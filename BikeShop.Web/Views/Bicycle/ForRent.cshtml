@@ -1,0 +1,33 @@
+﻿@model IEnumerable<BikeShop.Web.Models.Bicycle>
+
+@{
+    ViewData["Title"] = "Наеми велосипед";
+}
+
+<h2 class="mb-4">Наеми велосипед</h2>
+
+@foreach (var bike in Model)
+{
+    <div class="card mb-3 shadow">
+        <div class="card-body">
+            <h5 class="card-title">@bike.Name</h5>
+
+            @if (!string.IsNullOrEmpty(bike.ImageUrl))
+            {
+                <img src="@bike.ImageUrl" class="img-fluid mb-2" style="max-height: 200px;" alt="@bike.Name" />
+            }
+
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#details-@bike.Id">
+                Детайли
+            </button>
+
+            <div class="collapse mt-3" id="details-@bike.Id">
+                <p><strong>Описание:</strong> @bike.Description</p>
+                <p><strong>Цена на ден:</strong> @bike.Price лв.</p>
+                <p><strong>Наличност:</strong> @(bike.IsAvailable ? "Да" : "Не")</p>
+                <a href="/Rental/Create/@bike.Id" class="btn btn-warning">Наеми</a>
+            </div>
+        </div>
+    </div>
+}
+    

@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Моят профил";
+    var rentals = ViewBag.MyRentals as List<BikeShop.Web.Models.Rental>;
+    var orders = ViewBag.MyOrders as List<BikeShop.Web.Models.Order>;
+}
+
+<h2>Моите наеми</h2>
+@if (rentals != null && rentals.Any())
+{
+    <ul>
+        @foreach (var r in rentals)
+        {
+            <li>@r.Bicycle.Name — от @r.StartDate.ToShortDateString() до @r.EndDate.ToShortDateString()</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Нямате активни наеми.</p>
+}
+
+<h2 class="mt-4">Моите покупки</h2>
+@if (orders != null && orders.Any())
+{
+    <ul>
+        @foreach (var o in orders)
+        {
+            <li>@o.Bicycle.Name — @o.OrderDate.ToShortDateString()</li>
+        }
+    </ul>
+}
+else
+{
+    <p>Нямате покупки.</p>
+}

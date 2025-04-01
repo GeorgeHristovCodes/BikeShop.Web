@@ -1,0 +1,28 @@
+﻿@model BikeShop.Web.Models.Order
+@{
+    ViewData["Title"] = "Потвърди покупка";
+    var bike = ViewBag.Bicycle as BikeShop.Web.Models.Bicycle;
+}
+
+<h2 class="mb-4">Потвърди покупка: @bike?.Name</h2>
+
+@if (!string.IsNullOrEmpty(bike?.ImageUrl))
+{
+    <img src="@bike.ImageUrl" class="img-thumbnail mb-3" style="max-height:200px;" />
+}
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="BicycleId" />
+
+    <div class="mb-3">
+        <label class="form-label">Цена:</label>
+        <input type="text" class="form-control" value="@bike?.Price лв." disabled />
+        <input type="hidden" asp-for="TotalPrice" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Потвърди поръчка</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
