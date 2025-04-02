@@ -1,0 +1,31 @@
+﻿@model IEnumerable<BikeShop.Web.Models.Rental>
+
+@{
+    ViewData["Title"] = "Всички наеми";
+}
+
+<h2>Всички наеми</h2>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Потребител</th>
+            <th>Велосипед</th>
+            <th>От</th>
+            <th>До</th>
+            <th>Дата на наем</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rental in Model)
+        {
+            <tr>
+                <td>@rental.User.Email</td>
+                <td>@rental.Bicycle.Name</td>
+                <td>@rental.StartDate.ToShortDateString()</td>
+                <td>@rental.EndDate.ToShortDateString()</td>
+               
+            </tr>
+        }
+    </tbody>
+</table>

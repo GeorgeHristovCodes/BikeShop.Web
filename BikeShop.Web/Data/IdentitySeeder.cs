@@ -1,47 +1,43 @@
-﻿using BikeShop.Web.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using BikeShop.Web.Models;
 
 namespace BikeShop.Web.Data
 {
     public static class IdentitySeeder
     {
-        private const string AdminEmail = "admin@bikeshop.com";
-        private const string AdminPassword = "Admin123!"; // Може по-късно да го смениш
-        private static readonly string[] Roles = new[] { "Admin", "User" };
-
-        public static async Task SeedAsync(IServiceProvider serviceProvider)
+        public static async Task SeedRolesAndAdminAsync(IServiceProvider serviceProvider)
         {
-            using var scope = serviceProvider.CreateScope();
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            // Създаваме ролите, ако ги няма
-            foreach (var role in Roles)
-            {
-                if (!await roleManager.RoleExistsAsync(role))
-                {
-                    await roleManager.CreateAsync(new IdentityRole(role));
-                }
-            }
+            // ➕ Добавяне на роли
+            if (!await roleManager.RoleExistsAsync("Admin"))
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
 
-            // Създаваме админ потребител, ако го няма
-            var adminUser = await userManager.FindByEmailAsync(AdminEmail);
+            if (!await roleManager.RoleExistsAsync("User"))
+                await roleManager.CreateAsync(new IdentityRole("User"));
+
+            // ➕ Админ потребител
+            var adminEmail = "admin@bikeshop.com";
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
             if (adminUser == null)
             {
-                var user = new ApplicationUser
+                var newAdmin = new ApplicationUser
                 {
-                    UserName = AdminEmail,
-                    Email = AdminEmail,
+                    UserName = adminEmail,
+                    Email = adminEmail,
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(user, AdminPassword);
+                var result = await userManager.CreateAsync(newAdmin, "Admin123!");
+
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, "Admin");
+                    await userManager.AddToRoleAsync(newAdmin, "Admin");
                 }
             }
         }

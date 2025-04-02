@@ -38,21 +38,42 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// 🛠 Автоматично създаване на роля „User“, ако я няма
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    if (!await roleManager.RoleExistsAsync("User"))
-    {
-        await roleManager.CreateAsync(new IdentityRole("User"));
-    }
+    var services = scope.ServiceProvider;
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-    // 👉 По желание можеш да създадеш и „Admin“ роля тук
-    // if (!await roleManager.RoleExistsAsync("Admin"))
-    // {
-    //     await roleManager.CreateAsync(new IdentityRole("Admin"));
-    // }
+    // 1. Създай роля "User" ако не съществува
+    if (!await roleManager.RoleExistsAsync("User"))
+        await roleManager.CreateAsync(new IdentityRole("User"));
+
+    // 2. Създай роля "Admin" ако не съществува
+    if (!await roleManager.RoleExistsAsync("Admin"))
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+
+    // 3. Създай админ потребител, ако не съществува
+    string adminEmail = "admin@bikeshop.com";
+    string adminPassword = "Admin123!";
+
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser == null)
+    {
+        var newAdmin = new ApplicationUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(newAdmin, adminPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(newAdmin, "Admin");
+        }
+    }
 }
+
 
 app.MapControllerRoute(
     name: "default",

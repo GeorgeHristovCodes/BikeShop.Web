@@ -25,7 +25,15 @@
                 <p><strong>Описание:</strong> @bike.Description</p>
                 <p><strong>Цена:</strong> @bike.Price лв.</p>
                 <p><strong>Наличност:</strong> @(bike.IsAvailable ? "Да" : "Не")</p>
-                <a href="/Order/Create/@bike.Id" class="btn btn-success">Купи</a>
+                @if (bike.IsAvailable && bike.Quantity > 0)
+                {
+                    <a href="/Order/Create/@bike.Id" class="btn btn-success">Купи</a>
+                }
+                else
+                {
+                    <span class="text-danger fw-bold">❌ Няма наличност</span>
+                }
+
             </div>
         </div>
     </div>

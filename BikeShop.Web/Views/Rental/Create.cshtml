@@ -12,6 +12,7 @@
 }
 
 <form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
     <input type="hidden" asp-for="BicycleId" />
 
     <div class="mb-3">

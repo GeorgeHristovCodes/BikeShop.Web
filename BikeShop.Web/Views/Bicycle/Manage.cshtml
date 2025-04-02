@@ -1,0 +1,51 @@
+﻿@model IEnumerable<BikeShop.Web.Models.Bicycle>
+
+@{
+    ViewData["Title"] = "Управление на велосипеди";
+}
+
+<h2 class="mb-3">Управление на велосипеди</h2>
+
+<a class="btn btn-success mb-3" asp-action="Create">➕ Добави нов велосипед</a>
+<form method="get" asp-action="Manage" class="mb-3">
+    <select name="filterType" class="form-select d-inline w-auto me-2">
+        <option value="">Всички</option>
+        <option value="ForRent">Само за наем</option>
+        <option value="ForSale">Само за продажба</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Филтрирай</button>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Име</th>
+            <th>Тип</th>
+            <th>Цена</th>
+            <th>Наличност</th>
+            <th>Количество</th>
+            <th>Действия</th>
+            
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bike in Model)
+        {
+            <tr>
+                <td>@bike.Name</td>
+                <td>@bike.Type</td>
+                <td>@bike.Price лв.</td>
+                <td>@bike.Quantity</td>
+                <td class="fw-bold @(bike.Quantity == 0 ? "text-danger" : "text-success")">
+                    @(bike.Quantity > 0 ? $"Да ({bike.Quantity} бр.)" : "❌ Не (0 бр.)")
+                </td>
+                <td>
+                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@bike.Id">Детайли</a>
+                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@bike.Id">Редактирай</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@bike.Id">Изтрий</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

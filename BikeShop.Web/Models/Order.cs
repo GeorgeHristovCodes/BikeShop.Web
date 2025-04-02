@@ -19,6 +19,10 @@ namespace BikeShop.Web.Models
         [ForeignKey("BicycleId")]
         public Bicycle? Bicycle { get; set; }
 
+        [Required]
+        public string Address { get; set; } = null!;
+
+
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
         public decimal TotalPrice { get; set; }

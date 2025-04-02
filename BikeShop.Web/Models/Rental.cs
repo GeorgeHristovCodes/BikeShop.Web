@@ -5,9 +5,11 @@ namespace BikeShop.Web.Models
 {
     public class Rental
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required]
+        
         public string UserId { get; set; } = null!;
 
         [ForeignKey("UserId")]
@@ -24,6 +26,7 @@ namespace BikeShop.Web.Models
 
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
+        public DateTime CreatedOn { get; set; }
 
         public bool IsActive { get; set; } = true;
     }

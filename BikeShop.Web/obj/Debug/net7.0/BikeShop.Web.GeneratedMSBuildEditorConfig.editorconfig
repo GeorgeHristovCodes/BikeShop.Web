@@ -52,12 +52,48 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Admin/AllOrders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWxsT3JkZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Admin/AllRentals.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWxsUmVudGFscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Admin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Admin/Users.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVXNlcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Bicycle/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmljeWNsZVxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Bicycle/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmljeWNsZVxEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Bicycle/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmljeWNsZVxEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Bicycle/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmljeWNsZVxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Bicycle/ForRent.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmljeWNsZVxGb3JSZW50LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Bicycle/ForSale.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmljeWNsZVxGb3JTYWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Bicycle/Manage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmljeWNsZVxNYW5hZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Home/Index.cshtml]
@@ -72,8 +108,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Order/Success.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcU3VjY2Vzcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Rental/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Rental/Success.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsXFN1Y2Nlc3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Shared/Error.cshtml]

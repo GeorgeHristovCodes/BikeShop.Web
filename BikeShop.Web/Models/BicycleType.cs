@@ -2,7 +2,7 @@
 {
     public enum BicycleType
     {
-        ForSale = 1,
-        ForRent = 2
+        ForRent,  // За наем
+        ForSale   // За продажба
     }
 }

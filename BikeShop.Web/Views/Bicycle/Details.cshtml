@@ -1,0 +1,35 @@
+﻿@model BikeShop.Web.Models.Bicycle
+
+@{
+    ViewData["Title"] = "Детайли за велосипед";
+}
+
+<h2>Детайли за велосипед</h2>
+
+<div class="mb-3">
+    <strong>Име:</strong> @Model.Name
+</div>
+
+<div class="mb-3">
+    <strong>Описание:</strong>
+    <p>@Model.Description</p>
+</div>
+
+<div class="mb-3">
+    <strong>Цена:</strong> @Model.Price лв.
+</div>
+
+<div class="mb-3">
+    <strong>Тип:</strong> @Model.Type
+</div>
+
+<div class="mb-3">
+    <strong>Наличен:</strong> @(Model.IsAvailable ? "Да" : "Не")
+</div>
+
+<div class="mb-3">
+    <strong>Снимка:</strong><br />
+    <img src="@Model.ImageUrl" alt="Велосипед" width="300" />
+</div>
+
+<a asp-action="Manage" class="btn btn-secondary">⬅ Назад</a>

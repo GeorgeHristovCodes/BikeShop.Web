@@ -38,13 +38,25 @@ namespace BikeShop.Web.Controllers
             return View(rental);
         }
 
-        // POST: /Rental/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(Rental rental)
         {
+            rental.Id = 0;
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
                 return Unauthorized();
+
+            // 🟢 Най-важно: задаваме UserId и махаме от валидацията
+            rental.UserId = user.Id;
+            ModelState.Remove("UserId");
+
+            var bicycle = await _context.Bicycles.FindAsync(rental.BicycleId);
+            if (bicycle == null || !bicycle.IsAvailable || bicycle.Quantity <= 0)
+            {
+                return BadRequest("Велосипедът не е наличен");
+            }
 
             if (rental.StartDate >= rental.EndDate)
             {
@@ -53,17 +65,28 @@ namespace BikeShop.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Bicycle = await _context.Bicycles.FindAsync(rental.BicycleId);
+                ViewBag.Bicycle = bicycle;
                 return View(rental);
             }
 
-            rental.UserId = user.Id;
             rental.IsActive = true;
-
+            rental.CreatedOn = DateTime.Now;
+            //
             _context.Rentals.Add(rental);
+
+            bicycle.Quantity--;
+            if (bicycle.Quantity == 0)
+                bicycle.IsAvailable = false;
+
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("ForRent", "Bicycle");
+            return RedirectToAction("Success");
+
         }
+        public IActionResult Success()
+        {
+            return View();
+        }
+
     }
 }

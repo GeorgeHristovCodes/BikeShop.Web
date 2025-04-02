@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BikeShop.Web.Data.Migrations
+namespace BikeShop.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250401152824_SeedRentBikes")]
-    partial class SeedRentBikes
+    [Migration("20250402152235_FixRentalIdIdentity")]
+    partial class FixRentalIdIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -114,6 +114,9 @@ namespace BikeShop.Web.Data.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -130,7 +133,8 @@ namespace BikeShop.Web.Data.Migrations
                             IsAvailable = true,
                             Name = "Rent Bike 1",
                             Price = 15m,
-                            Type = 2
+                            Quantity = 0,
+                            Type = 0
                         },
                         new
                         {
@@ -140,8 +144,61 @@ namespace BikeShop.Web.Data.Migrations
                             IsAvailable = true,
                             Name = "Rent Bike 2",
                             Price = 10m,
-                            Type = 2
+                            Quantity = 0,
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Шосеен велосипед с карбонова рамка.",
+                            ImageUrl = "https://via.placeholder.com/300x200",
+                            IsAvailable = true,
+                            Name = "Road Bike Pro",
+                            Price = 1200m,
+                            Quantity = 0,
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Удобен градски велосипед за ежедневна употреба.",
+                            ImageUrl = "https://via.placeholder.com/300x200",
+                            IsAvailable = true,
+                            Name = "City Cruiser",
+                            Price = 750m,
+                            Quantity = 0,
+                            Type = 1
                         });
+                });
+
+            modelBuilder.Entity("BikeShop.Web.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BicycleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BicycleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("BikeShop.Web.Models.Rental", b =>
@@ -154,6 +211,9 @@ namespace BikeShop.Web.Data.Migrations
 
                     b.Property<int>("BicycleId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -229,7 +289,7 @@ namespace BikeShop.Web.Data.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -254,7 +314,7 @@ namespace BikeShop.Web.Data.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
@@ -278,7 +338,7 @@ namespace BikeShop.Web.Data.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -293,7 +353,7 @@ namespace BikeShop.Web.Data.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -312,6 +372,25 @@ namespace BikeShop.Web.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BikeShop.Web.Models.Order", b =>
+                {
+                    b.HasOne("BikeShop.Web.Models.Bicycle", "Bicycle")
+                        .WithMany()
+                        .HasForeignKey("BicycleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BikeShop.Web.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bicycle");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BikeShop.Web.Models.Rental", b =>
@@ -342,7 +421,7 @@ namespace BikeShop.Web.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserClaim<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.HasOne("BikeShop.Web.Models.ApplicationUser", null)
                         .WithMany()
@@ -351,7 +430,7 @@ namespace BikeShop.Web.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserLogin<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.HasOne("BikeShop.Web.Models.ApplicationUser", null)
                         .WithMany()
@@ -360,7 +439,7 @@ namespace BikeShop.Web.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserRole<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
@@ -375,7 +454,7 @@ namespace BikeShop.Web.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.ApplicationUserToken<string>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.HasOne("BikeShop.Web.Models.ApplicationUser", null)
                         .WithMany()

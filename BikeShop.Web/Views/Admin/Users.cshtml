@@ -1,0 +1,36 @@
+﻿@model IEnumerable<BikeShop.Web.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Управление на потребители";
+    var userRoles = ViewBag.UserRoles as Dictionary<string, IList<string>>;
+}
+
+<h2>Управление на потребители</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Email</th>
+            <th>Роля</th>
+            <th>Промени роля</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@string.Join(", ", userRoles[user.Id])</td>
+                <td>
+                    <form asp-action="ChangeRole" method="post" class="d-flex gap-2">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <select name="newRole" class="form-select form-select-sm w-auto">
+                            <option value="User">User</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Промени</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

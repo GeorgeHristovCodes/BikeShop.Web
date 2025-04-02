@@ -1,35 +1,68 @@
-﻿@{
-    ViewData["Title"] = "Моят профил";
-    var rentals = ViewBag.MyRentals as List<BikeShop.Web.Models.Rental>;
-    var orders = ViewBag.MyOrders as List<BikeShop.Web.Models.Order>;
+﻿@model BikeShop.Web.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Профил";
+    var rentals = ViewBag.Rentals as List<BikeShop.Web.Models.Rental>;
+    var orders = ViewBag.Orders as List<BikeShop.Web.Models.Order>;
 }
 
-<h2>Моите наеми</h2>
-@if (rentals != null && rentals.Any())
+<h2>Профил</h2>
+
+<p><strong>Email:</strong> @Model.Email</p>
+
+<hr />
+<h4>🛵 Моите наеми</h4>
+
+@if (rentals.Any())
 {
-    <ul>
-        @foreach (var r in rentals)
-        {
-            <li>@r.Bicycle.Name — от @r.StartDate.ToShortDateString() до @r.EndDate.ToShortDateString()</li>
-        }
-    </ul>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Велосипед</th>
+                <th>От</th>
+                <th>До</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rental in rentals)
+            {
+                <tr>
+                    <td>@rental.Bicycle.Name</td>
+                    <td>@rental.StartDate.ToShortDateString()</td>
+                    <td>@rental.EndDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 else
 {
-    <p>Нямате активни наеми.</p>
+    <p>Нямаш направени наеми.</p>
 }
 
-<h2 class="mt-4">Моите покупки</h2>
-@if (orders != null && orders.Any())
+<hr />
+<h4>🛒 Моите поръчки</h4>
+
+@if (orders.Any())
 {
-    <ul>
-        @foreach (var o in orders)
-        {
-            <li>@o.Bicycle.Name — @o.OrderDate.ToShortDateString()</li>
-        }
-    </ul>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Велосипед</th>
+                <th>Дата на поръчка</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.Bicycle.Name</td>
+                    <td>@order.OrderDate.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 else
 {
-    <p>Нямате покупки.</p>
+    <p>Нямаш направени поръчки.</p>
 }

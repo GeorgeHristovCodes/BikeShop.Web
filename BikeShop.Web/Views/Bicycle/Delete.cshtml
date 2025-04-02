@@ -1,0 +1,19 @@
+﻿@model BikeShop.Web.Models.Bicycle
+
+@{
+    ViewData["Title"] = "Изтриване на велосипед";
+}
+
+<h2 class="text-danger">Сигурни ли сте, че искате да изтриете този велосипед?</h2>
+
+<div>
+    <h4>@Model.Name</h4>
+    <p>@Model.Description</p>
+    <p><strong>Цена:</strong> @Model.Price лв.</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Да, изтрий</button>
+    <a asp-action="Manage" class="btn btn-secondary">Отказ</a>
+</form>

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<BikeShop.Web.Models.Order>
+
+@{
+    ViewData["Title"] = "Всички поръчки";
+}
+
+<h2>Всички поръчки</h2>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Потребител</th>
+            <th>Велосипед</th>
+            <th>Дата на поръчка</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.User.Email</td>
+                <td>@order.Bicycle.Name</td>
+                <td>@order.OrderDate.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

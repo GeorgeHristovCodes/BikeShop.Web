@@ -2,6 +2,7 @@
 
 namespace BikeShop.Web.Models
 {
+
     public class Bicycle
     {
         public int Id { get; set; }
@@ -11,7 +12,7 @@ namespace BikeShop.Web.Models
 
         public string? Description { get; set; }
 
-        [Range(0, 10000)]
+        [Range(0, 100000)]
         public decimal Price { get; set; }
 
         [Required]
@@ -20,5 +21,7 @@ namespace BikeShop.Web.Models
         public string? ImageUrl { get; set; }
 
         public bool IsAvailable { get; set; } = true;
+
+        public int Quantity { get; set; }
     }
 }

@@ -21,24 +21,28 @@ namespace BikeShop.Web.Controllers
             _userManager = userManager;
         }
 
+        [Authorize]
         public async Task<IActionResult> Profile()
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var myRentals = await _context.Rentals
+            var rentals = await _context.Rentals
                 .Include(r => r.Bicycle)
                 .Where(r => r.UserId == user.Id)
+                .OrderByDescending(r => r.StartDate)
                 .ToListAsync();
 
-            var myOrders = await _context.Orders
+            var orders = await _context.Orders
                 .Include(o => o.Bicycle)
                 .Where(o => o.UserId == user.Id)
+                .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
 
-            ViewBag.MyRentals = myRentals;
-            ViewBag.MyOrders = myOrders;
+            ViewBag.Rentals = rentals;
+            ViewBag.Orders = orders;
 
-            return View();
+            return View(user);
         }
+
     }
 }
