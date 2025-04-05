@@ -1,0 +1,127 @@
+﻿@model RentalCheckoutViewModel
+@using BikeShop.Web.Models
+
+@{
+    ViewData["Title"] = "Завърши наем";
+}
+
+<h2 class="mb-4">🚲 Завършване на наем</h2>
+
+@if (!Model.CartItems.Any())
+{
+    <div class="alert alert-info">
+        Нямате добавени велосипеди за наем.
+    </div>
+}
+else
+{
+    <form asp-action="CheckoutRental" method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <h5 class="mb-3">📝 Данни за клиента</h5>
+
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label">Име</label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label">Фамилия</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="PhoneNumber" class="form-label">Телефон</label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="City" class="form-label">Град</label>
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+
+        <h5 class="mt-4 mb-3">📅 Избери период на наема</h5>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="RentalStartDate" class="form-label">Начална дата</label>
+                <input asp-for="RentalStartDate" type="date" class="form-control" />
+                <span asp-validation-for="RentalStartDate" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label asp-for="RentalEndDate" class="form-label">Крайна дата</label>
+                <input asp-for="RentalEndDate" type="date" class="form-control" />
+                <span asp-validation-for="RentalEndDate" class="text-danger"></span>
+            </div>
+        </div>
+
+        <h5 class="mt-4 mb-3">📦 Велосипеди за наем</h5>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Снимка</th>
+                    <th>Име</th>
+                    <th>Цена на ден</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td style="width: 150px;">
+                            <img src="@item.Bicycle.ImageUrl" class="img-thumbnail" style="max-height: 80px;" />
+                        </td>
+                        <td>@item.Bicycle.Name</td>
+                        <td>@item.Bicycle.Price лв.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end mt-3">
+            <h5>Обща сума за наема: <span id="totalPrice" class="text-primary fw-bold">0.00</span> лв.</h5>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-4">✅ Потвърди наема</button>
+    </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const pricePerDayPerItem = [];
+
+        document.querySelectorAll('tbody tr').forEach(row => {
+            const priceText = row.querySelector('td:nth-child(3)')?.innerText || "0";
+            const clean = parseFloat(priceText.replace('лв.', '').trim());
+            if (!isNaN(clean)) {
+                pricePerDayPerItem.push(clean);
+            }
+        });
+
+        function updateTotalPrice() {
+            const start = new Date(document.getElementById("RentalStartDate").value);
+            const end = new Date(document.getElementById("RentalEndDate").value);
+
+            if (isNaN(start.getTime()) || isNaN(end.getTime()) || end <= start) {
+                document.getElementById("totalPrice").innerText = "0.00";
+                return;
+            }
+
+            const days = Math.max(1, (end - start) / (1000 * 60 * 60 * 24));
+            let total = 0;
+
+            pricePerDayPerItem.forEach(price => {
+                total += price * days;
+            });
+
+            document.getElementById("totalPrice").innerText = total.toFixed(2);
+        }
+
+        document.getElementById("RentalStartDate").addEventListener("change", updateTotalPrice);
+        document.getElementById("RentalEndDate").addEventListener("change", updateTotalPrice);
+    </script>
+}

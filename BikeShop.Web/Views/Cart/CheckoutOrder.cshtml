@@ -1,0 +1,114 @@
+﻿@model OrderCheckoutViewModel
+
+@{
+    ViewData["Title"] = "Завърши поръчката";
+}
+
+<h2 class="mb-4">🛒 Завърши покупката</h2>
+
+@if (!Model.CartItems.Any())
+{
+    <div class="alert alert-info">Нямате добавени велосипеди за покупка.</div>
+}
+else
+{
+    <form asp-action="CheckoutOrder" method="post">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <h5 class="mb-3">🧍 Данни за клиента</h5>
+
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label">Име</label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label">Фамилия</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="PhoneNumber" class="form-label">Телефон</label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CustomerCity" class="form-label">Град</label>
+            <input asp-for="CustomerCity" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Начин на получаване:</label><br />
+            <div class="form-check form-check-inline">
+                <input asp-for="IsDelivery" class="form-check-input" type="radio" value="true" id="deliveryOption" />
+                <label class="form-check-label" for="deliveryOption">Желая доставка</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input asp-for="IsDelivery" class="form-check-input" type="radio" value="false" id="pickupOption" />
+                <label class="form-check-label" for="pickupOption">Ще взема от магазина</label>
+            </div>
+        </div>
+
+        <div id="deliveryFields" style="display: none;">
+            <h5 class="mb-2">📍 Адрес за доставка</h5>
+
+            <div class="mb-3">
+                <label asp-for="DeliveryCity" class="form-label">Град</label>
+                <input asp-for="DeliveryCity" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="DeliveryStreet" class="form-label">Улица</label>
+                <input asp-for="DeliveryStreet" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="DeliveryStreetNumber" class="form-label">Номер</label>
+                <input asp-for="DeliveryStreetNumber" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="PostalCode" class="form-label">Пощенски код</label>
+                <input asp-for="PostalCode" class="form-control" />
+            </div>
+        </div>
+
+        <h5 class="mt-4 mb-3">📦 Артикули за покупка</h5>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Снимка</th>
+                    <th>Име</th>
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td style="width: 150px;">
+                            <img src="@item.Bicycle.ImageUrl" class="img-thumbnail" style="max-height: 80px;" />
+                        </td>
+                        <td>@item.Bicycle.Name</td>
+                        <td>@item.Bicycle.Price лв.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-success">✅ Потвърди поръчката</button>
+    </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function toggleDeliveryFields() {
+            const isDelivery = document.querySelector('input[name="IsDelivery"]:checked')?.value === "true";
+            document.getElementById("deliveryFields").style.display = isDelivery ? "block" : "none";
+        }
+
+        document.querySelectorAll('input[name="IsDelivery"]').forEach(el => {
+            el.addEventListener("change", toggleDeliveryFields);
+        });
+
+        toggleDeliveryFields();
+    </script>
+}

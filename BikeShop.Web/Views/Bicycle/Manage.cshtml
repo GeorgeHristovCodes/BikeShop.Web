@@ -7,26 +7,35 @@
 <h2 class="mb-3">Управление на велосипеди</h2>
 
 <a class="btn btn-success mb-3" asp-action="Create">➕ Добави нов велосипед</a>
-<form method="get" asp-action="Manage" class="mb-3">
-    <select name="filterType" class="form-select d-inline w-auto me-2">
-        <option value="">Всички</option>
+<form method="get" asp-action="Manage" class="mb-3 d-flex gap-2">
+    <select name="filterType" class="form-select w-auto">
+        <option value="">Всички типове</option>
         <option value="ForRent">Само за наем</option>
         <option value="ForSale">Само за продажба</option>
     </select>
+
+    <select name="filterCategory" class="form-select w-auto">
+        <option value="">Всички категории</option>
+        @foreach (BicycleCategory category in Enum.GetValues(typeof(BicycleCategory)))
+        {
+            <option value="@category">@category</option>
+        }
+    </select>
+
     <button type="submit" class="btn btn-primary">Филтрирай</button>
 </form>
+
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
         <tr>
             <th>Име</th>
             <th>Тип</th>
+            <th>Категория</th> <!-- 🆕 -->
             <th>Цена</th>
             <th>Наличност</th>
             <th>Количество</th>
             <th>Действия</th>
-            
-
         </tr>
     </thead>
     <tbody>
@@ -35,8 +44,8 @@
             <tr>
                 <td>@bike.Name</td>
                 <td>@bike.Type</td>
+                <td>@bike.Category</td> <!-- 🆕 -->
                 <td>@bike.Price лв.</td>
-                <td>@bike.Quantity</td>
                 <td class="fw-bold @(bike.Quantity == 0 ? "text-danger" : "text-success")">
                     @(bike.Quantity > 0 ? $"Да ({bike.Quantity} бр.)" : "❌ Не (0 бр.)")
                 </td>

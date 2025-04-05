@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<BikeShop.Web.Models.Bicycle>
+@using BikeShop.Web.Models
 
 @{
     ViewData["Title"] = "Наеми велосипед";
@@ -6,6 +7,19 @@
 
 <h2 class="mb-4">Наеми велосипед</h2>
 
+<!-- 🔽 Филтър по категория -->
+<form method="get" asp-action="ForRent" class="mb-4 d-flex gap-2">
+    <select name="category" class="form-select w-auto">
+        <option value="">Всички категории</option>
+        @foreach (BicycleCategory cat in Enum.GetValues(typeof(BicycleCategory)))
+        {
+            <option value="@cat">@cat</option>
+        }
+    </select>
+    <button type="submit" class="btn btn-outline-primary">Филтрирай</button>
+</form>
+
+<!-- 🔽 Списък с велосипеди -->
 @foreach (var bike in Model)
 {
     <div class="card mb-3 shadow">
@@ -23,20 +37,23 @@
 
             <div class="collapse mt-3" id="details-@bike.Id">
                 <p><strong>Описание:</strong> @bike.Description</p>
+                <p><strong>Категория:</strong> @bike.Category</p>
                 <p><strong>Цена на ден:</strong> @bike.Price лв.</p>
                 <p><strong>Наличност:</strong> @(bike.IsAvailable ? "Да" : "Не")</p>
                 @if (bike.IsAvailable && bike.Quantity > 0)
                 {
-                    <a href="/Rental/Create/@bike.Id" class="btn btn-warning">Наеми</a>
+                    <form asp-controller="Cart" asp-action="Add" method="post" style="display:inline;">
+                        <input type="hidden" name="bicycleId" value="@bike.Id" />
+                        <input type="hidden" name="type" value="Rental" />
+                        <button type="submit" class="btn btn-warning">Наеми</button>
+                    </form>
+
                 }
                 else
                 {
                     <span class="text-danger fw-bold">❌ Няма наличност</span>
                 }
-
-
             </div>
         </div>
     </div>
 }
-    

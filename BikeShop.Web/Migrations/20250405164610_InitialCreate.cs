@@ -62,6 +62,7 @@ namespace BikeShop.Web.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
+                    Category = table.Column<int>(type: "int", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
@@ -178,6 +179,36 @@ namespace BikeShop.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CartItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BicycleId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    RentalStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RentalEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CartItems_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Bicycles_BicycleId",
+                        column: x => x.BicycleId,
+                        principalTable: "Bicycles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -186,6 +217,15 @@ namespace BikeShop.Web.Migrations
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     BicycleId = table.Column<int>(type: "int", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CustomerCity = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeliveryCity = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeliveryStreet = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeliveryStreetNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDelivery = table.Column<bool>(type: "bit", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -215,7 +255,12 @@ namespace BikeShop.Web.Migrations
                     BicycleId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -237,13 +282,13 @@ namespace BikeShop.Web.Migrations
 
             migrationBuilder.InsertData(
                 table: "Bicycles",
-                columns: new[] { "Id", "Description", "ImageUrl", "IsAvailable", "Name", "Price", "Quantity", "Type" },
+                columns: new[] { "Id", "Category", "Description", "ImageUrl", "IsAvailable", "Name", "Price", "Quantity", "Type" },
                 values: new object[,]
                 {
-                    { 1, "Планински велосипед под наем", "https://via.placeholder.com/300x200", true, "Rent Bike 1", 15m, 0, 0 },
-                    { 2, "Градски велосипед под наем", "https://via.placeholder.com/300x200", true, "Rent Bike 2", 10m, 0, 0 },
-                    { 3, "Шосеен велосипед с карбонова рамка.", "https://via.placeholder.com/300x200", true, "Road Bike Pro", 1200m, 0, 1 },
-                    { 4, "Удобен градски велосипед за ежедневна употреба.", "https://via.placeholder.com/300x200", true, "City Cruiser", 750m, 0, 1 }
+                    { 1, 0, "Планински велосипед под наем", "https://via.placeholder.com/300x200", true, "Rent Bike 1", 15m, 0, 0 },
+                    { 2, 0, "Градски велосипед под наем", "https://via.placeholder.com/300x200", true, "Rent Bike 2", 10m, 0, 0 },
+                    { 3, 0, "Шосеен велосипед с карбонова рамка.", "https://via.placeholder.com/300x200", true, "Road Bike Pro", 1200m, 0, 1 },
+                    { 4, 0, "Удобен градски велосипед за ежедневна употреба.", "https://via.placeholder.com/300x200", true, "City Cruiser", 750m, 0, 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -286,6 +331,16 @@ namespace BikeShop.Web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartItems_BicycleId",
+                table: "CartItems",
+                column: "BicycleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_UserId",
+                table: "CartItems",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_BicycleId",
                 table: "Orders",
                 column: "BicycleId");
@@ -323,6 +378,9 @@ namespace BikeShop.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "Orders");

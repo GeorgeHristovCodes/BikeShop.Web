@@ -8,8 +8,6 @@ namespace BikeShop.Web.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        
         public string UserId { get; set; } = null!;
 
         [ForeignKey("UserId")]
@@ -26,8 +24,26 @@ namespace BikeShop.Web.Models
 
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
-        public DateTime CreatedOn { get; set; }
+        [Required]
+        public string FirstName { get; set; } = null!;
+
+        [Required]
+        public string LastName { get; set; } = null!;
+
+        [Required]
+        [Phone]
+        public string PhoneNumber { get; set; } = null!;
+
+        [Required]
+        public string City { get; set; } = null!;
+
+        [Required]
+        [Range(0, 100000)]
+        public decimal Price { get; set; }
+
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
 
         public bool IsActive { get; set; } = true;
+
     }
 }

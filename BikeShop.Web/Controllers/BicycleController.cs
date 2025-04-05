@@ -2,6 +2,7 @@
 using BikeShop.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -17,28 +18,38 @@ namespace BikeShop.Web.Controllers
         }
 
         // /Bicycle/ForSale
-        public async Task<IActionResult> ForSale()
+        public async Task<IActionResult> ForSale(BicycleCategory? category)
         {
-            var bicycles = await _context.Bicycles
-                .Where(b => b.Type == BicycleType.ForSale && b.IsAvailable)
-                .ToListAsync();
+            var bicycles = _context.Bicycles
+                .Where(b => b.Type == BicycleType.ForSale && b.IsAvailable);
 
-            return View(bicycles);
+            if (category != null)
+            {
+                bicycles = bicycles.Where(b => b.Category == category);
+            }
+
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)));
+            return View(await bicycles.ToListAsync());
         }
 
         // /Bicycle/ForRent
-        public async Task<IActionResult> ForRent()
+        public async Task<IActionResult> ForRent(BicycleCategory? category)
         {
-            var bicycles = await _context.Bicycles
-                .Where(b => b.Type == BicycleType.ForRent && b.IsAvailable)
-                .ToListAsync();
+            var bicycles = _context.Bicycles
+                .Where(b => b.Type == BicycleType.ForRent && b.IsAvailable);
 
-            return View(bicycles);
+            if (category != null)
+            {
+                bicycles = bicycles.Where(b => b.Category == category);
+            }
+
+            return View(await bicycles.ToListAsync());
         }
 
 
+
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Manage(string? filterType)
+        public async Task<IActionResult> Manage(string? filterType, BicycleCategory? filterCategory)
         {
             var bicycles = _context.Bicycles.AsQueryable();
 
@@ -50,13 +61,21 @@ namespace BikeShop.Web.Controllers
                     bicycles = bicycles.Where(b => b.Type == BicycleType.ForSale);
             }
 
+            if (filterCategory != null)
+            {
+                bicycles = bicycles.Where(b => b.Category == filterCategory);
+            }
+
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)));
             return View(await bicycles.ToListAsync());
         }
+
 
 
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)));
             return View();
         }
 
@@ -67,12 +86,33 @@ namespace BikeShop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (bicycle.ImageFile != null)
+                {
+                    string wwwRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                    if (!Directory.Exists(wwwRootPath))
+                    {
+                        Directory.CreateDirectory(wwwRootPath);
+                    }
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(bicycle.ImageFile.FileName);
+                    string filePath = Path.Combine(wwwRootPath, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await bicycle.ImageFile.CopyToAsync(stream);
+                    }
+
+                    bicycle.ImageUrl = "/images/" + fileName;
+                }
+
                 _context.Add(bicycle);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Manage));
             }
+
             return View(bicycle);
         }
+
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
@@ -87,8 +127,11 @@ namespace BikeShop.Web.Controllers
             {
                 return NotFound();
             }
+
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)), bicycle.Category);
             return View(bicycle);
         }
+
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
@@ -120,8 +163,11 @@ namespace BikeShop.Web.Controllers
                 }
                 return RedirectToAction(nameof(Manage));
             }
+
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)), bicycle.Category); // <- при невалиден модел
             return View(bicycle);
         }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {

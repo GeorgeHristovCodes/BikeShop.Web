@@ -14,6 +14,8 @@ namespace BikeShop.Web.Data
         public DbSet<Bicycle> Bicycles { get; set; }
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder builder)

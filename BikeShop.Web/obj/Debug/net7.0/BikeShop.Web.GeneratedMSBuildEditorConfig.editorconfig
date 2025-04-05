@@ -96,28 +96,40 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmljeWNsZVxNYW5hZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Cart/CheckoutOrder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxDaGVja291dE9yZGVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Cart/CheckoutRental.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxDaGVja291dFJlbnRhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Cart/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Cart/SuccessOrder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxTdWNjZXNzT3JkZXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Cart/SuccessRental.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxTdWNjZXNzUmVudGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Home/About.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBYm91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Home/Contact.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb250YWN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Order/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcQ3JlYXRlLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Order/Success.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcU3VjY2Vzcy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Rental/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsXENyZWF0ZS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Rental/Success.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVudGFsXFN1Y2Nlc3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Shared/Error.cshtml]

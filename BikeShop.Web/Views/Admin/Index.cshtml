@@ -2,13 +2,12 @@
     ViewData["Title"] = "Админ Панел";
 }
 
-<h2>Админ Панел</h2>
+<h2 class="mb-4">Админ панел</h2>
 
 <div class="list-group">
-    <a class="list-group-item list-group-item-action" asp-controller="Bicycle" asp-action="Manage">Управление на велосипеди</a>
-    <a class="list-group-item list-group-item-action" asp-controller="Admin" asp-action="Users">Управление на потребители</a>
-    <a class="list-group-item" asp-action="AllRentals">Всички наеми</a>
-    <a class="list-group-item" asp-action="AllOrders">Всички поръчки</a>
-
-
+    <a href="/Admin/AllRentals" class="list-group-item list-group-item-action">🟡 Всички наеми</a>
+    <a href="/Admin/AllOrders" class="list-group-item list-group-item-action">🟢 Всички поръчки</a>
+    <a href="/Admin/Users" class="list-group-item list-group-item-action">🔵 Управление на потребители</a>
+    <a href="/Bicycle/Manage" class="list-group-item list-group-item-action">⚙️ Управление на велосипеди</a>
 </div>
+

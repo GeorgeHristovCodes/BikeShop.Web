@@ -5,7 +5,7 @@
 namespace BikeShop.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class FixRentalIdIdentity : Migration
+    public partial class FixRentalStructure : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -95,6 +95,9 @@ namespace BikeShop.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -125,6 +128,7 @@ namespace BikeShop.Web.Migrations
                         new
                         {
                             Id = 1,
+                            Category = 0,
                             Description = "Планински велосипед под наем",
                             ImageUrl = "https://via.placeholder.com/300x200",
                             IsAvailable = true,
@@ -136,6 +140,7 @@ namespace BikeShop.Web.Migrations
                         new
                         {
                             Id = 2,
+                            Category = 0,
                             Description = "Градски велосипед под наем",
                             ImageUrl = "https://via.placeholder.com/300x200",
                             IsAvailable = true,
@@ -147,6 +152,7 @@ namespace BikeShop.Web.Migrations
                         new
                         {
                             Id = 3,
+                            Category = 0,
                             Description = "Шосеен велосипед с карбонова рамка.",
                             ImageUrl = "https://via.placeholder.com/300x200",
                             IsAvailable = true,
@@ -158,6 +164,7 @@ namespace BikeShop.Web.Migrations
                         new
                         {
                             Id = 4,
+                            Category = 0,
                             Description = "Удобен градски велосипед за ежедневна употреба.",
                             ImageUrl = "https://via.placeholder.com/300x200",
                             IsAvailable = true,
@@ -176,15 +183,38 @@ namespace BikeShop.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("BicycleId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CustomerCity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeliveryCity")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeliveryStreet")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeliveryStreetNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDelivery")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
@@ -213,14 +243,33 @@ namespace BikeShop.Web.Migrations
                     b.Property<int>("BicycleId")
                         .HasColumnType("int");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -236,6 +285,42 @@ namespace BikeShop.Web.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Rentals");
+                });
+
+            modelBuilder.Entity("CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BicycleId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("RentalEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("RentalStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BicycleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -395,6 +480,25 @@ namespace BikeShop.Web.Migrations
                 });
 
             modelBuilder.Entity("BikeShop.Web.Models.Rental", b =>
+                {
+                    b.HasOne("BikeShop.Web.Models.Bicycle", "Bicycle")
+                        .WithMany()
+                        .HasForeignKey("BicycleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BikeShop.Web.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bicycle");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CartItem", b =>
                 {
                     b.HasOne("BikeShop.Web.Models.Bicycle", "Bicycle")
                         .WithMany()

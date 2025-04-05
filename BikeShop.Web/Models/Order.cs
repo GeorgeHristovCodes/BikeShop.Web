@@ -19,12 +19,24 @@ namespace BikeShop.Web.Models
         [ForeignKey("BicycleId")]
         public Bicycle? Bicycle { get; set; }
 
-        [Required]
-        public string Address { get; set; } = null!;
+        
 
 
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? PhoneNumber { get; set; }
+        // Информация за клиента
+        public string? CustomerCity { get; set; }
+
+        public string? DeliveryCity { get; set; }
+        public string? DeliveryStreet { get; set; }
+        public string? DeliveryStreetNumber { get; set; }
+        public string? PostalCode { get; set; }
+
+        // Начин на доставка
+        public bool IsDelivery { get; set; } // true = доставка, false = взима от магазин
         public decimal TotalPrice { get; set; }
     }
 }

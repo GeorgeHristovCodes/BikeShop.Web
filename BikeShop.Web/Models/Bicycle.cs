@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BikeShop.Web.Models
 {
@@ -17,11 +18,19 @@ namespace BikeShop.Web.Models
 
         [Required]
         public BicycleType Type { get; set; }
+        public BicycleCategory Category { get; set; }
+
 
         public string? ImageUrl { get; set; }
 
         public bool IsAvailable { get; set; } = true;
 
         public int Quantity { get; set; }
+
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
+
+
+
     }
 }

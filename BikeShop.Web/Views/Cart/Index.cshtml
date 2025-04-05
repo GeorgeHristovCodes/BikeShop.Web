@@ -1,0 +1,85 @@
+﻿@model List<CartItem>
+
+@{
+    ViewData["Title"] = "Кошницата";
+}
+
+<h2 class="mb-4">🛒 Моята кошница</h2>
+
+@if (!Model.Any())
+{
+    <div class="text-center p-5">
+        <h4 class="text-muted">🛒 Все още не сте добавили артикули в кошницата си.</h4>
+        <a href="/Bicycle/ForSale" class="btn btn-outline-primary mt-3">Разгледайте велосипедите</a>
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+        <thead>
+            <tr>
+                <th>Снимка</th>
+                <th>Име</th>
+                <th>Тип</th>
+                <th>Цена</th>
+
+                    @if (Model.Any(i => i.Type == CartItemType.Rental))
+                    {
+                    <th>Дати (ако е наем)</th>
+                    }
+
+                <th></th>
+            </tr>
+        </thead>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="@item.Bicycle.ImageUrl" alt="Велосипед" class="img-thumbnail" style="max-height:100px;" />
+                    </td>
+                    <td>@item.Bicycle.Name</td>
+                    <td>@(item.Type == CartItemType.Purchase ? "Покупка" : "Наем")</td>
+                    <td>@item.Price лв.</td>
+
+                    @if (Model.Any(i => i.Type == CartItemType.Rental))
+                    {
+                        <td>
+                            @if (item.Type == CartItemType.Rental)
+                            {
+                                <span>
+                                    @item.RentalStartDate?.ToString("dd.MM.yyyy") - @item.RentalEndDate?.ToString("dd.MM.yyyy")
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">—</span>
+                            }
+                        </td>
+                    }
+
+                    <td>
+                        <form asp-action="Remove" asp-controller="Cart" method="post">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Премахни</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+    @if (Model.Any(i => i.Type == CartItemType.Purchase))
+    {
+        <a asp-controller="Cart" asp-action="CheckoutOrder" class="btn btn-success mt-3">✅ Финализирай покупка</a>
+    }
+    @if (Model.Any(i => i.Type == CartItemType.Rental))
+    {
+        <a asp-controller="Cart" asp-action="CheckoutRental" class="btn btn-warning mt-3">🚲 Финализирай наем</a>
+    }
+
+}
