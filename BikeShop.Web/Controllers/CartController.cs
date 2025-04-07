@@ -1,11 +1,13 @@
-﻿// ✅ ОБНОВЕН CartController.cs — с поддръжка за гост потребители и прехвърляне към акаунт
+﻿// ✅ CartController.cs (разширен с CheckoutOrder)
 using BikeShop.Web.Data;
 using BikeShop.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
+[Authorize]
 public class CartController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -17,39 +19,9 @@ public class CartController : Controller
         _userManager = userManager;
     }
 
-    private string GetCurrentUserId()
-    {
-        if (User.Identity.IsAuthenticated)
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        const string sessionKey = "GuestId";
-        if (!HttpContext.Session.TryGetValue(sessionKey, out _))
-        {
-            HttpContext.Session.SetString(sessionKey, Guid.NewGuid().ToString());
-        }
-        return HttpContext.Session.GetString(sessionKey)!;
-    }
-
     public async Task<IActionResult> Index()
     {
-        var userId = GetCurrentUserId();
-
-        // 🔁 Прехвърляне от Guest към акаунт
-        if (User.Identity.IsAuthenticated)
-        {
-            var guestId = HttpContext.Session.GetString("GuestId");
-            if (!string.IsNullOrEmpty(guestId) && guestId != userId)
-            {
-                var guestItems = await _context.CartItems.Where(c => c.UserId == guestId).ToListAsync();
-                foreach (var item in guestItems)
-                {
-                    item.UserId = userId;
-                }
-                await _context.SaveChangesAsync();
-                HttpContext.Session.Remove("GuestId");
-            }
-        }
-
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
             .Where(c => c.UserId == userId)
@@ -59,11 +31,15 @@ public class CartController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add(int bicycleId, CartItemType type, DateTime? rentalStartDate = null, DateTime? rentalEndDate = null)
+    public async Task<IActionResult> Add(int bicycleId, CartItemType type)
     {
-        var userId = GetCurrentUserId();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var bicycle = await _context.Bicycles.FindAsync(bicycleId);
-        if (bicycle == null) return NotFound();
+
+        if (bicycle == null)
+        {
+            return NotFound();
+        }
 
         var price = type == CartItemType.Purchase ? bicycle.Price : 0;
 
@@ -72,9 +48,7 @@ public class CartController : Controller
             BicycleId = bicycleId,
             UserId = userId,
             Type = type,
-            Price = price,
-            RentalStartDate = rentalStartDate,
-            RentalEndDate = rentalEndDate
+            Price = price
         };
 
         _context.CartItems.Add(cartItem);
@@ -87,7 +61,10 @@ public class CartController : Controller
     public async Task<IActionResult> Remove(int id)
     {
         var item = await _context.CartItems.FindAsync(id);
-        if (item == null) return NotFound();
+        if (item == null)
+        {
+            return NotFound();
+        }
 
         _context.CartItems.Remove(item);
         await _context.SaveChangesAsync();
@@ -95,13 +72,12 @@ public class CartController : Controller
         return RedirectToAction("Index");
     }
 
+    // ✅ CheckoutRental (GET)
     [HttpGet]
     public async Task<IActionResult> CheckoutRental()
     {
-        if (!User.Identity.IsAuthenticated)
-            return RedirectToPage("/Account/Login", new { area = "Identity", returnUrl = "/Cart/CheckoutRental" });
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var userId = GetCurrentUserId();
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
             .Where(c => c.UserId == userId && c.Type == CartItemType.Rental)
@@ -113,15 +89,21 @@ public class CartController : Controller
             return RedirectToAction("Index");
         }
 
-        var model = new RentalCheckoutViewModel { CartItems = cartItems };
+        var model = new RentalCheckoutViewModel
+        {
+            CartItems = cartItems
+        };
+
         return View(model);
     }
 
+    // ✅ CheckoutRental (POST)
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CheckoutRental(RentalCheckoutViewModel model)
     {
-        var userId = GetCurrentUserId();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
             .Where(c => c.UserId == userId && c.Type == CartItemType.Rental)
@@ -149,6 +131,7 @@ public class CartController : Controller
                 CreatedOn = DateTime.Now,
                 IsActive = true
             };
+
             _context.Rentals.Add(rental);
         }
 
@@ -164,15 +147,17 @@ public class CartController : Controller
         return dailyPrice * (days > 0 ? days : 1);
     }
 
-    public IActionResult SuccessRental() => View();
+    public IActionResult SuccessRental()
+    {
+        return View();
+    }
 
+    // ✅ CheckoutOrder (GET)
     [HttpGet]
     public async Task<IActionResult> CheckoutOrder()
     {
-        if (!User.Identity.IsAuthenticated)
-            return RedirectToPage("/Account/Login", new { area = "Identity", returnUrl = "/Cart/CheckoutOrder" });
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var userId = GetCurrentUserId();
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
             .Where(c => c.UserId == userId && c.Type == CartItemType.Purchase)
@@ -184,15 +169,21 @@ public class CartController : Controller
             return RedirectToAction("Index");
         }
 
-        var model = new OrderCheckoutViewModel { CartItems = cartItems };
+        var model = new OrderCheckoutViewModel
+        {
+            CartItems = cartItems
+        };
+
         return View(model);
     }
 
+    // ✅ CheckoutOrder (POST)
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CheckoutOrder(OrderCheckoutViewModel model)
     {
-        var userId = GetCurrentUserId();
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
             .Where(c => c.UserId == userId && c.Type == CartItemType.Purchase)
@@ -230,7 +221,9 @@ public class CartController : Controller
             {
                 bicycle.Quantity--;
                 if (bicycle.Quantity <= 0)
+                {
                     bicycle.IsAvailable = false;
+                }
             }
         }
 
@@ -240,5 +233,8 @@ public class CartController : Controller
         return RedirectToAction("SuccessOrder");
     }
 
-    public IActionResult SuccessOrder() => View();
+    public IActionResult SuccessOrder()
+    {
+        return View();
+    }
 }

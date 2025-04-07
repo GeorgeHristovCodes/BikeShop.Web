@@ -25,47 +25,37 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Index">Начало</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="About">За нас</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Contact">Контакти</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Bicycle" asp-action="ForSale">Купи</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Bicycle" asp-action="ForRent">Наеми</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Начало</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="About">За нас</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Контакти</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Bicycle" asp-action="ForSale">Купи</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Bicycle" asp-action="ForRent">Наеми</a></li>
                     @if (User.IsInRole("Admin"))
                     {
-                        <li class="nav-item">
-                            <a class="nav-link text-warning" asp-controller="Admin" asp-action="Index">Админ</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link text-warning" asp-controller="Admin" asp-action="Index">Админ</a></li>
                     }
                 </ul>
 
                 <ul class="navbar-nav">
-                    @if (User.Identity?.IsAuthenticated ?? false)
-                    {
-                        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                        var cartCount = DbContext.CartItems.Count(c => c.UserId == userId);
-
-                        <li class="nav-item">
-                            <a class="nav-link position-relative" asp-controller="Cart" asp-action="Index">
-                                🛒 Кошница
-                                @if (cartCount > 0)
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" asp-controller="Cart" asp-action="Index">
+                            🛒 Кошница
+                            @if (User.Identity?.IsAuthenticated ?? false)
+                            {
+                                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                                var cartCount = DbContext.CartItems.Count(c => c.UserId == userId);
+                                if (cartCount > 0)
                                 {
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         @cartCount
                                     </span>
                                 }
-                            </a>
-                        </li>
+                            }
+                        </a>
+                    </li>
 
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Account" asp-action="Profile">Профил</a>
                         </li>
@@ -102,7 +92,6 @@
                     <h5>BikeShop 🚴‍♂️</h5>
                     <p>Онлайн платформа за наем и покупка на велосипеди. Караме бъдещето напред – с педали!</p>
                 </div>
-
                 <div class="col-md-4 mb-3">
                     <h5>Навигация 🔗</h5>
                     <ul class="list-unstyled">
@@ -112,7 +101,6 @@
                         <li><a href="/Bicycles/Rent" class="text-white">Наем</a></li>
                     </ul>
                 </div>
-
                 <div class="col-md-4 mb-3">
                     <h5>Контакти 📞</h5>
                     <p>📧 support@bikeshop.bg</p>

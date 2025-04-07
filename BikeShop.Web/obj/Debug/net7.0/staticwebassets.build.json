@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "taPEN1lsO/smyVAxAJpg09pj5v5hTCNviYKsAfhwPjM=",
+  "Hash": "Yf+PMTiEZRVOLtK2Dp6ZgZmCks9/YqilZi++2M/3FHw=",
   "Source": "BikeShop.Web",
   "BasePath": "_content/BikeShop.Web",
   "Mode": "Default",
@@ -102,6 +102,23 @@
       "OriginalItemSpec": "wwwroot\\images\\0b06e824-5d04-4789-9d0e-f198307b3a9e.webp"
     },
     {
+      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\1cb9594e-df59-4682-bcb1-be1217718acd.webp",
+      "SourceId": "BikeShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
+      "BasePath": "_content/BikeShop.Web",
+      "RelativePath": "images/1cb9594e-df59-4682-bcb1-be1217718acd.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\1cb9594e-df59-4682-bcb1-be1217718acd.webp"
+    },
+    {
       "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\601adef5-4f6a-4a18-8e28-34e735b34d78.webp",
       "SourceId": "BikeShop.Web",
       "SourceType": "Discovered",
@@ -187,6 +204,23 @@
       "OriginalItemSpec": "wwwroot\\images\\75213b11-1661-48c7-9e51-6c82fc948a7b.webp"
     },
     {
+      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\8fcc600e-17ed-4c07-bf67-6c3f1b1b1e01.webp",
+      "SourceId": "BikeShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
+      "BasePath": "_content/BikeShop.Web",
+      "RelativePath": "images/8fcc600e-17ed-4c07-bf67-6c3f1b1b1e01.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\8fcc600e-17ed-4c07-bf67-6c3f1b1b1e01.webp"
+    },
+    {
       "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\b5956221-c792-440d-8944-f5e3e497b35c.webp",
       "SourceId": "BikeShop.Web",
       "SourceType": "Discovered",
@@ -253,6 +287,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\d7dc398e-f1a1-4ee2-9972-9ed4b4ecbdcb.webp"
+    },
+    {
+      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\e4776ca2-2b4c-420f-a47c-a9a1b72a3d8c.webp",
+      "SourceId": "BikeShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
+      "BasePath": "_content/BikeShop.Web",
+      "RelativePath": "images/e4776ca2-2b4c-420f-a47c-a9a1b72a3d8c.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\e4776ca2-2b4c-420f-a47c-a9a1b72a3d8c.webp"
     },
     {
       "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\eaf03e1e-60bc-4851-ac17-d0bc19bf327d.webp",

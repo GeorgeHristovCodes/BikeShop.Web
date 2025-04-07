@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BikeShop.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250407125741_InitialCreate")]
+    [Migration("20250407134124_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
