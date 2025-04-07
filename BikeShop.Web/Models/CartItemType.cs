@@ -1,5 +1,8 @@
-﻿public enum CartItemType
+﻿namespace BikeShop.Web.Models
 {
-    Purchase = 1,
-    Rental = 2
+    public enum CartItemType
+    {
+        Purchase = 1,
+        Rental = 2
+    }
 }

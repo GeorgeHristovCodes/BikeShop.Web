@@ -18,7 +18,14 @@ namespace BikeShop.Web.Models
 
         [Required]
         public BicycleType Type { get; set; }
+      
         public BicycleCategory Category { get; set; }
+
+        [Required]
+        public string Brand { get; set; } = null!;
+
+        [Required]
+        public string FrameSize { get; set; } = null!;
 
 
         public string? ImageUrl { get; set; }
@@ -29,6 +36,7 @@ namespace BikeShop.Web.Models
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+
 
 
 
