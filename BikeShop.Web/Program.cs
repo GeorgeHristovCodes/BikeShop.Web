@@ -20,6 +20,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 // ➕ MVC & Razor
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddSession(); // ✅ Добавя Session услугата
+
 
 var app = builder.Build();
 
@@ -34,6 +36,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession(); // ✅ Активира session middleware-а
+
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -80,5 +84,7 @@ app.MapControllerRoute(
     pattern: "{controller=Bicycle}/{action=ForRent}/{id?}");
 
 app.MapRazorPages();
+
+
 
 app.Run();

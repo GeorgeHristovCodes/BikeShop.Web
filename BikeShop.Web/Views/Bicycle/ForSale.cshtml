@@ -1,60 +1,123 @@
-﻿@model IEnumerable<BikeShop.Web.Models.Bicycle>
-@using BikeShop.Web.Models
-
+﻿@model BikeShop.Web.Models.ViewModels.BicycleFilterViewModel
 @{
     ViewData["Title"] = "Купи велосипед";
 }
 
-<h2 class="mb-4">Купи велосипед</h2>
+<div class="row">
+    <!-- 🔍 ФИЛТЪР ПАНЕЛ ВЛЯВО -->
+    <div class="col-md-3">
+        <form asp-action="ForSale" method="get" class="border rounded p-3 bg-light">
+            <h5 class="mb-3">Филтрирай</h5>
 
-<!-- 🔽 Форма за филтриране по категория -->
-<form method="get" asp-action="ForSale" class="mb-4 d-flex gap-2">
-    <select name="category" class="form-select w-auto">
-        <option value="">Всички категории</option>
-        @foreach (BicycleCategory cat in Enum.GetValues(typeof(BicycleCategory)))
+            <!-- Категория -->
+            <div class="mb-3">
+                <label class="form-label">Категория</label>
+                <select class="form-select" asp-for="Category" asp-items="Html.GetEnumSelectList<BicycleCategory>()">
+                    <option value="">-- Всички --</option>
+                </select>
+            </div>
+
+            <!-- Бранд -->
+            <div class="mb-3">
+                <label class="form-label">Бранд</label>
+                <select class="form-select" asp-for="Brand">
+                    <option value="">-- Всички --</option>
+                    @foreach (var brand in Model.AvailableBrands)
+                    {
+                        <option value="@brand" selected="@(Model.Brand == brand)">@brand</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Размер на рамката -->
+            <div class="mb-3">
+                <label class="form-label">Размер на рамката</label>
+                <select class="form-select" asp-for="FrameSize">
+                    <option value="">-- Всички --</option>
+                    @foreach (var size in Model.FrameSizes)
+                    {
+                        <option value="@size" selected="@(Model.FrameSize == size)">@size</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Диапазон цена -->
+            <div class="mb-3">
+                <label class="form-label">Цена (от - до)</label>
+                <div class="input-group">
+                    <input type="number" asp-for="MinPrice" class="form-control" placeholder="Мин." step="0.01" />
+                    <input type="number" asp-for="MaxPrice" class="form-control" placeholder="Макс." step="0.01" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Филтрирай</button>
+        </form>
+    </div>
+
+    <!-- 📦 РЕЗУЛТАТИ ВДЯСНО -->
+    <div class="col-md-9">
+        <h3 class="mb-4">Резултати (@Model.Results.Count)</h3>
+
+        @if (!Model.Results.Any())
         {
-            <option value="@cat">@cat</option>
+            <div class="alert alert-warning">Няма намерени велосипеди по избраните критерии.</div>
         }
-    </select>
-    <button type="submit" class="btn btn-outline-primary">Филтрирай</button>
-</form>
-
-<!-- 🔽 Списък с велосипеди -->
-@foreach (var bike in Model)
-{
-    <div class="card mb-3 shadow">
-        <div class="card-body">
-            <h5 class="card-title">@bike.Name</h5>
-
-            @if (!string.IsNullOrEmpty(bike.ImageUrl))
-            {
-                <img src="@bike.ImageUrl" class="img-fluid mb-2" style="max-height: 200px;" alt="@bike.Name" />
-            }
-
-            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#details-@bike.Id">
-                Детайли
-            </button>
-
-            <div class="collapse mt-3" id="details-@bike.Id">
-                <p><strong>Описание:</strong> @bike.Description</p>
-                <p><strong>Категория:</strong> @bike.Category</p>
-                <p><strong>Цена:</strong> @bike.Price лв.</p>
-                <p><strong>Наличност:</strong> @(bike.IsAvailable ? "Да" : "Не")</p>
-                @if (bike.IsAvailable && bike.Quantity > 0)
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var bike in Model.Results)
                 {
-                    <!-- Покупка -->
-                    <form asp-controller="Cart" asp-action="Add" method="post" style="display:inline;">
-                        <input type="hidden" name="bicycleId" value="@bike.Id" />
-                        <input type="hidden" name="type" value="Purchase" />
-                        <button type="submit" class="btn btn-primary">Купи</button>
-                    </form>
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="@bike.ImageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" />
+                            <div class="card-body">
+                                <h5 class="card-title">@bike.Name</h5>
+                                <p class="card-text">
+                                    Бранд: @bike.Brand<br />
+                                    Рамка: @bike.FrameSize<br />
+                                    Категория: @bike.Category
+                                </p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <strong class="text-success">@bike.Price лв.</strong>
+                                <div class="btn-group">
+                                    <form asp-controller="Cart" asp-action="Add" method="post">
+                                        <input type="hidden" name="bicycleId" value="@bike.Id" />
+                                        <input type="hidden" name="type" value="Purchase" />
+                                        <button type="submit" class="btn btn-sm btn-success">Добави в кошницата</button>
+                                    </form>
+                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal-@bike.Id">
+                                        Описание
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                }
-                else
-                {
-                    <span class="text-danger fw-bold">❌ Няма наличност</span>
+                    <!-- Modal описание -->
+                    <div class="modal fade" id="detailsModal-@bike.Id" tabindex="-1" aria-labelledby="detailsLabel-@bike.Id" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="detailsLabel-@bike.Id">@bike.Name</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Бранд:</strong> @bike.Brand</p>
+                                    <p><strong>Размер:</strong> @bike.FrameSize</p>
+                                    <p><strong>Категория:</strong> @bike.Category</p>
+                                    <p><strong>Описание:</strong> @bike.Description</p>
+                                    <p><strong>Наличност:</strong> @(bike.IsAvailable ? "Да" : "Не")</p>
+                                    <p><strong>Цена:</strong> @bike.Price лв.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 }
             </div>
-        </div>
+        }
     </div>
-}
+</div>

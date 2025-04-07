@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace BikeShop.Web.Migrations
 {
     /// <inheritdoc />
@@ -63,6 +61,8 @@ namespace BikeShop.Web.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Category = table.Column<int>(type: "int", nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FrameSize = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
@@ -185,7 +185,7 @@ namespace BikeShop.Web.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BicycleId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     RentalStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     RentalEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -194,12 +194,6 @@ namespace BikeShop.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CartItems_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CartItems_Bicycles_BicycleId",
                         column: x => x.BicycleId,
@@ -259,8 +253,8 @@ namespace BikeShop.Web.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -278,17 +272,6 @@ namespace BikeShop.Web.Migrations
                         principalTable: "Bicycles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Bicycles",
-                columns: new[] { "Id", "Category", "Description", "ImageUrl", "IsAvailable", "Name", "Price", "Quantity", "Type" },
-                values: new object[,]
-                {
-                    { 1, 0, "Планински велосипед под наем", "https://via.placeholder.com/300x200", true, "Rent Bike 1", 15m, 0, 0 },
-                    { 2, 0, "Градски велосипед под наем", "https://via.placeholder.com/300x200", true, "Rent Bike 2", 10m, 0, 0 },
-                    { 3, 0, "Шосеен велосипед с карбонова рамка.", "https://via.placeholder.com/300x200", true, "Road Bike Pro", 1200m, 0, 1 },
-                    { 4, 0, "Удобен градски велосипед за ежедневна употреба.", "https://via.placeholder.com/300x200", true, "City Cruiser", 750m, 0, 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -334,11 +317,6 @@ namespace BikeShop.Web.Migrations
                 name: "IX_CartItems_BicycleId",
                 table: "CartItems",
                 column: "BicycleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CartItems_UserId",
-                table: "CartItems",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_BicycleId",

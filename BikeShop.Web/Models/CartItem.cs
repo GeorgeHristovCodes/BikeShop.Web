@@ -11,13 +11,13 @@ public class CartItem
     public int BicycleId { get; set; }
 
     [ForeignKey(nameof(BicycleId))]
-    public Bicycle Bicycle { get; set; }
+    public Bicycle Bicycle { get; set; } = null!;
 
     [Required]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = null!;
 
-    [ForeignKey(nameof(UserId))]
-    public ApplicationUser User { get; set; }
+    // ❌ Премахнато навигационно свойство към ApplicationUser:
+    // public ApplicationUser User { get; set; }
 
     [Required]
     public CartItemType Type { get; set; }

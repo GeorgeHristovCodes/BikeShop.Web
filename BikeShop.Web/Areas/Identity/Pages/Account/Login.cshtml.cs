@@ -116,8 +116,20 @@ namespace BikeShop.Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        if (returnUrl.Contains("/Cart/Add"))
+                        {
+                            return RedirectToAction("Index", "Cart"); // 🛒 директно към кошницата
+                        }
+
+                        return LocalRedirect(returnUrl);
+                    }
+
+                    return RedirectToPage("/Index", new { area = "" });
                 }
+
                 if (result.RequiresTwoFactor)
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });

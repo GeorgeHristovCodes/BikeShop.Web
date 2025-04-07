@@ -13,12 +13,40 @@
         <label asp-for="Name" class="form-label"></label>
         <input asp-for="Name" class="form-control" />
     </div>
-    <div class="form-group">
-        <label asp-for="Category" class="control-label"></label>
-        <select asp-for="Category" class="form-control" asp-items="ViewBag.Categories"></select>
+
+    <div class="mb-3">
+        <label asp-for="Brand" class="form-label">Бранд</label>
+        <select asp-for="Brand" class="form-select">
+            <option value="">-- Избери бранд --</option>
+            <option value="DRAG">DRAG</option>
+            <option value="NS BIKES">NS BIKES</option>
+            <option value="SPECIALIZED">SPECIALIZED</option>
+            <option value="YT INDUSTRIES">YT INDUSTRIES</option>
+        </select>
+        <span asp-validation-for="Brand" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Category" class="form-label">Категория</label>
+        <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<BicycleCategory>()">
+            <option value="">-- Избери категория --</option>
+        </select>
         <span asp-validation-for="Category" class="text-danger"></span>
     </div>
 
+    <div class="mb-3">
+        <label asp-for="FrameSize" class="form-label">Размер на рамката</label>
+        <select asp-for="FrameSize" class="form-select">
+            <option value="">-- Избери размер --</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+        </select>
+        <span asp-validation-for="FrameSize" class="text-danger"></span>
+    </div>
 
     <div class="mb-3">
         <label asp-for="Description" class="form-label"></label>

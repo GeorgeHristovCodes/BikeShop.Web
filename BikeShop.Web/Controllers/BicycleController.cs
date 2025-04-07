@@ -1,5 +1,6 @@
 ﻿using BikeShop.Web.Data;
 using BikeShop.Web.Models;
+using BikeShop.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,35 +19,67 @@ namespace BikeShop.Web.Controllers
         }
 
         // /Bicycle/ForSale
-        public async Task<IActionResult> ForSale(BicycleCategory? category)
+        [HttpGet]
+        public IActionResult ForSale(BicycleFilterViewModel filter)
         {
-            var bicycles = _context.Bicycles
+            var query = _context.Bicycles
                 .Where(b => b.Type == BicycleType.ForSale && b.IsAvailable);
 
-            if (category != null)
-            {
-                bicycles = bicycles.Where(b => b.Category == category);
-            }
+            if (filter.Category.HasValue)
+                query = query.Where(b => b.Category == filter.Category.Value);
 
-            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)));
-            return View(await bicycles.ToListAsync());
+            if (!string.IsNullOrWhiteSpace(filter.Brand))
+                query = query.Where(b => b.Brand == filter.Brand);
+
+            if (!string.IsNullOrWhiteSpace(filter.FrameSize))
+                query = query.Where(b => b.FrameSize == filter.FrameSize);
+
+            if (filter.MinPrice.HasValue)
+                query = query.Where(b => b.Price >= filter.MinPrice.Value);
+
+            if (filter.MaxPrice.HasValue)
+                query = query.Where(b => b.Price <= filter.MaxPrice.Value);
+
+            filter.Results = query.ToList();
+
+            // Списъци за селекти
+            filter.AvailableBrands = new List<string> { "DRAG", "NS BIKES", "SPECIALIZED", "YT INDUSTRIES" };
+            filter.FrameSizes = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
+
+            return View(filter);
         }
+
 
         // /Bicycle/ForRent
-        public async Task<IActionResult> ForRent(BicycleCategory? category)
+        [HttpGet]
+        public IActionResult ForRent(BicycleFilterViewModel filter)
         {
-            var bicycles = _context.Bicycles
+            var query = _context.Bicycles
                 .Where(b => b.Type == BicycleType.ForRent && b.IsAvailable);
 
-            if (category != null)
-            {
-                bicycles = bicycles.Where(b => b.Category == category);
-            }
+            if (filter.Category.HasValue)
+                query = query.Where(b => b.Category == filter.Category.Value);
 
-            return View(await bicycles.ToListAsync());
+            if (!string.IsNullOrWhiteSpace(filter.Brand))
+                query = query.Where(b => b.Brand == filter.Brand);
+
+            if (!string.IsNullOrWhiteSpace(filter.FrameSize))
+                query = query.Where(b => b.FrameSize == filter.FrameSize);
+
+            if (filter.MinPrice.HasValue)
+                query = query.Where(b => b.Price >= filter.MinPrice.Value);
+
+            if (filter.MaxPrice.HasValue)
+                query = query.Where(b => b.Price <= filter.MaxPrice.Value);
+
+            filter.Results = query.ToList();
+
+            // Списъци за селекти
+            filter.AvailableBrands = new List<string> { "DRAG", "NS BIKES", "SPECIALIZED", "YT INDUSTRIES" };
+            filter.FrameSizes = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
+
+            return View(filter);
         }
-
-
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Manage(string? filterType, BicycleCategory? filterCategory)
