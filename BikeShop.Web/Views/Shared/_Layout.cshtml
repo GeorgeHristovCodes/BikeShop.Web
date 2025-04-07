@@ -30,11 +30,14 @@
                     <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Контакти</a></li>
                     <li class="nav-item"><a class="nav-link" asp-controller="Bicycle" asp-action="ForSale">Купи</a></li>
                     <li class="nav-item"><a class="nav-link" asp-controller="Bicycle" asp-action="ForRent">Наеми</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Gear" asp-action="Index">Екипировка</a></li> <!-- 🎒 Тук я добавяме -->
                     @if (User.IsInRole("Admin"))
                     {
                         <li class="nav-item"><a class="nav-link text-warning" asp-controller="Admin" asp-action="Index">Админ</a></li>
                     }
                 </ul>
+
+                
 
                 <ul class="navbar-nav">
                     <li class="nav-item">
