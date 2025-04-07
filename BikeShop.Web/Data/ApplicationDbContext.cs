@@ -15,11 +15,12 @@ namespace BikeShop.Web.Data
         public DbSet<Rental> Rentals { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<GearItem> GearItems { get; set; }
 
 
 
-       
 
-        
+
+
     }
 }
