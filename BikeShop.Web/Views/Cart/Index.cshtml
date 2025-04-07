@@ -73,13 +73,34 @@ else
 
     </table>
 
-    @if (Model.Any(i => i.Type == CartItemType.Purchase))
+   
+    bool hasPurchase = Model.Any(i => i.Type == CartItemType.Purchase);
+    bool hasRental = Model.Any(i => i.Type == CartItemType.Rental);
+
+
+     @if (hasPurchase && hasRental)
+     {
+        <div class="alert alert-danger mt-3">
+           ❌ Не може едновременно да се наемат и купуват велосипеди.<br />
+           Моля, премахнете някои артикули от количката и опитайте отново.
+       </div>
+     }
+     else
+     {
+     if (hasPurchase)
+     {
+        <a asp-controller="Cart" asp-action="CheckoutOrder" class="btn btn-success mt-3">
+            ✅ Финализирай покупка
+        </a>
+     }
+
+    if (hasRental)
     {
-        <a asp-controller="Cart" asp-action="CheckoutOrder" class="btn btn-success mt-3">✅ Финализирай покупка</a>
+        <a asp-controller="Cart" asp-action="CheckoutRental" class="btn btn-warning mt-3">
+            🚲 Финализирай наем
+        </a>
     }
-    @if (Model.Any(i => i.Type == CartItemType.Rental))
-    {
-        <a asp-controller="Cart" asp-action="CheckoutRental" class="btn btn-warning mt-3">🚲 Финализирай наем</a>
-    }
+}
+
 
 }
