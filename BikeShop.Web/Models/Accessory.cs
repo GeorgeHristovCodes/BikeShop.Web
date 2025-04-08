@@ -24,5 +24,6 @@ namespace BikeShop.Web.Models
         public AccessoryCategory Category { get; set; }
 
         public int Stock { get; set; }
+
     }
 }

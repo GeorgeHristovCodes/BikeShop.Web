@@ -120,12 +120,14 @@
                                     <form asp-controller="Cart" asp-action="Add" method="post">
                                         <input type="hidden" name="bicycleId" value="@bike.Id" />
                                         <input type="hidden" name="type" value="Purchase" />
-                                        <button type="submit" class="btn btn-sm btn-success">Добави в кошницата</button>
+                                        <input type="hidden" name="returnUrl" value="@Url.Action("ForSale", "Bicycle")" />
+                                        <button type="submit" class="btn btn-sm btn-success">Купи</button>
                                     </form>
+
                                     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal-@bike.Id">
                                         Описание
                                     </button>
-                                </div>
+                                </div>value="Purchase"
                             </div>
                         </div>
                     </div>

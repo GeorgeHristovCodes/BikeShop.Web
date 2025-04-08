@@ -32,15 +32,14 @@ public class CartController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add(int bicycleId, CartItemType type)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Add(int bicycleId, CartItemType type, string? returnUrl)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var bicycle = await _context.Bicycles.FindAsync(bicycleId);
 
         if (bicycle == null)
-        {
             return NotFound();
-        }
 
         var price = type == CartItemType.Purchase ? bicycle.Price : 0;
 
@@ -55,8 +54,13 @@ public class CartController : Controller
         _context.CartItems.Add(cartItem);
         await _context.SaveChangesAsync();
 
-        return RedirectToAction("Index");
+        TempData["Success"] = "✅ Артикулът беше добавен в кошницата.";
+
+        // Връщаме се към зададената страница
+        return !string.IsNullOrEmpty(returnUrl) ? Redirect(returnUrl) : RedirectToAction("Index", "Cart");
     }
+
+
 
     [HttpPost]
     public async Task<IActionResult> Remove(int id)
@@ -85,7 +89,6 @@ public class CartController : Controller
 
         if (!cartItems.Any())
         {
-            TempData["Error"] = "Нямате артикули за наем в кошницата.";
             return RedirectToAction("Index");
         }
 
@@ -137,6 +140,7 @@ public class CartController : Controller
         _context.CartItems.RemoveRange(cartItems);
         await _context.SaveChangesAsync();
 
+        TempData["Success"] = "✅ Успешен наем!";
         return RedirectToAction("SuccessRental");
     }
 
@@ -164,7 +168,6 @@ public class CartController : Controller
 
         if (!cartItems.Any())
         {
-            TempData["Error"] = "Нямате артикули за покупка в кошницата.";
             return RedirectToAction("Index");
         }
 
@@ -243,6 +246,7 @@ public class CartController : Controller
         _context.CartItems.RemoveRange(cartItems);
         await _context.SaveChangesAsync();
 
+        TempData["Success"] = "✅ Поръчката е успешно направена.";
         return RedirectToAction("SuccessOrder");
     }
 
@@ -259,7 +263,6 @@ public class CartController : Controller
 
         if (accessory == null || accessory.Stock <= 0)
         {
-            TempData["Error"] = "Аксесоарът не е наличен.";
             return RedirectToAction("Index", "Accessory");
         }
 
@@ -290,8 +293,7 @@ public class CartController : Controller
         }
 
         await _context.SaveChangesAsync();
-
-        TempData["Success"] = "Аксесоарът беше добавен в кошницата.";
+        TempData["Success"] = "✅ Аксесоарът беше добавен в количката.";
         return RedirectToAction("Index", "Accessory");
     }
 }

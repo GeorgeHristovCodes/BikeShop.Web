@@ -1,65 +1,68 @@
-﻿@model IEnumerable<BikeShop.Web.Models.Accessory>
+﻿@model BikeShop.Web.Models.AccessoryFilterViewModel
 @{
     ViewData["Title"] = "Всички аксесоари";
 }
 
-<div class="container mt-4">
-    <h2 class="mb-4 fw-bold">Всички аксесоари</h2>
+<h2 class="mb-4">🧢 Всички аксесоари</h2>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var item in Model)
-        {
-            <div class="col">
-                <div class="card h-100 shadow-sm">
-                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="max-height: 200px; object-fit: contain;" />
+<div class="row">
+    <!-- 🔍 Филтриране -->
+    <div class="col-md-3">
+        <form method="get" asp-action="Index" class="border rounded p-3 bg-light">
+            <h5 class="mb-3">Филтрирай аксесоари</h5>
 
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text">
-                            <strong>Бранд:</strong> @item.Brand<br />
-                            <strong>Категория:</strong> @item.Category
-                        </p>
+            <!-- Категория -->
+            <div class="mb-3">
+                <label class="form-label">Категория</label>
+                <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<AccessoryCategory>()">
+                    <option value="">-- Всички --</option>
+                </select>
+            </div>
 
-                        <p class="fw-bold text-success h5">@item.Price.ToString("F2") лв.</p>
-
-                        <div class="d-flex gap-2 mt-2">
-                            <form asp-controller="Cart" asp-action="AddAccessory" method="post">
-                                <input type="hidden" name="accessoryId" value="@item.Id" />
-                                <button type="submit" class="btn btn-success btn-sm">
-                                    <i class="bi bi-cart-plus"></i> Добави в кошницата
-                                </button>
-                            </form>
-
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal-@item.Id">
-                                Детайли
-                            </button>
-                        </div>
-                    </div>
+            <!-- Цена -->
+            <div class="mb-3">
+                <label class="form-label">Цена (от - до)</label>
+                <div class="input-group">
+                    <input asp-for="MinPrice" class="form-control" placeholder="Мин." step="0.01" />
+                    <input asp-for="MaxPrice" class="form-control" placeholder="Макс." step="0.01" />
                 </div>
             </div>
 
-            <!-- Модал с детайлите -->
-            <div class="modal fade" id="detailsModal-@item.Id" tabindex="-1" aria-labelledby="modalLabel-@item.Id" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content shadow">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalLabel-@item.Id">@item.Name</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
-                        </div>
-                        <div class="modal-body">
-                            <img src="@item.ImageUrl" class="img-fluid rounded mb-3" alt="@item.Name" />
+            <button type="submit" class="btn btn-primary w-100">Филтрирай</button>
+        </form>
+    </div>
 
-                            <p><strong>Бранд:</strong> @item.Brand</p>
-                            <p><strong>Категория:</strong> @item.Category</p>
-                            <p><strong>Описание:</strong> @item.Description</p>
-                            <p><strong>Наличност:</strong> @(item.Stock > 0 ? "Да" : "❌ Не")</p>
-                            <p><strong>Цена:</strong> @item.Price.ToString("F2") лв.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+    <!-- 🧢 Резултати -->
+    <div class="col-md-9">
+        @if (!Model.Results.Any())
+        {
+            <div class="alert alert-warning mt-3">⚠️ Няма намерени аксесоари по избраните критерии.</div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var item in Model.Results)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <img src="@item.ImageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" alt="@item.Name" />
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                <p class="card-text">
+                                    Категория: @item.Category<br />
+                                    Бранд: @item.Brand
+                                </p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <strong class="text-success">@item.Price.ToString("F2") лв.</strong>
+                                <form asp-controller="Cart" asp-action="AddAccessory" method="post">
+                                    <input type="hidden" name="accessoryId" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-success">Добави</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
         }
     </div>

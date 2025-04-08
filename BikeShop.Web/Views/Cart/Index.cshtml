@@ -16,7 +16,6 @@
 }
 
 <h2 class="mb-4">🛒 Моята кошница</h2>
-
 @if (!Model.Any())
 {
     <div class="text-center p-5">
@@ -46,7 +45,7 @@ else
                 {
                     <tr>
                         <td>
-                            <img src="@item.Bicycle.ImageUrl" alt="Снимка" class="img-thumbnail" style="max-height: 100px;" />
+                            <img src="@item.Bicycle.ImageUrl" class="img-thumbnail" style="max-height: 100px;" />
                         </td>
                         <td>@item.Bicycle.Name</td>
                         <td>@(item.Type == CartItemType.Purchase ? "Покупка" : "Наем")</td>
@@ -99,7 +98,7 @@ else
                 {
                     <tr>
                         <td>
-                            <img src="@item.Accessory.ImageUrl" alt="Снимка" class="img-thumbnail" style="max-height: 100px;" />
+                            <img src="@item.Accessory.ImageUrl" class="img-thumbnail" style="max-height: 100px;" />
                         </td>
                         <td>@item.Accessory.Name</td>
                         <td>@item.Accessory.Brand</td>
@@ -128,7 +127,7 @@ else
         Обща крайна сума: <span class="text-success">@total.ToString("F2") лв.</span>
     </div>
 
-    <!-- 🟩 Бутон за финализиране -->
+    <!-- ✅ Бутон за финализиране -->
     @if (hasPurchase && hasRental)
     {
         <div class="alert alert-danger mt-3">
@@ -138,14 +137,14 @@ else
     }
     else
     {
-        if (hasPurchase)
+        @if (hasPurchase)
         {
             <a asp-controller="Cart" asp-action="CheckoutOrder" class="btn btn-success w-100 mt-3">
                 ✅ Финализирай покупка
             </a>
         }
 
-        if (hasRental)
+        @if (hasRental)
         {
             <a asp-controller="Cart" asp-action="CheckoutRental" class="btn btn-warning w-100 mt-3">
                 🚲 Финализирай наем

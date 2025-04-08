@@ -15,11 +15,24 @@ namespace BikeShop.Web.Controllers
             _context = context;
         }
 
-        // Всички аксесоари
-        public async Task<IActionResult> Index()
+        // Филтрирани аксесоари
+        public IActionResult Index(AccessoryFilterViewModel filter)
         {
-            var accessories = await _context.Accessories.ToListAsync();
-            return View(accessories);
+            var query = _context.Accessories.AsQueryable();
+
+            if (filter.Category.HasValue)
+                query = query.Where(a => a.Category == filter.Category.Value);
+
+            if (filter.MinPrice.HasValue)
+                query = query.Where(a => a.Price >= filter.MinPrice.Value);
+
+            if (filter.MaxPrice.HasValue)
+                query = query.Where(a => a.Price <= filter.MaxPrice.Value);
+
+            filter.Results = query.ToList();
+            filter.AvailableCategories = Enum.GetValues(typeof(AccessoryCategory)).Cast<AccessoryCategory>().ToList();
+
+            return View(filter);
         }
 
         // Детайли за аксесоар
@@ -67,7 +80,6 @@ namespace BikeShop.Web.Controllers
             return View(accessory);
         }
 
-
         // Редакция на аксесоар (GET)
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
@@ -91,7 +103,6 @@ namespace BikeShop.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                // Копираме старите стойности, за да не загубим нищо
                 existingAccessory.Name = accessory.Name;
                 existingAccessory.Description = accessory.Description;
                 existingAccessory.Price = accessory.Price;
@@ -99,7 +110,6 @@ namespace BikeShop.Web.Controllers
                 existingAccessory.Category = accessory.Category;
                 existingAccessory.Stock = accessory.Stock;
 
-                // Ако има нова снимка – качваме я
                 if (imageFile != null && imageFile.Length > 0)
                 {
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
@@ -120,7 +130,6 @@ namespace BikeShop.Web.Controllers
 
             return View(accessory);
         }
-
 
         // Изтриване на аксесоар (GET)
         [Authorize(Roles = "Admin")]
@@ -147,6 +156,7 @@ namespace BikeShop.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // Админ панел
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Manage(AccessoryCategory? category = null)
         {
@@ -161,6 +171,5 @@ namespace BikeShop.Web.Controllers
             ViewBag.SelectedCategory = category;
             return View(model);
         }
-
     }
 }
