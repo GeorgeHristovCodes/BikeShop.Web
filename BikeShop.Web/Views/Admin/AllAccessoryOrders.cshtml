@@ -1,0 +1,29 @@
+﻿@model List<BikeShop.Web.Models.Order>
+
+@{
+    ViewData["Title"] = "Поръчки на аксесоари";
+}
+
+<h2>📦 Всички поръчки на аксесоари</h2>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Потребител</th>
+            <th>Аксесоар</th>
+            <th>Дата</th>
+            <th>Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.User?.Email</td>
+                <td>@order.Accessory?.Name ?? "—"</td>
+                <td>@order.OrderDate.ToShortDateString()</td>
+                <td>@order.TotalPrice лв.</td>
+            </tr>
+        }
+    </tbody>
+</table>

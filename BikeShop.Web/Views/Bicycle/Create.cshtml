@@ -68,10 +68,11 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="ImageFile" class="control-label">Качи снимка</label>
-        <input asp-for="ImageFile" type="file" class="form-control" />
-        <span asp-validation-for="ImageFile" class="text-danger"></span>
+        <label>Качи снимки (може няколко)</label>
+        <input type="file" name="ImageFiles" multiple class="form-control" />
+
     </div>
+
 
 
     <div class="form-check mb-3">

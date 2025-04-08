@@ -81,6 +81,18 @@ namespace BikeShop.Web.Controllers
 
             return View(orders);
         }
+        public async Task<IActionResult> AllAccessoryOrders()
+        {
+            var accessoryOrders = await _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.Accessory)
+                .Where(o => o.AccessoryId != null)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+
+            return View(accessoryOrders);
+        }
+
 
     }
 

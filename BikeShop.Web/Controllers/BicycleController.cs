@@ -20,9 +20,11 @@ namespace BikeShop.Web.Controllers
 
         // /Bicycle/ForSale
         [HttpGet]
+        [HttpGet]
         public IActionResult ForSale(BicycleFilterViewModel filter)
         {
             var query = _context.Bicycles
+                .Include(b => b.Images) // 🔥 Добавяме това
                 .Where(b => b.Type == BicycleType.ForSale && b.IsAvailable);
 
             if (filter.Category.HasValue)
@@ -48,6 +50,7 @@ namespace BikeShop.Web.Controllers
 
             return View(filter);
         }
+
 
 
         // /Bicycle/ForRent
@@ -119,6 +122,7 @@ namespace BikeShop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Качи основна снимка, ако има
                 if (bicycle.ImageFile != null)
                 {
                     string wwwRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
@@ -138,11 +142,47 @@ namespace BikeShop.Web.Controllers
                     bicycle.ImageUrl = "/images/" + fileName;
                 }
 
+                // Запази велосипеда, за да има ID
                 _context.Add(bicycle);
                 await _context.SaveChangesAsync();
+
+                // Качи допълнителни снимки
+                if (Request.Form.Files.Count > 0)
+                {
+                    foreach (var image in Request.Form.Files)
+                    {
+                        if (image.Length > 0 && image.FileName != bicycle.ImageFile?.FileName)
+                        {
+                            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/bicycles", fileName);
+
+                            if (!Directory.Exists(Path.GetDirectoryName(imagePath)))
+                            {
+                                Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
+                            }
+
+                            using (var stream = new FileStream(imagePath, FileMode.Create))
+                            {
+                                await image.CopyToAsync(stream);
+                            }
+
+                            var bikeImage = new BicycleImage
+                            {
+                                BicycleId = bicycle.Id,
+                                ImageUrl = "/images/bicycles/" + fileName
+                            };
+
+                            _context.BicycleImages.Add(bikeImage);
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Manage));
             }
 
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)), bicycle.Category);
             return View(bicycle);
         }
 
@@ -244,6 +284,7 @@ namespace BikeShop.Web.Controllers
             }
 
             var bicycle = await _context.Bicycles
+                .Include(b => b.Images) // 👈 Това добавя снимките!
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (bicycle == null)
@@ -253,8 +294,6 @@ namespace BikeShop.Web.Controllers
 
             return View(bicycle);
         }
-
-
 
 
     }

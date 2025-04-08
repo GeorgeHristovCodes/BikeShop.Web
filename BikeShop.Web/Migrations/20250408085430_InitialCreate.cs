@@ -12,6 +12,25 @@ namespace BikeShop.Web.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Accessories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<int>(type: "int", nullable: false),
+                    Stock = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accessories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -184,22 +203,28 @@ namespace BikeShop.Web.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BicycleId = table.Column<int>(type: "int", nullable: false),
+                    BicycleId = table.Column<int>(type: "int", nullable: true),
+                    AccessoryId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     RentalStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     RentalEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartItems", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_CartItems_Accessories_AccessoryId",
+                        column: x => x.AccessoryId,
+                        principalTable: "Accessories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_CartItems_Bicycles_BicycleId",
                         column: x => x.BicycleId,
                         principalTable: "Bicycles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -209,7 +234,8 @@ namespace BikeShop.Web.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BicycleId = table.Column<int>(type: "int", nullable: false),
+                    BicycleId = table.Column<int>(type: "int", nullable: true),
+                    AccessoryId = table.Column<int>(type: "int", nullable: true),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -226,6 +252,11 @@ namespace BikeShop.Web.Migrations
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Orders_Accessories_AccessoryId",
+                        column: x => x.AccessoryId,
+                        principalTable: "Accessories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Orders_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
@@ -235,8 +266,7 @@ namespace BikeShop.Web.Migrations
                         name: "FK_Orders_Bicycles_BicycleId",
                         column: x => x.BicycleId,
                         principalTable: "Bicycles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -314,9 +344,19 @@ namespace BikeShop.Web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartItems_AccessoryId",
+                table: "CartItems",
+                column: "AccessoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CartItems_BicycleId",
                 table: "CartItems",
                 column: "BicycleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_AccessoryId",
+                table: "Orders",
+                column: "AccessoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_BicycleId",
@@ -368,6 +408,9 @@ namespace BikeShop.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Accessories");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

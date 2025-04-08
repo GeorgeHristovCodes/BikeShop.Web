@@ -4,7 +4,6 @@
 }
 
 <div class="row">
-    <!-- 🔍 Филтри отляво -->
     <div class="col-md-3">
         <form asp-action="ForRent" method="get" class="border rounded p-3 bg-light">
             <h5 class="mb-3">Филтрирай</h5>
@@ -50,9 +49,8 @@
         </form>
     </div>
 
-    <!-- 🚲 Резултати вдясно -->
     <div class="col-md-9">
-        <h3 class="mb-4">Велосипеди за наем (@Model.Results.Count)</h3>
+        <h3 class="mb-4">Резултати (@Model.Results.Count)</h3>
 
         @if (!Model.Results.Any())
         {
@@ -63,9 +61,49 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 @foreach (var bike in Model.Results)
                 {
+                    var imageUrl = bike.ImageUrl;
+                    if (string.IsNullOrEmpty(imageUrl) && bike.Images?.Any() == true)
+                    {
+                        imageUrl = bike.Images.First().ImageUrl;
+                    }
+                    if (string.IsNullOrEmpty(imageUrl))
+                    {
+                        imageUrl = "/images/no-image.png";
+                    }
+
                     <div class="col">
                         <div class="card h-100">
-                            <img src="@bike.ImageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" />
+                            @if (bike.Images != null && bike.Images.Count > 1)
+                            {
+                                <div id="carousel-@bike.Id" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @for (int i = 0; i < bike.Images.Count; i++)
+                                        {
+                                            var img = bike.Images.ElementAt(i);
+                                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                                <img src="@img.ImageUrl" class="d-block w-100 card-img-top" style="max-height:200px; object-fit:cover;" alt="Снимка @(i+1)">
+                                            </div>
+                                        }
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@bike.Id" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                                        <span class="visually-hidden">Назад</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-@bike.Id" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                                        <span class="visually-hidden">Напред</span>
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                var singleImageUrl = !string.IsNullOrEmpty(bike.ImageUrl)
+                                ? bike.ImageUrl
+                                : bike.Images?.FirstOrDefault()?.ImageUrl ?? "/images/no-image.png";
+
+                                <img src="@singleImageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" />
+                            }
+
                             <div class="card-body">
                                 <h5 class="card-title">@bike.Name</h5>
                                 <p class="card-text">
@@ -79,8 +117,8 @@
                                 <div class="btn-group">
                                     <form asp-controller="Cart" asp-action="Add" method="post">
                                         <input type="hidden" name="bicycleId" value="@bike.Id" />
-                                        <input type="hidden" name="type" value="Rental" />
-                                        <button type="submit" class="btn btn-sm btn-success">Наеми</button>
+                                        <input type="hidden" name="type" value="Rent" />
+                                        <button type="submit" class="btn btn-sm btn-success">Добави в кошницата</button>
                                     </form>
                                     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal-@bike.Id">
                                         Описание

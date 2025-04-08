@@ -1,35 +1,47 @@
 ﻿@model BikeShop.Web.Models.Bicycle
 
 @{
-    ViewData["Title"] = "Детайли за велосипед";
+    ViewData["Title"] = "Детайли за " + Model.Name;
 }
 
-<h2>Детайли за велосипед</h2>
+<h2>@Model.Name</h2>
 
-<div class="mb-3">
-    <strong>Име:</strong> @Model.Name
-</div>
+<p><strong>Цена:</strong> @Model.Price лв</p>
+<p><strong>Категория:</strong> @Model.Category</p>
+<p><strong>Тип:</strong> @Model.Type</p>
+<p><strong>Бранд:</strong> @Model.Brand</p>
+<p><strong>Размер на рамката:</strong> @Model.FrameSize</p>
+<p><strong>Описание:</strong> @Model.Description</p>
 
-<div class="mb-3">
-    <strong>Описание:</strong>
-    <p>@Model.Description</p>
-</div>
+<hr />
 
-<div class="mb-3">
-    <strong>Цена:</strong> @Model.Price лв.
-</div>
+<h4>Галерия</h4>
 
-<div class="mb-3">
-    <strong>Тип:</strong> @Model.Type
-</div>
+@if (Model.Images != null && Model.Images.Any())
+{
+    <div id="bicycleCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            @for (int i = 0; i < Model.Images.Count; i++)
+            {
+                var img = Model.Images.ElementAt(i);
+                <div class="carousel-item @(i == 0 ? "active" : "")">
+                    <img src="@img.ImageUrl" class="d-block w-100" style="max-height:500px; object-fit:contain;" alt="Снимка @(i+1)">
+                </div>
+            }
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#bicycleCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Предишна</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#bicycleCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Следваща</span>
+        </button>
+    </div>
+}
+else
+{
+    <p>Няма снимки за показване.</p>
+}
 
-<div class="mb-3">
-    <strong>Наличен:</strong> @(Model.IsAvailable ? "Да" : "Не")
-</div>
-
-<div class="mb-3">
-    <strong>Снимка:</strong><br />
-    <img src="@Model.ImageUrl" alt="Велосипед" width="300" />
-</div>
-
-<a asp-action="Manage" class="btn btn-secondary">⬅ Назад</a>
+<a asp-action="ForSale" class="btn btn-secondary mt-4">Назад</a>

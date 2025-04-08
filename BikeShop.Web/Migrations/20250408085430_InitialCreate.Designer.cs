@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BikeShop.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250408075646_AddAccessoryIdToOrder")]
-    partial class AddAccessoryIdToOrder
+    [Migration("20250408085430_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,41 +59,6 @@ namespace BikeShop.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accessories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Brand = "DRAG",
-                            Category = 0,
-                            Description = "Лека и удобна каска с вентилационни отвори",
-                            ImageUrl = "/images/accessories/helmet1.jpg",
-                            Name = "DRAG Каска PRO",
-                            Price = 129.99m,
-                            Stock = 15
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Brand = "NS BIKES",
-                            Category = 1,
-                            Description = "Противохлъзгаща вътрешност и дишаща материя",
-                            ImageUrl = "/images/accessories/gloves1.jpg",
-                            Name = "NS Rъкавици GripX",
-                            Price = 39.50m,
-                            Stock = 30
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Brand = "SPECIALIZED",
-                            Category = 2,
-                            Description = "Удобна и здрава ръчна помпа",
-                            ImageUrl = "/images/accessories/pump1.jpg",
-                            Name = "SPECIALIZED Помпа AirTool",
-                            Price = 49.00m,
-                            Stock = 20
-                        });
                 });
 
             modelBuilder.Entity("BikeShop.Web.Models.ApplicationUser", b =>

@@ -2,6 +2,9 @@
 using BikeShop.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.StaticFiles;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +36,15 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+// Позволи статични файлове + поддръжка за .webp
+var provider = new FileExtensionContentTypeProvider();
+provider.Mappings[".webp"] = "image/webp";
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    ContentTypeProvider = provider
+});
+
 
 app.UseRouting();
 app.UseSession(); // ✅ Активира session middleware-а

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BikeShop.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250408061438_SeedAccessories")]
-    partial class SeedAccessories
+    [Migration("20250408094748_AddBicycleImages")]
+    partial class AddBicycleImages
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,28 @@ namespace BikeShop.Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BicycleImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BicycleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BicycleId");
+
+                    b.ToTable("BicycleImages");
+                });
 
             modelBuilder.Entity("BikeShop.Web.Models.Accessory", b =>
                 {
@@ -59,41 +81,6 @@ namespace BikeShop.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accessories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Brand = "DRAG",
-                            Category = 0,
-                            Description = "Лека и удобна каска с вентилационни отвори",
-                            ImageUrl = "/images/accessories/helmet1.jpg",
-                            Name = "DRAG Каска PRO",
-                            Price = 129.99m,
-                            Stock = 15
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Brand = "NS BIKES",
-                            Category = 1,
-                            Description = "Противохлъзгаща вътрешност и дишаща материя",
-                            ImageUrl = "/images/accessories/gloves1.jpg",
-                            Name = "NS Rъкавици GripX",
-                            Price = 39.50m,
-                            Stock = 30
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Brand = "SPECIALIZED",
-                            Category = 2,
-                            Description = "Удобна и здрава ръчна помпа",
-                            ImageUrl = "/images/accessories/pump1.jpg",
-                            Name = "SPECIALIZED Помпа AirTool",
-                            Price = 49.00m,
-                            Stock = 20
-                        });
                 });
 
             modelBuilder.Entity("BikeShop.Web.Models.ApplicationUser", b =>
@@ -215,7 +202,10 @@ namespace BikeShop.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BicycleId")
+                    b.Property<int?>("AccessoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BicycleId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerCity")
@@ -256,6 +246,8 @@ namespace BikeShop.Web.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccessoryId");
 
                     b.HasIndex("BicycleId");
 
@@ -327,11 +319,17 @@ namespace BikeShop.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BicycleId")
+                    b.Property<int?>("AccessoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("BicycleId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("RentalEndDate")
                         .HasColumnType("datetime2");
@@ -347,6 +345,8 @@ namespace BikeShop.Web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccessoryId");
 
                     b.HasIndex("BicycleId");
 
@@ -490,19 +490,34 @@ namespace BikeShop.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BikeShop.Web.Models.Order", b =>
+            modelBuilder.Entity("BicycleImage", b =>
                 {
                     b.HasOne("BikeShop.Web.Models.Bicycle", "Bicycle")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("BicycleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Bicycle");
+                });
+
+            modelBuilder.Entity("BikeShop.Web.Models.Order", b =>
+                {
+                    b.HasOne("BikeShop.Web.Models.Accessory", "Accessory")
+                        .WithMany()
+                        .HasForeignKey("AccessoryId");
+
+                    b.HasOne("BikeShop.Web.Models.Bicycle", "Bicycle")
+                        .WithMany()
+                        .HasForeignKey("BicycleId");
 
                     b.HasOne("BikeShop.Web.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Accessory");
 
                     b.Navigation("Bicycle");
 
@@ -530,11 +545,15 @@ namespace BikeShop.Web.Migrations
 
             modelBuilder.Entity("CartItem", b =>
                 {
+                    b.HasOne("BikeShop.Web.Models.Accessory", "Accessory")
+                        .WithMany()
+                        .HasForeignKey("AccessoryId");
+
                     b.HasOne("BikeShop.Web.Models.Bicycle", "Bicycle")
                         .WithMany()
-                        .HasForeignKey("BicycleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BicycleId");
+
+                    b.Navigation("Accessory");
 
                     b.Navigation("Bicycle");
                 });
@@ -588,6 +607,11 @@ namespace BikeShop.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BikeShop.Web.Models.Bicycle", b =>
+                {
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

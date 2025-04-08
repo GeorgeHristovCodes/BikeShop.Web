@@ -37,6 +37,7 @@ namespace BikeShop.Web.Models
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
 
+        public ICollection<BicycleImage> Images { get; set; } = new List<BicycleImage>();
 
 
 

@@ -19,7 +19,7 @@
         {
             <tr>
                 <td>@order.User.Email</td>
-                <td>@order.Bicycle.Name</td>
+                <td>@(order.Bicycle?.Name ?? "—")</td>
                 <td>@order.OrderDate.ToShortDateString()</td>
             </tr>
         }
