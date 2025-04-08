@@ -16,9 +16,6 @@ public class CartItem
     [Required]
     public string UserId { get; set; } = null!;
 
-    // ❌ Премахнато навигационно свойство към ApplicationUser:
-    // public ApplicationUser User { get; set; }
-
     [Required]
     public CartItemType Type { get; set; }
 

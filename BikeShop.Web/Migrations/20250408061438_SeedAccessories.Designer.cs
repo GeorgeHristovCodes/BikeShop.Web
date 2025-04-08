@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BikeShop.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250407134124_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250408061438_SeedAccessories")]
+    partial class SeedAccessories
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,77 @@ namespace BikeShop.Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BikeShop.Web.Models.Accessory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accessories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Brand = "DRAG",
+                            Category = 0,
+                            Description = "Лека и удобна каска с вентилационни отвори",
+                            ImageUrl = "/images/accessories/helmet1.jpg",
+                            Name = "DRAG Каска PRO",
+                            Price = 129.99m,
+                            Stock = 15
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Brand = "NS BIKES",
+                            Category = 1,
+                            Description = "Противохлъзгаща вътрешност и дишаща материя",
+                            ImageUrl = "/images/accessories/gloves1.jpg",
+                            Name = "NS Rъкавици GripX",
+                            Price = 39.50m,
+                            Stock = 30
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Brand = "SPECIALIZED",
+                            Category = 2,
+                            Description = "Удобна и здрава ръчна помпа",
+                            ImageUrl = "/images/accessories/pump1.jpg",
+                            Name = "SPECIALIZED Помпа AirTool",
+                            Price = 49.00m,
+                            Stock = 20
+                        });
+                });
 
             modelBuilder.Entity("BikeShop.Web.Models.ApplicationUser", b =>
                 {

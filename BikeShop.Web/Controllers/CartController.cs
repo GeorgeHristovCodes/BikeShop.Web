@@ -1,5 +1,4 @@
-﻿// ✅ CartController.cs (разширен с CheckoutOrder)
-using BikeShop.Web.Data;
+﻿using BikeShop.Web.Data;
 using BikeShop.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -72,7 +71,6 @@ public class CartController : Controller
         return RedirectToAction("Index");
     }
 
-    // ✅ CheckoutRental (GET)
     [HttpGet]
     public async Task<IActionResult> CheckoutRental()
     {
@@ -97,7 +95,6 @@ public class CartController : Controller
         return View(model);
     }
 
-    // ✅ CheckoutRental (POST)
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CheckoutRental(RentalCheckoutViewModel model)
@@ -119,7 +116,7 @@ public class CartController : Controller
         {
             var rental = new Rental
             {
-                BicycleId = item.BicycleId,
+                BicycleId = item.Id,
                 UserId = userId,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -152,7 +149,6 @@ public class CartController : Controller
         return View();
     }
 
-    // ✅ CheckoutOrder (GET)
     [HttpGet]
     public async Task<IActionResult> CheckoutOrder()
     {
@@ -177,7 +173,6 @@ public class CartController : Controller
         return View(model);
     }
 
-    // ✅ CheckoutOrder (POST)
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CheckoutOrder(OrderCheckoutViewModel model)
@@ -199,7 +194,7 @@ public class CartController : Controller
         {
             var order = new Order
             {
-                BicycleId = item.BicycleId,
+                BicycleId = item.Id,
                 UserId = userId,
                 FirstName = model.FirstName,
                 LastName = model.LastName,

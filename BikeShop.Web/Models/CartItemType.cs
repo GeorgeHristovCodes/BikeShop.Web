@@ -3,6 +3,6 @@
     public enum CartItemType
     {
         Purchase = 1,
-        Rental = 2
+        Rental = 2,
     }
 }

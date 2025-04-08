@@ -116,30 +116,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxTdWNjZXNzUmVudGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Gear/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2VhclxDcmVhdGUuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Gear/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2VhclxEZWxldGUuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Gear/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2VhclxEZXRhaWxzLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Gear/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2VhclxFZGl0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Gear/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2VhclxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Gear/Manage.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2VhclxNYW5hZ2UuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Home/About.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxBYm91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

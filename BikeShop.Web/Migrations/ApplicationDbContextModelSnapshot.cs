@@ -22,6 +22,77 @@ namespace BikeShop.Web.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("BikeShop.Web.Models.Accessory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accessories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Brand = "DRAG",
+                            Category = 0,
+                            Description = "Лека и удобна каска с вентилационни отвори",
+                            ImageUrl = "/images/accessories/helmet1.jpg",
+                            Name = "DRAG Каска PRO",
+                            Price = 129.99m,
+                            Stock = 15
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Brand = "NS BIKES",
+                            Category = 1,
+                            Description = "Противохлъзгаща вътрешност и дишаща материя",
+                            ImageUrl = "/images/accessories/gloves1.jpg",
+                            Name = "NS Rъкавици GripX",
+                            Price = 39.50m,
+                            Stock = 30
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Brand = "SPECIALIZED",
+                            Category = 2,
+                            Description = "Удобна и здрава ръчна помпа",
+                            ImageUrl = "/images/accessories/pump1.jpg",
+                            Name = "SPECIALIZED Помпа AirTool",
+                            Price = 49.00m,
+                            Stock = 20
+                        });
+                });
+
             modelBuilder.Entity("BikeShop.Web.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -131,37 +202,6 @@ namespace BikeShop.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Bicycles");
-                });
-
-            modelBuilder.Entity("BikeShop.Web.Models.GearItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GearItems");
                 });
 
             modelBuilder.Entity("BikeShop.Web.Models.Order", b =>
