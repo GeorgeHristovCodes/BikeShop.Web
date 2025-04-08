@@ -1,12 +1,12 @@
 ﻿@model BikeShop.Web.Models.Bicycle
-
 @{
     ViewData["Title"] = "Редактиране на велосипед";
 }
 
 <h2>Редактиране на велосипед</h2>
 
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
     <input type="hidden" asp-for="Id" />
 
     <div class="mb-3">
@@ -23,7 +23,6 @@
             <option value="SPECIALIZED">SPECIALIZED</option>
             <option value="YT INDUSTRIES">YT INDUSTRIES</option>
         </select>
-        <span asp-validation-for="Brand" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
@@ -31,7 +30,6 @@
         <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<BicycleCategory>()">
             <option value="">-- Избери категория --</option>
         </select>
-        <span asp-validation-for="Category" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
@@ -45,7 +43,6 @@
             <option value="XL">XL</option>
             <option value="XXL">XXL</option>
         </select>
-        <span asp-validation-for="FrameSize" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
@@ -66,15 +63,33 @@
         </select>
     </div>
 
+    @if (Model.Images != null && Model.Images.Any())
+    {
+        <div class="mb-3">
+            <label class="form-label">Текущи снимки</label>
+            <div class="row">
+                @foreach (var img in Model.Images)
+                {
+                    <div class="col-md-3 text-center image-container">
+                        <img src="@img.ImageUrl" class="img-thumbnail mb-2" style="height: 100px; object-fit:cover;" />
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteImage(@img.Id, this)">Х</button>
+                    </div>
+
+                }
+            </div>
+        </div>
+    }
+
     <div class="mb-3">
-        <label asp-for="ImageUrl" class="form-label"></label>
-        <input asp-for="ImageUrl" class="form-control" />
+        <label class="form-label">Добави нови снимки (всички ще се запишат)</label>
+        <input class="form-control" name="AdditionalImages" type="file" multiple />
     </div>
+
+    <input type="hidden" asp-for="ImageUrl" />
 
     <div class="mb-3">
         <label asp-for="Quantity" class="form-label"></label>
         <input asp-for="Quantity" class="form-control" type="number" min="0" />
-        <span asp-validation-for="Quantity" class="text-danger"></span>
     </div>
 
     <div class="form-check mb-3">
@@ -82,12 +97,31 @@
         <label asp-for="IsAvailable" class="form-check-label"></label>
     </div>
 
-
-
     <button type="submit" class="btn btn-primary">Запиши</button>
     <a asp-action="Manage" class="btn btn-secondary">Отказ</a>
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function deleteImage(imageId, button) {
+            if (confirm("Сигурен ли си, че искаш да изтриеш тази снимка?")) {
+                fetch('/Bicycle/DeleteImage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify({ imageId: imageId })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Премахни визуално картинката от DOM-а
+                            button.closest('.image-container').remove();
+                        } else {
+                            alert("⚠️ Грешка при изтриване на снимката.");
+                        }
+                    });
+            }
+        }
+    </script>
 }

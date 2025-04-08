@@ -1,4 +1,5 @@
-﻿using BikeShop.Web.Data;
+﻿// BicycleController.cs - с логика за качване, редакция и изтриване на снимки
+using BikeShop.Web.Data;
 using BikeShop.Web.Models;
 using BikeShop.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using BikeShop.Web.Models.Requests;
 
 namespace BikeShop.Web.Controllers
 {
@@ -18,13 +20,11 @@ namespace BikeShop.Web.Controllers
             _context = context;
         }
 
-        // /Bicycle/ForSale
-        [HttpGet]
         [HttpGet]
         public IActionResult ForSale(BicycleFilterViewModel filter)
         {
             var query = _context.Bicycles
-                .Include(b => b.Images) // 🔥 Добавяме това
+                .Include(b => b.Images)
                 .Where(b => b.Type == BicycleType.ForSale && b.IsAvailable);
 
             if (filter.Category.HasValue)
@@ -43,21 +43,17 @@ namespace BikeShop.Web.Controllers
                 query = query.Where(b => b.Price <= filter.MaxPrice.Value);
 
             filter.Results = query.ToList();
-
-            // Списъци за селекти
             filter.AvailableBrands = new List<string> { "DRAG", "NS BIKES", "SPECIALIZED", "YT INDUSTRIES" };
             filter.FrameSizes = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
 
             return View(filter);
         }
 
-
-
-        // /Bicycle/ForRent
         [HttpGet]
         public IActionResult ForRent(BicycleFilterViewModel filter)
         {
             var query = _context.Bicycles
+                .Include(b => b.Images)
                 .Where(b => b.Type == BicycleType.ForRent && b.IsAvailable);
 
             if (filter.Category.HasValue)
@@ -76,8 +72,6 @@ namespace BikeShop.Web.Controllers
                 query = query.Where(b => b.Price <= filter.MaxPrice.Value);
 
             filter.Results = query.ToList();
-
-            // Списъци за селекти
             filter.AvailableBrands = new List<string> { "DRAG", "NS BIKES", "SPECIALIZED", "YT INDUSTRIES" };
             filter.FrameSizes = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
 
@@ -91,13 +85,10 @@ namespace BikeShop.Web.Controllers
 
             if (!string.IsNullOrEmpty(filterType))
             {
-                if (filterType == "ForRent")
-                    bicycles = bicycles.Where(b => b.Type == BicycleType.ForRent);
-                else if (filterType == "ForSale")
-                    bicycles = bicycles.Where(b => b.Type == BicycleType.ForSale);
+                bicycles = bicycles.Where(b => b.Type.ToString() == filterType);
             }
 
-            if (filterCategory != null)
+            if (filterCategory.HasValue)
             {
                 bicycles = bicycles.Where(b => b.Category == filterCategory);
             }
@@ -105,8 +96,6 @@ namespace BikeShop.Web.Controllers
             ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)));
             return View(await bicycles.ToListAsync());
         }
-
-
 
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
@@ -122,14 +111,10 @@ namespace BikeShop.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Качи основна снимка, ако има
                 if (bicycle.ImageFile != null)
                 {
                     string wwwRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-                    if (!Directory.Exists(wwwRootPath))
-                    {
-                        Directory.CreateDirectory(wwwRootPath);
-                    }
+                    if (!Directory.Exists(wwwRootPath)) Directory.CreateDirectory(wwwRootPath);
 
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(bicycle.ImageFile.FileName);
                     string filePath = Path.Combine(wwwRootPath, fileName);
@@ -142,43 +127,31 @@ namespace BikeShop.Web.Controllers
                     bicycle.ImageUrl = "/images/" + fileName;
                 }
 
-                // Запази велосипеда, за да има ID
                 _context.Add(bicycle);
                 await _context.SaveChangesAsync();
 
-                // Качи допълнителни снимки
-                if (Request.Form.Files.Count > 0)
+                foreach (var image in Request.Form.Files.Where(f => f.Name == "AdditionalImages"))
                 {
-                    foreach (var image in Request.Form.Files)
+                    if (image.Length > 0)
                     {
-                        if (image.Length > 0 && image.FileName != bicycle.ImageFile?.FileName)
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/bicycles", fileName);
+                        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+
+                        using (var stream = new FileStream(path, FileMode.Create))
                         {
-                            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/bicycles", fileName);
-
-                            if (!Directory.Exists(Path.GetDirectoryName(imagePath)))
-                            {
-                                Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
-                            }
-
-                            using (var stream = new FileStream(imagePath, FileMode.Create))
-                            {
-                                await image.CopyToAsync(stream);
-                            }
-
-                            var bikeImage = new BicycleImage
-                            {
-                                BicycleId = bicycle.Id,
-                                ImageUrl = "/images/bicycles/" + fileName
-                            };
-
-                            _context.BicycleImages.Add(bikeImage);
+                            await image.CopyToAsync(stream);
                         }
-                    }
 
-                    await _context.SaveChangesAsync();
+                        _context.BicycleImages.Add(new BicycleImage
+                        {
+                            BicycleId = bicycle.Id,
+                            ImageUrl = "/images/bicycles/" + fileName
+                        });
+                    }
                 }
 
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Manage));
             }
 
@@ -186,76 +159,117 @@ namespace BikeShop.Web.Controllers
             return View(bicycle);
         }
 
-
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Bicycles == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var bicycle = await _context.Bicycles.FindAsync(id);
-            if (bicycle == null)
-            {
-                return NotFound();
-            }
+            var bicycle = await _context.Bicycles.Include(b => b.Images).FirstOrDefaultAsync(b => b.Id == id);
+            if (bicycle == null) return NotFound();
 
             ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)), bicycle.Category);
             return View(bicycle);
         }
-
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Bicycle bicycle)
         {
-            if (id != bicycle.Id)
-            {
-                return NotFound();
-            }
+            if (id != bicycle.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
-                try
+                var existingBike = await _context.Bicycles.Include(b => b.Images).FirstOrDefaultAsync(b => b.Id == id);
+                if (existingBike == null) return NotFound();
+
+                if (bicycle.ImageFile != null)
                 {
-                    _context.Update(bicycle);
-                    await _context.SaveChangesAsync();
+                    var root = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                    if (!Directory.Exists(root)) Directory.CreateDirectory(root);
+
+                    if (!string.IsNullOrEmpty(existingBike.ImageUrl))
+                    {
+                        var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existingBike.ImageUrl.TrimStart('/'));
+                        if (System.IO.File.Exists(oldPath)) System.IO.File.Delete(oldPath);
+                    }
+
+                    var fileName = Guid.NewGuid() + Path.GetExtension(bicycle.ImageFile.FileName);
+                    var filePath = Path.Combine(root, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await bicycle.ImageFile.CopyToAsync(stream);
+                    }
+
+                    existingBike.ImageUrl = "/images/" + fileName;
                 }
-                catch (DbUpdateConcurrencyException)
+
+                foreach (var image in Request.Form.Files.Where(f => f.Name == "AdditionalImages"))
                 {
-                    if (!_context.Bicycles.Any(e => e.Id == bicycle.Id))
+                    if (image.Length > 0)
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                        var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/bicycles", fileName);
+                        Directory.CreateDirectory(Path.GetDirectoryName(imagePath)!);
+
+                        using (var stream = new FileStream(imagePath, FileMode.Create))
+                        {
+                            await image.CopyToAsync(stream);
+                        }
+
+                        _context.BicycleImages.Add(new BicycleImage
+                        {
+                            BicycleId = existingBike.Id,
+                            ImageUrl = "/images/bicycles/" + fileName
+                        });
                     }
                 }
+
+                existingBike.Name = bicycle.Name;
+                existingBike.Description = bicycle.Description;
+                existingBike.Price = bicycle.Price;
+                existingBike.Type = bicycle.Type;
+                existingBike.Category = bicycle.Category;
+                existingBike.Brand = bicycle.Brand;
+                existingBike.FrameSize = bicycle.FrameSize;
+                existingBike.Quantity = bicycle.Quantity;
+                existingBike.IsAvailable = bicycle.IsAvailable;
+
+                _context.Update(existingBike);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Manage));
             }
 
-            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)), bicycle.Category); // <- при невалиден модел
+            ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)), bicycle.Category);
             return View(bicycle);
+        }
+
+      
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken] // 👈 Ако имаш този ред, JS-а трябва да подаде валиден анти-фалшификация токен
+        public async Task<IActionResult> DeleteImage([FromBody] DeleteImageRequest request)
+
+        {
+            var image = await _context.BicycleImages.FindAsync(request.ImageId);
+            if (image == null) return NotFound();
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", image.ImageUrl.TrimStart('/'));
+            if (System.IO.File.Exists(path)) System.IO.File.Delete(path);
+
+            _context.BicycleImages.Remove(image);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Bicycles == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var bicycle = await _context.Bicycles
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (bicycle == null)
-            {
-                return NotFound();
-            }
+            var bicycle = await _context.Bicycles.FirstOrDefaultAsync(m => m.Id == id);
+            if (bicycle == null) return NotFound();
 
             return View(bicycle);
         }
@@ -271,30 +285,18 @@ namespace BikeShop.Web.Controllers
                 _context.Bicycles.Remove(bicycle);
                 await _context.SaveChangesAsync();
             }
-
             return RedirectToAction(nameof(Manage));
         }
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Bicycles == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var bicycle = await _context.Bicycles
-                .Include(b => b.Images) // 👈 Това добавя снимките!
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (bicycle == null)
-            {
-                return NotFound();
-            }
+            var bicycle = await _context.Bicycles.Include(b => b.Images).FirstOrDefaultAsync(m => m.Id == id);
+            if (bicycle == null) return NotFound();
 
             return View(bicycle);
         }
-
-
     }
 }
