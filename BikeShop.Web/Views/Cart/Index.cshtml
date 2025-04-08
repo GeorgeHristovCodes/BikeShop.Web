@@ -36,9 +36,7 @@ else
                     <th>Име</th>
                     <th>Тип</th>
                     <th>Цена</th>
-                    <th>Дати (ако е наем)</th>
                     <th></th>
-                </tr>
             </thead>
             <tbody>
                 @foreach (var item in bicycleItems)
@@ -49,15 +47,14 @@ else
                         </td>
                         <td>@item.Bicycle.Name</td>
                         <td>@(item.Type == CartItemType.Purchase ? "Покупка" : "Наем")</td>
-                        <td>@item.Price.ToString("F2") лв.</td>
                         <td>
                             @if (item.Type == CartItemType.Rental)
                             {
-                                @($"{item.RentalStartDate:dd.MM.yyyy} - {item.RentalEndDate:dd.MM.yyyy}")
+                                @($"{item.Bicycle.Price} лв. / ден")
                             }
                             else
                             {
-                                <span class="text-muted">—</span>
+                                @($"{item.Bicycle.Price} лв.")
                             }
                         </td>
                         <td>
@@ -71,8 +68,9 @@ else
             </tbody>
             <tfoot class="table-secondary">
                 <tr>
-                    <td colspan="3" class="text-end fw-bold">Сума за велосипеди:</td>
+                    <td colspan="2" class="text-end fw-bold">Сума за велосипеди:</td>
                     <td colspan="3" class="fw-bold text-success">@bicycleTotal.ToString("F2") лв.</td>
+
                 </tr>
             </tfoot>
         </table>

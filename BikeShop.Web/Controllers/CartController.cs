@@ -94,11 +94,14 @@ public class CartController : Controller
 
         var model = new RentalCheckoutViewModel
         {
-            CartItems = cartItems
+            CartItems = cartItems,
+            RentalStartDate = DateTime.Now.Date,
+            RentalEndDate = DateTime.Now.Date.AddDays(1)
         };
 
         return View(model);
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
