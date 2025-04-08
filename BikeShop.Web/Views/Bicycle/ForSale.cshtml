@@ -1,10 +1,11 @@
 ﻿@model BikeShop.Web.Models.ViewModels.BicycleFilterViewModel
+
 @{
     ViewData["Title"] = "Купи велосипед";
 }
 
 <div class="row">
-    <!-- 🔍 ФИЛТЪР ПАНЕЛ ВЛЯВО -->
+    <!-- 🔍 ФИЛТЪР ПАНЕЛ -->
     <div class="col-md-3">
         <form asp-action="ForSale" method="get" class="border rounded p-3 bg-light">
             <h5 class="mb-3">Филтрирай</h5>
@@ -50,7 +51,7 @@
         </form>
     </div>
 
-    <!-- 📦 РЕЗУЛТАТИ ВДЯСНО -->
+    <!-- 📦 РЕЗУЛТАТИ -->
     <div class="col-md-9">
         <h3 class="mb-4">Резултати (@Model.Results.Count)</h3>
 
@@ -114,6 +115,7 @@
                                     Категория: @bike.Category
                                 </p>
                             </div>
+
                             <div class="card-footer d-flex justify-content-between align-items-center">
                                 <strong class="text-success">@bike.Price лв.</strong>
                                 <div class="btn-group">
@@ -124,32 +126,9 @@
                                         <button type="submit" class="btn btn-sm btn-success">Купи</button>
                                     </form>
 
-                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal-@bike.Id">
-                                        Описание
-                                    </button>
-                                </div>value="Purchase"
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modal описание -->
-                    <div class="modal fade" id="detailsModal-@bike.Id" tabindex="-1" aria-labelledby="detailsLabel-@bike.Id" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="detailsLabel-@bike.Id">@bike.Name</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><strong>Бранд:</strong> @bike.Brand</p>
-                                    <p><strong>Размер:</strong> @bike.FrameSize</p>
-                                    <p><strong>Категория:</strong> @bike.Category</p>
-                                    <p><strong>Описание:</strong> @bike.Description</p>
-                                    <p><strong>Наличност:</strong> @(bike.IsAvailable ? "Да" : "Не")</p>
-                                    <p><strong>Цена:</strong> @bike.Price лв.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                                    <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-sm btn-primary">
+                                        Детайли
+                                    </a>
                                 </div>
                             </div>
                         </div>

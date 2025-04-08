@@ -2,46 +2,71 @@
 
 @{
     ViewData["Title"] = "Детайли за " + Model.Name;
+    var imageList = Model.Images.ToList(); // конвертираме ICollection в List
 }
 
-<h2>@Model.Name</h2>
+<h2 class="mb-4">@Model.Name</h2>
 
-<p><strong>Цена:</strong> @Model.Price лв</p>
-<p><strong>Категория:</strong> @Model.Category</p>
-<p><strong>Тип:</strong> @Model.Type</p>
-<p><strong>Бранд:</strong> @Model.Brand</p>
-<p><strong>Размер на рамката:</strong> @Model.FrameSize</p>
-<p><strong>Описание:</strong> @Model.Description</p>
-
-<hr />
-
-<h4>Галерия</h4>
-
-@if (Model.Images != null && Model.Images.Any())
-{
-    <div id="bicycleCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            @for (int i = 0; i < Model.Images.Count; i++)
-            {
-                var img = Model.Images.ElementAt(i);
-                <div class="carousel-item @(i == 0 ? "active" : "")">
-                    <img src="@img.ImageUrl" class="d-block w-100" style="max-height:500px; object-fit:contain;" alt="Снимка @(i+1)">
+<div class="row">
+    <!-- 🖼 Галерия със снимки -->
+    <div class="col-md-6">
+        @if (imageList.Any())
+        {
+            <div id="bicycleCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+                <div class="carousel-inner shadow rounded">
+                    @for (int i = 0; i < imageList.Count; i++)
+                    {
+                        var image = imageList[i];
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            <img src="@image.ImageUrl" class="d-block w-100" alt="Снимка @(i + 1)" />
+                        </div>
+                    }
                 </div>
-            }
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#bicycleCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Предишна</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#bicycleCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Следваща</span>
-        </button>
+                <button class="carousel-control-prev" type="button" data-bs-target="#bicycleCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-dark rounded-circle"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#bicycleCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-dark rounded-circle"></span>
+                </button>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-warning">Няма снимки за този велосипед.</div>
+        }
     </div>
-}
-else
-{
-    <p>Няма снимки за показване.</p>
-}
 
-<a asp-action="ForSale" class="btn btn-secondary mt-4">Назад</a>
+    <!-- ℹ️ Информация за велосипеда -->
+    <div class="col-md-6">
+        <p><strong>Марка:</strong> @Model.Brand</p>
+        <p><strong>Категория:</strong> @Model.Category</p>
+        <p><strong>Размер на рамката:</strong> @Model.FrameSize</p>
+        <p><strong>Цена:</strong> <span class="text-success fw-bold">@Model.Price лв.</span></p>
+        <p><strong>Описание:</strong><br />@Model.Description</p>
+
+        <div class="mt-4">
+            @if (Model.Type == BicycleType.ForRent)
+            {
+                <form asp-controller="Cart" asp-action="Add" method="post" class="d-inline">
+                    <input type="hidden" name="bicycleId" value="@Model.Id" />
+                    <input type="hidden" name="type" value="Rent" />
+                    <input type="hidden" name="returnUrl" value="@Url.Action("ForRent", "Bicycle")" />
+                    <button type="submit" class="btn btn-warning">Добави в кошницата (Наем)</button>
+                </form>
+            }
+            else if (Model.Type == BicycleType.ForSale)
+            {
+                <form asp-controller="Cart" asp-action="Add" method="post" class="d-inline">
+                    <input type="hidden" name="bicycleId" value="@Model.Id" />
+                    <input type="hidden" name="type" value="Purchase" />
+                    <input type="hidden" name="returnUrl" value="@Url.Action("ForSale", "Bicycle")" />
+                    <button type="submit" class="btn btn-success">Добави в кошницата (Покупка)</button>
+                </form>
+            }
+
+
+
+            <a asp-action="ForSale" class="btn btn-outline-secondary">⬅ Обратно</a>
+        </div>
+    </div>
+</div>

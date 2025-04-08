@@ -63,9 +63,19 @@
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                 @foreach (var bike in Model.Results)
                 {
+                    var imageUrl = bike.ImageUrl;
+                    if (string.IsNullOrEmpty(imageUrl) && bike.Images?.Any() == true)
+                    {
+                        imageUrl = bike.Images.First().ImageUrl;
+                    }
+                    if (string.IsNullOrEmpty(imageUrl))
+                    {
+                        imageUrl = "/images/no-image.png";
+                    }
+
                     <div class="col">
                         <div class="card h-100">
-                            <img src="@bike.ImageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" />
+                            <img src="@imageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" />
                             <div class="card-body">
                                 <h5 class="card-title">@bike.Name</h5>
                                 <p class="card-text">
@@ -84,32 +94,9 @@
                                         <button type="submit" class="btn btn-sm btn-success">Наеми</button>
                                     </form>
 
-                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal-@bike.Id">
-                                        Описание
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Modal описание -->
-                    <div class="modal fade" id="detailsModal-@bike.Id" tabindex="-1" aria-labelledby="detailsLabel-@bike.Id" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="detailsLabel-@bike.Id">@bike.Name</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><strong>Бранд:</strong> @bike.Brand</p>
-                                    <p><strong>Размер:</strong> @bike.FrameSize</p>
-                                    <p><strong>Категория:</strong> @bike.Category</p>
-                                    <p><strong>Описание:</strong> @bike.Description</p>
-                                    <p><strong>Наличност:</strong> @(bike.IsAvailable ? "Да" : "Не")</p>
-                                    <p><strong>Цена:</strong> @bike.Price лв./ден</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                                    <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-sm btn-primary">
+                                        Детайли
+                                    </a>
                                 </div>
                             </div>
                         </div>
