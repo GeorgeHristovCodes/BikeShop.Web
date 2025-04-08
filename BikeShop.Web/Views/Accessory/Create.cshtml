@@ -1,0 +1,60 @@
+﻿@model BikeShop.Web.Models.Accessory
+@{
+    ViewData["Title"] = "Създаване на аксесоар";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 fw-bold">Създаване на аксесоар</h2>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="shadow-sm p-4 bg-white rounded">
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Име</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Brand" class="form-label">Бранд</label>
+            <input asp-for="Brand" class="form-control" />
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Category" class="form-label">Категория</label>
+            <select asp-for="Category" asp-items="Html.GetEnumSelectList<BikeShop.Web.Models.AccessoryCategory>()" class="form-select">
+                <option disabled selected>-- Избери категория --</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Stock" class="form-label">Наличност (бр.)</label>
+            <input asp-for="Stock" class="form-control" />
+            <span asp-validation-for="Stock" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label">Цена (лв.)</label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Описание</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Снимка</label>
+            <input type="file" name="imageFile" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">
+            <i class="bi bi-plus-circle"></i> Създай аксесоар
+        </button>
+    </form>
+
+    <div class="mt-3">
+        <a asp-action="Manage" class="btn btn-outline-secondary">← Назад</a>
+    </div>
+</div>

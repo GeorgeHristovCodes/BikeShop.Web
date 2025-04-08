@@ -1,0 +1,19 @@
+﻿@model BikeShop.Web.Models.Accessory
+
+@{
+    ViewData["Title"] = "Изтрий аксесоар";
+}
+
+<h2 class="text-xl font-bold mb-4 text-red-600">Сигурен ли си, че искаш да изтриеш този аксесоар?</h2>
+
+<div class="border p-4 rounded bg-gray-50">
+    <p><strong>Име:</strong> @Model.Name</p>
+    <p><strong>Категория:</strong> @Model.Category</p>
+    <p><strong>Цена:</strong> @Model.Price лв.</p>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post" class="mt-4">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Изтрий</button>
+    <a asp-action="Index" class="ml-4 text-blue-600 underline">Отказ</a>
+</form>

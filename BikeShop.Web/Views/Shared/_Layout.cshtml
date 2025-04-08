@@ -30,6 +30,8 @@
                     <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Контакти</a></li>
                     <li class="nav-item"><a class="nav-link" asp-controller="Bicycle" asp-action="ForSale">Купи</a></li>
                     <li class="nav-item"><a class="nav-link" asp-controller="Bicycle" asp-action="ForRent">Наеми</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Accessory" asp-action="Index">Аксесоари</a></li>
+
                     @if (User.IsInRole("Admin"))
                     {
                         <li class="nav-item"><a class="nav-link text-warning" asp-controller="Admin" asp-action="Index">Админ</a></li>

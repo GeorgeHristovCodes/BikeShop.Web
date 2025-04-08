@@ -1,0 +1,66 @@
+﻿@model BikeShop.Web.Models.Accessory
+@{
+    ViewData["Title"] = "Редактиране на аксесоар";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 fw-bold">Редактиране на аксесоар</h2>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" class="shadow-sm p-4 bg-white rounded">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Име</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Brand" class="form-label">Бранд</label>
+            <input asp-for="Brand" class="form-control" />
+            <span asp-validation-for="Brand" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Category" class="form-label">Категория</label>
+            <select asp-for="Category" asp-items="Html.GetEnumSelectList<BikeShop.Web.Models.AccessoryCategory>()" class="form-select">
+                <option disabled>-- Избери категория --</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Stock" class="form-label">Наличност (бр.)</label>
+            <input asp-for="Stock" class="form-control" />
+            <span asp-validation-for="Stock" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label">Цена (лв.)</label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Описание</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Смени снимката</label>
+            <input type="file" name="imageFile" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Текуща снимка</label><br />
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded shadow-sm" style="max-height: 200px;" />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-save-fill"></i> Запази промените
+        </button>
+    </form>
+
+    <div class="mt-3">
+        <a asp-action="Manage" class="btn btn-outline-secondary">← Назад</a>
+    </div>
+</div>
