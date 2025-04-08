@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "tvXmLpVCzNVU63kPh2HRkh5cYM5V1XqcYJy8p7YO8E8=",
+  "Hash": "CFb63d8IGbWi15vtT/+DFCQnYIO3D1mMulFLmp7NxXU=",
   "Source": "BikeShop.Web",
   "BasePath": "_content/BikeShop.Web",
   "Mode": "Default",
@@ -612,12 +612,12 @@
       "OriginalItemSpec": "wwwroot\\images\\b5956221-c792-440d-8944-f5e3e497b35c.webp"
     },
     {
-      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\035039ed-fff3-47e2-a750-14601b93e281.webp",
+      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\0007cb90-7325-4e86-8ad0-b5998349126e.webp",
       "SourceId": "BikeShop.Web",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
       "BasePath": "_content/BikeShop.Web",
-      "RelativePath": "images/bicycles/035039ed-fff3-47e2-a750-14601b93e281.webp",
+      "RelativePath": "images/bicycles/0007cb90-7325-4e86-8ad0-b5998349126e.webp",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -626,7 +626,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\bicycles\\035039ed-fff3-47e2-a750-14601b93e281.webp"
+      "OriginalItemSpec": "wwwroot\\images\\bicycles\\0007cb90-7325-4e86-8ad0-b5998349126e.webp"
     },
     {
       "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\1f140650-73cf-4647-a49c-7f104c35e61d.webp",
@@ -646,6 +646,23 @@
       "OriginalItemSpec": "wwwroot\\images\\bicycles\\1f140650-73cf-4647-a49c-7f104c35e61d.webp"
     },
     {
+      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\26b11b44-fda0-43a5-abda-564d0c200159.webp",
+      "SourceId": "BikeShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
+      "BasePath": "_content/BikeShop.Web",
+      "RelativePath": "images/bicycles/26b11b44-fda0-43a5-abda-564d0c200159.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\bicycles\\26b11b44-fda0-43a5-abda-564d0c200159.webp"
+    },
+    {
       "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\330f49ef-bfd5-4368-8702-d20f2e05588a.webp",
       "SourceId": "BikeShop.Web",
       "SourceType": "Discovered",
@@ -663,6 +680,23 @@
       "OriginalItemSpec": "wwwroot\\images\\bicycles\\330f49ef-bfd5-4368-8702-d20f2e05588a.webp"
     },
     {
+      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\364faf5c-dd1e-46b7-86b7-8f858c09b876.webp",
+      "SourceId": "BikeShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
+      "BasePath": "_content/BikeShop.Web",
+      "RelativePath": "images/bicycles/364faf5c-dd1e-46b7-86b7-8f858c09b876.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\bicycles\\364faf5c-dd1e-46b7-86b7-8f858c09b876.webp"
+    },
+    {
       "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\3b03e7a1-5223-489f-be87-1e93df4c804c.webp",
       "SourceId": "BikeShop.Web",
       "SourceType": "Discovered",
@@ -678,6 +712,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\bicycles\\3b03e7a1-5223-489f-be87-1e93df4c804c.webp"
+    },
+    {
+      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\5ad1e04e-f7b1-4704-a3ec-1d2eee1f7267.webp",
+      "SourceId": "BikeShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
+      "BasePath": "_content/BikeShop.Web",
+      "RelativePath": "images/bicycles/5ad1e04e-f7b1-4704-a3ec-1d2eee1f7267.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\bicycles\\5ad1e04e-f7b1-4704-a3ec-1d2eee1f7267.webp"
+    },
+    {
+      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\62df2430-b2b9-40b6-9686-5b0095c2b0fd.webp",
+      "SourceId": "BikeShop.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
+      "BasePath": "_content/BikeShop.Web",
+      "RelativePath": "images/bicycles/62df2430-b2b9-40b6-9686-5b0095c2b0fd.webp",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\bicycles\\62df2430-b2b9-40b6-9686-5b0095c2b0fd.webp"
     },
     {
       "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\782c4aa5-edfc-4dfb-bb96-ba4442ddb208.webp",
@@ -712,23 +780,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\bicycles\\8fad349e-ee69-45e0-9352-e4542f335912.webp"
-    },
-    {
-      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\9166b3a4-2d07-4225-9267-22d1605313da.webp",
-      "SourceId": "BikeShop.Web",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
-      "BasePath": "_content/BikeShop.Web",
-      "RelativePath": "images/bicycles/9166b3a4-2d07-4225-9267-22d1605313da.webp",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\bicycles\\9166b3a4-2d07-4225-9267-22d1605313da.webp"
     },
     {
       "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\9e547977-052a-4ad4-9ced-dfe9851d171f.webp",
@@ -848,23 +899,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\bicycles\\d0bdc4b4-e822-4675-8869-e7f7359dc619.webp"
-    },
-    {
-      "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\daf76dad-eb30-4fac-aaa0-60ed1502a282.webp",
-      "SourceId": "BikeShop.Web",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\",
-      "BasePath": "_content/BikeShop.Web",
-      "RelativePath": "images/bicycles/daf76dad-eb30-4fac-aaa0-60ed1502a282.webp",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\bicycles\\daf76dad-eb30-4fac-aaa0-60ed1502a282.webp"
     },
     {
       "Identity": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\f54ca6bf-2e24-4177-9e20-43a4003acc05.webp",

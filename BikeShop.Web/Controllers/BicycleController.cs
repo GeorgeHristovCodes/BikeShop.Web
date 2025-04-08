@@ -109,36 +109,42 @@ namespace BikeShop.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Bicycle bicycle)
         {
+            var uploadedImages = Request.Form.Files;
+
             if (ModelState.IsValid)
             {
-                if (bicycle.ImageFile != null)
+                if (uploadedImages.Any())
                 {
-                    string wwwRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-                    if (!Directory.Exists(wwwRootPath)) Directory.CreateDirectory(wwwRootPath);
+                    // Първата снимка става основна
+                    var firstImage = uploadedImages.First();
+                    string root = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                    if (!Directory.Exists(root)) Directory.CreateDirectory(root);
 
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(bicycle.ImageFile.FileName);
-                    string filePath = Path.Combine(wwwRootPath, fileName);
+                    string firstFileName = Guid.NewGuid() + Path.GetExtension(firstImage.FileName);
+                    string firstFilePath = Path.Combine(root, firstFileName);
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    using (var stream = new FileStream(firstFilePath, FileMode.Create))
                     {
-                        await bicycle.ImageFile.CopyToAsync(stream);
+                        await firstImage.CopyToAsync(stream);
                     }
 
-                    bicycle.ImageUrl = "/images/" + fileName;
+                    bicycle.ImageUrl = "/images/" + firstFileName;
                 }
 
                 _context.Add(bicycle);
                 await _context.SaveChangesAsync();
 
-                foreach (var image in Request.Form.Files.Where(f => f.Name == "AdditionalImages"))
+                // Качи останалите снимки (вкл. първата, ако искаш да я покажеш в галерията)
+                foreach (var image in uploadedImages)
                 {
                     if (image.Length > 0)
                     {
-                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
-                        string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/bicycles", fileName);
-                        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                        string fileName = Guid.NewGuid() + Path.GetExtension(image.FileName);
+                        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/bicycles", fileName);
 
-                        using (var stream = new FileStream(path, FileMode.Create))
+                        Directory.CreateDirectory(Path.GetDirectoryName(imagePath)!);
+
+                        using (var stream = new FileStream(imagePath, FileMode.Create))
                         {
                             await image.CopyToAsync(stream);
                         }
