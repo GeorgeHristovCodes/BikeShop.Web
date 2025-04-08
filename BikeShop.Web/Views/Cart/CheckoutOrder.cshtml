@@ -1,20 +1,27 @@
 ﻿@model OrderCheckoutViewModel
+@using BikeShop.Web.Models
 
 @{
     ViewData["Title"] = "Завърши поръчката";
+
+    var bicycles = Model.CartItems.Where(i => i.Bicycle != null).ToList();
+    var accessories = Model.CartItems.Where(i => i.Accessory != null).ToList();
+
+    decimal total = bicycles.Sum(i => i.Price) + accessories.Sum(i => i.Price);
 }
 
 <h2 class="mb-4">🛒 Завърши покупката</h2>
 
 @if (!Model.CartItems.Any())
 {
-    <div class="alert alert-info">Нямате добавени велосипеди за покупка.</div>
+    <div class="alert alert-info">Нямате добавени артикули за покупка.</div>
 }
 else
 {
     <form asp-action="CheckoutOrder" method="post">
         <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
+        <!-- 🧍 Клиент -->
         <h5 class="mb-3">🧍 Данни за клиента</h5>
 
         <div class="mb-3">
@@ -37,6 +44,7 @@ else
             <input asp-for="CustomerCity" class="form-control" />
         </div>
 
+        <!-- 📦 Доставка -->
         <div class="mb-3">
             <label class="form-label">Начин на получаване:</label><br />
             <div class="form-check form-check-inline">
@@ -70,30 +78,68 @@ else
             </div>
         </div>
 
-        <h5 class="mt-4 mb-3">📦 Артикули за покупка</h5>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Снимка</th>
-                    <th>Име</th>
-                    <th>Цена</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.CartItems)
-                {
+        <!-- 🚴 Велосипеди -->
+        @if (bicycles.Any())
+        {
+            <h5 class="mt-4 mb-3">🚴 Велосипеди</h5>
+            <table class="table table-bordered table-striped">
+                <thead>
                     <tr>
-                        <td style="width: 150px;">
-                            <img src="@item.Bicycle.ImageUrl" class="img-thumbnail" style="max-height: 80px;" />
-                        </td>
-                        <td>@item.Bicycle.Name</td>
-                        <td>@item.Bicycle.Price лв.</td>
+                        <th>Снимка</th>
+                        <th>Име</th>
+                        <th>Цена</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in bicycles)
+                    {
+                        <tr>
+                            <td style="width: 150px;">
+                                <img src="@item.Bicycle.ImageUrl" class="img-thumbnail" style="max-height: 80px;" />
+                            </td>
+                            <td>@item.Bicycle.Name</td>
+                            <td>@item.Price лв.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
 
-        <button type="submit" class="btn btn-success">✅ Потвърди поръчката</button>
+        <!-- 🧢 Аксесоари -->
+        @if (accessories.Any())
+        {
+            <h5 class="mt-4 mb-3">🧢 Аксесоари</h5>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Снимка</th>
+                        <th>Име</th>
+                        <th>Количество</th>
+                        <th>Обща цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in accessories)
+                    {
+                        <tr>
+                            <td style="width: 150px;">
+                                <img src="@item.Accessory.ImageUrl" class="img-thumbnail" style="max-height: 80px;" />
+                            </td>
+                            <td>@item.Accessory.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price лв.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <!-- 💰 Обща сума -->
+        <div class="text-end fw-bold fs-5 mt-3">
+            Обща сума: <span class="text-success">@total.ToString("F2") лв.</span>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-4">✅ Потвърди поръчката</button>
     </form>
 }
 

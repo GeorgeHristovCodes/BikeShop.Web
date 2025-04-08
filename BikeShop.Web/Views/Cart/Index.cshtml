@@ -1,7 +1,18 @@
 ﻿@model List<CartItem>
+@using BikeShop.Web.Models
 
 @{
     ViewData["Title"] = "Кошницата";
+
+    var bicycleItems = Model.Where(i => i.Bicycle != null).ToList();
+    var accessoryItems = Model.Where(i => i.Accessory != null).ToList();
+
+    decimal bicycleTotal = bicycleItems.Sum(i => i.Price);
+    decimal accessoryTotal = accessoryItems.Sum(i => i.Price);
+    decimal total = bicycleTotal + accessoryTotal;
+
+    bool hasPurchase = Model.Any(i => i.Type == CartItemType.Purchase);
+    bool hasRental = Model.Any(i => i.Type == CartItemType.Rental);
 }
 
 <h2 class="mb-4">🛒 Моята кошница</h2>
@@ -15,92 +26,130 @@
 }
 else
 {
-    <table class="table table-bordered table-striped">
-        <thead>
-        <thead>
-            <tr>
-                <th>Снимка</th>
-                <th>Име</th>
-                <th>Тип</th>
-                <th>Цена</th>
-
-                    @if (Model.Any(i => i.Type == CartItemType.Rental))
-                    {
-                    <th>Дати (ако е наем)</th>
-                    }
-
-                <th></th>
-            </tr>
-        </thead>
-
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <!-- 🚲 Велосипеди -->
+    @if (bicycleItems.Any())
+    {
+        <h4 class="mt-4">🚴 Велосипеди</h4>
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
                 <tr>
-                    <td>
-                        <img src="@item.Bicycle.ImageUrl" alt="Велосипед" class="img-thumbnail" style="max-height:100px;" />
-                    </td>
-                    <td>@item.Bicycle.Name</td>
-                    <td>@(item.Type == CartItemType.Purchase ? "Покупка" : "Наем")</td>
-                    <td>@item.Price лв.</td>
-
-                    @if (Model.Any(i => i.Type == CartItemType.Rental))
-                    {
+                    <th>Снимка</th>
+                    <th>Име</th>
+                    <th>Тип</th>
+                    <th>Цена</th>
+                    <th>Дати (ако е наем)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in bicycleItems)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.Bicycle.ImageUrl" alt="Снимка" class="img-thumbnail" style="max-height: 100px;" />
+                        </td>
+                        <td>@item.Bicycle.Name</td>
+                        <td>@(item.Type == CartItemType.Purchase ? "Покупка" : "Наем")</td>
+                        <td>@item.Price.ToString("F2") лв.</td>
                         <td>
                             @if (item.Type == CartItemType.Rental)
                             {
-                                <span>
-                                    @item.RentalStartDate?.ToString("dd.MM.yyyy") - @item.RentalEndDate?.ToString("dd.MM.yyyy")
-                                </span>
+                                @($"{item.RentalStartDate:dd.MM.yyyy} - {item.RentalEndDate:dd.MM.yyyy}")
                             }
                             else
                             {
                                 <span class="text-muted">—</span>
                             }
                         </td>
-                    }
-
-                    <td>
-                        <form asp-action="Remove" asp-controller="Cart" method="post">
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm">Премахни</button>
-                        </form>
-                    </td>
+                        <td>
+                            <form asp-action="Remove" asp-controller="Cart" method="post">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Премахни</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot class="table-secondary">
+                <tr>
+                    <td colspan="3" class="text-end fw-bold">Сума за велосипеди:</td>
+                    <td colspan="3" class="fw-bold text-success">@bicycleTotal.ToString("F2") лв.</td>
                 </tr>
-            }
-        </tbody>
-
-    </table>
-
-   
-    bool hasPurchase = Model.Any(i => i.Type == CartItemType.Purchase);
-    bool hasRental = Model.Any(i => i.Type == CartItemType.Rental);
-
-
-     @if (hasPurchase && hasRental)
-     {
-        <div class="alert alert-danger mt-3">
-           ❌ Не може едновременно да се наемат и купуват велосипеди.<br />
-           Моля, премахнете някои артикули от количката и опитайте отново.
-       </div>
-     }
-     else
-     {
-     if (hasPurchase)
-     {
-        <a asp-controller="Cart" asp-action="CheckoutOrder" class="btn btn-success mt-3">
-            ✅ Финализирай покупка
-        </a>
-     }
-
-    if (hasRental)
-    {
-        <a asp-controller="Cart" asp-action="CheckoutRental" class="btn btn-warning mt-3">
-            🚲 Финализирай наем
-        </a>
+            </tfoot>
+        </table>
     }
-}
 
+    <!-- 🧢 Аксесоари -->
+    @if (accessoryItems.Any())
+    {
+        <h4 class="mt-5">🧢 Аксесоари</h4>
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Снимка</th>
+                    <th>Име</th>
+                    <th>Бранд</th>
+                    <th>Количество</th>
+                    <th>Обща цена</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in accessoryItems)
+                {
+                    <tr>
+                        <td>
+                            <img src="@item.Accessory.ImageUrl" alt="Снимка" class="img-thumbnail" style="max-height: 100px;" />
+                        </td>
+                        <td>@item.Accessory.Name</td>
+                        <td>@item.Accessory.Brand</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price.ToString("F2") лв.</td>
+                        <td>
+                            <form asp-action="Remove" asp-controller="Cart" method="post">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">Премахни</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot class="table-secondary">
+                <tr>
+                    <td colspan="4" class="text-end fw-bold">Сума за аксесоари:</td>
+                    <td colspan="2" class="fw-bold text-success">@accessoryTotal.ToString("F2") лв.</td>
+                </tr>
+            </tfoot>
+        </table>
+    }
 
+    <!-- 🔚 Обща сума -->
+    <div class="text-end fw-bold fs-5 mt-4">
+        Обща крайна сума: <span class="text-success">@total.ToString("F2") лв.</span>
+    </div>
+
+    <!-- 🟩 Бутон за финализиране -->
+    @if (hasPurchase && hasRental)
+    {
+        <div class="alert alert-danger mt-3">
+            ❌ Не може едновременно да се наемат и купуват артикули.<br />
+            Моля, премахнете някои от тях и опитайте отново.
+        </div>
+    }
+    else
+    {
+        if (hasPurchase)
+        {
+            <a asp-controller="Cart" asp-action="CheckoutOrder" class="btn btn-success w-100 mt-3">
+                ✅ Финализирай покупка
+            </a>
+        }
+
+        if (hasRental)
+        {
+            <a asp-controller="Cart" asp-action="CheckoutRental" class="btn btn-warning w-100 mt-3">
+                🚲 Финализирай наем
+            </a>
+        }
+    }
 }

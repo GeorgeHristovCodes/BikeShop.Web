@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using BikeShop.Web.Models;
+using System.Security.Claims;
 
 namespace BikeShop.Web.Controllers
 {
@@ -34,6 +35,7 @@ namespace BikeShop.Web.Controllers
 
             var orders = await _context.Orders
                 .Include(o => o.Bicycle)
+                .Include(o => o.Accessory) // ✅ ЕТО ТОВА ДОБАВИ!
                 .Where(o => o.UserId == user.Id)
                 .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
@@ -43,6 +45,19 @@ namespace BikeShop.Web.Controllers
 
             return View(user);
         }
+
+        public async Task<IActionResult> AccessoryOrders()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var accessoryOrders = await _context.Orders
+                .Include(o => o.Accessory)
+                .Where(o => o.UserId == userId && o.AccessoryId != null)
+                .ToListAsync();
+
+            return View(accessoryOrders);
+        }
+
 
     }
 }

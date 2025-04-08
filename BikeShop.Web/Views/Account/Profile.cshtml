@@ -40,9 +40,9 @@ else
 }
 
 <hr />
-<h4>🛒 Моите поръчки</h4>
+<h4>🛒 Моите поръчки (велосипеди)</h4>
 
-@if (orders.Any())
+@if (orders.Any(o => o.BicycleId != null))
 {
     <table class="table table-striped">
         <thead class="table-dark">
@@ -52,10 +52,10 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var order in orders)
+            @foreach (var order in orders.Where(o => o.BicycleId != null))
             {
                 <tr>
-                    <td>@order.Bicycle.Name</td>
+                    <td>@order.Bicycle?.Name</td>
                     <td>@order.OrderDate.ToShortDateString()</td>
                 </tr>
             }
@@ -64,5 +64,45 @@ else
 }
 else
 {
-    <p>Нямаш направени поръчки.</p>
+    <p>Нямаш направени поръчки за велосипеди.</p>
+}
+
+<hr />
+<h4>🧢 Моите покупки на аксесоари</h4>
+
+@if (orders.Any(o => o.AccessoryId != null))
+{
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Аксесоар</th>
+                <th>Дата</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders.Where(o => o.AccessoryId != null))
+            {
+                <tr>
+                    <td>
+                        @if (order.Accessory != null)
+                        {
+                            @order.Accessory.Name
+                        }
+                        else
+                        {
+                            <span class="text-danger">❌ null</span>
+                        }
+                    </td>
+
+                    <td>@order.OrderDate.ToShortDateString()</td>
+                    <td>@order.TotalPrice.ToString("F2") лв.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Нямаш направени покупки на аксесоари.</p>
 }

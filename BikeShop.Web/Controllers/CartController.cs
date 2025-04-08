@@ -21,8 +21,10 @@ public class CartController : Controller
     public async Task<IActionResult> Index()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
+            .Include(c => c.Accessory)
             .Where(c => c.UserId == userId)
             .ToListAsync();
 
@@ -116,7 +118,7 @@ public class CartController : Controller
         {
             var rental = new Rental
             {
-                BicycleId = item.Id,
+                BicycleId = item.BicycleId ?? 0,
                 UserId = userId,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -156,6 +158,7 @@ public class CartController : Controller
 
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
+            .Include(c => c.Accessory)
             .Where(c => c.UserId == userId && c.Type == CartItemType.Purchase)
             .ToListAsync();
 
@@ -181,6 +184,7 @@ public class CartController : Controller
 
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
+            .Include(c => c.Accessory)
             .Where(c => c.UserId == userId && c.Type == CartItemType.Purchase)
             .ToListAsync();
 
@@ -194,7 +198,6 @@ public class CartController : Controller
         {
             var order = new Order
             {
-                BicycleId = item.Id,
                 UserId = userId,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -209,17 +212,32 @@ public class CartController : Controller
                 TotalPrice = item.Price
             };
 
-            _context.Orders.Add(order);
-
-            var bicycle = await _context.Bicycles.FindAsync(item.BicycleId);
-            if (bicycle != null)
+            if (item.BicycleId > 0)
             {
-                bicycle.Quantity--;
-                if (bicycle.Quantity <= 0)
+                order.BicycleId = item.BicycleId;
+
+                var bicycle = await _context.Bicycles.FindAsync(item.BicycleId);
+                if (bicycle != null)
                 {
-                    bicycle.IsAvailable = false;
+                    bicycle.Quantity--;
+                    if (bicycle.Quantity <= 0)
+                        bicycle.IsAvailable = false;
                 }
             }
+            else if (item.AccessoryId > 0)
+            {
+                order.AccessoryId = item.AccessoryId;
+
+                var accessory = await _context.Accessories.FindAsync(item.AccessoryId);
+                if (accessory != null)
+                {
+                    accessory.Stock -= item.Quantity;
+                    if (accessory.Stock < 0)
+                        accessory.Stock = 0;
+                }
+            }
+
+            _context.Orders.Add(order);
         }
 
         _context.CartItems.RemoveRange(cartItems);
@@ -231,5 +249,49 @@ public class CartController : Controller
     public IActionResult SuccessOrder()
     {
         return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddAccessory(int accessoryId)
+    {
+        var accessory = await _context.Accessories.FindAsync(accessoryId);
+
+        if (accessory == null || accessory.Stock <= 0)
+        {
+            TempData["Error"] = "Аксесоарът не е наличен.";
+            return RedirectToAction("Index", "Accessory");
+        }
+
+        var userId = _userManager.GetUserId(User);
+
+        var existingItem = await _context.CartItems
+            .FirstOrDefaultAsync(c => c.UserId == userId
+                                   && c.AccessoryId == accessoryId
+                                   && c.Type == CartItemType.Purchase);
+
+        if (existingItem == null)
+        {
+            var cartItem = new CartItem
+            {
+                UserId = userId,
+                AccessoryId = accessory.Id,
+                Quantity = 1,
+                Type = CartItemType.Purchase,
+                Price = accessory.Price
+            };
+
+            _context.CartItems.Add(cartItem);
+        }
+        else
+        {
+            existingItem.Quantity++;
+            existingItem.Price += accessory.Price;
+        }
+
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "Аксесоарът беше добавен в кошницата.";
+        return RedirectToAction("Index", "Accessory");
     }
 }

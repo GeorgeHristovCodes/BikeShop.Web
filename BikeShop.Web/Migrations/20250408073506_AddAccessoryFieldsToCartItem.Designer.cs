@@ -4,6 +4,7 @@ using BikeShop.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BikeShop.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250408073506_AddAccessoryFieldsToCartItem")]
+    partial class AddAccessoryFieldsToCartItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,10 +215,7 @@ namespace BikeShop.Web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AccessoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("BicycleId")
+                    b.Property<int>("BicycleId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerCity")
@@ -256,8 +256,6 @@ namespace BikeShop.Web.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AccessoryId");
 
                     b.HasIndex("BicycleId");
 
@@ -502,21 +500,17 @@ namespace BikeShop.Web.Migrations
 
             modelBuilder.Entity("BikeShop.Web.Models.Order", b =>
                 {
-                    b.HasOne("BikeShop.Web.Models.Accessory", "Accessory")
-                        .WithMany()
-                        .HasForeignKey("AccessoryId");
-
                     b.HasOne("BikeShop.Web.Models.Bicycle", "Bicycle")
                         .WithMany()
-                        .HasForeignKey("BicycleId");
+                        .HasForeignKey("BicycleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BikeShop.Web.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Accessory");
 
                     b.Navigation("Bicycle");
 

@@ -1,20 +1,66 @@
 ﻿@model IEnumerable<BikeShop.Web.Models.Accessory>
-
 @{
-    ViewData["Title"] = "Аксесоари";
+    ViewData["Title"] = "Всички аксесоари";
 }
 
-<h2 class="text-2xl font-bold mb-4">Всички аксесоари</h2>
+<div class="container mt-4">
+    <h2 class="mb-4 fw-bold">Всички аксесоари</h2>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    @foreach (var item in Model)
-    {
-        <div class="border rounded-lg p-4 shadow hover:shadow-lg">
-            <img src="@item.ImageUrl" alt="@item.Name" class="w-full h-48 object-cover rounded mb-2" />
-            <h3 class="text-lg font-semibold">@item.Name</h3>
-            <p class="text-sm text-gray-500">@item.Brand</p>
-            <p class="font-bold text-green-600">@item.Price лв.</p>
-            <a href="@Url.Action("Details", "Accessory", new { id = item.Id })" class="text-blue-600 underline mt-2 inline-block">Детайли</a>
-        </div>
-    }
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="max-height: 200px; object-fit: contain;" />
+
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">
+                            <strong>Бранд:</strong> @item.Brand<br />
+                            <strong>Категория:</strong> @item.Category
+                        </p>
+
+                        <p class="fw-bold text-success h5">@item.Price.ToString("F2") лв.</p>
+
+                        <div class="d-flex gap-2 mt-2">
+                            <form asp-controller="Cart" asp-action="AddAccessory" method="post">
+                                <input type="hidden" name="accessoryId" value="@item.Id" />
+                                <button type="submit" class="btn btn-success btn-sm">
+                                    <i class="bi bi-cart-plus"></i> Добави в кошницата
+                                </button>
+                            </form>
+
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal-@item.Id">
+                                Детайли
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Модал с детайлите -->
+            <div class="modal fade" id="detailsModal-@item.Id" tabindex="-1" aria-labelledby="modalLabel-@item.Id" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content shadow">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalLabel-@item.Id">@item.Name</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Затвори"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="@item.ImageUrl" class="img-fluid rounded mb-3" alt="@item.Name" />
+
+                            <p><strong>Бранд:</strong> @item.Brand</p>
+                            <p><strong>Категория:</strong> @item.Category</p>
+                            <p><strong>Описание:</strong> @item.Description</p>
+                            <p><strong>Наличност:</strong> @(item.Stock > 0 ? "Да" : "❌ Не")</p>
+                            <p><strong>Цена:</strong> @item.Price.ToString("F2") лв.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>

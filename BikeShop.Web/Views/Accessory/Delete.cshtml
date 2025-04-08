@@ -1,19 +1,29 @@
 ﻿@model BikeShop.Web.Models.Accessory
-
 @{
-    ViewData["Title"] = "Изтрий аксесоар";
+    ViewData["Title"] = "Изтриване на аксесоар";
 }
 
-<h2 class="text-xl font-bold mb-4 text-red-600">Сигурен ли си, че искаш да изтриеш този аксесоар?</h2>
+<div class="container mt-4">
+    <div class="shadow-sm p-4 bg-white rounded">
+        <h2 class="text-danger fw-bold mb-3">Сигурни ли сте, че искате да изтриете този аксесоар?</h2>
 
-<div class="border p-4 rounded bg-gray-50">
-    <p><strong>Име:</strong> @Model.Name</p>
-    <p><strong>Категория:</strong> @Model.Category</p>
-    <p><strong>Цена:</strong> @Model.Price лв.</p>
+        <h4 class="mb-1">@Model.Name</h4>
+        <p class="text-muted mb-3">@Model.Description</p>
+
+        <p><strong>Бранд:</strong> @Model.Brand</p>
+        <p><strong>Категория:</strong> @Model.Category</p>
+        <p><strong>Цена:</strong> @Model.Price.ToString("F2") лв.</p>
+        <p><strong>Наличност:</strong> @(Model.Stock > 0 ? $"{Model.Stock} бр." : "❌ Няма")</p>
+
+        <form asp-action="DeleteConfirmed" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash-fill"></i> Да, изтрий
+                </button>
+                <a asp-action="Manage" class="btn btn-secondary">Отказ</a>
+            </div>
+        </form>
+    </div>
 </div>
-
-<form asp-action="DeleteConfirmed" method="post" class="mt-4">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Изтрий</button>
-    <a asp-action="Index" class="ml-4 text-blue-600 underline">Отказ</a>
-</form>
