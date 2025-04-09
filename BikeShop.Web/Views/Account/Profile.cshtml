@@ -1,4 +1,6 @@
-﻿@model BikeShop.Web.Models.ApplicationUser
+﻿@using BikeShop.Models;
+@using BikeShop.Web.Models
+@model BikeShop.Web.Models.ApplicationUser
 @{
     ViewData["Title"] = "Профил";
     var rentals = ViewBag.Rentals as List<BikeShop.Web.Models.Rental>;
@@ -18,8 +20,11 @@
         <thead class="table-dark">
             <tr>
                 <th>Велосипед</th>
+                <th>Дата на поръчка</th>
                 <th>От</th>
                 <th>До</th>
+                <th>Цена</th>
+                <th>Статус</th> 
             </tr>
         </thead>
         <tbody>
@@ -27,8 +32,24 @@
             {
                 <tr>
                     <td>@rental.Bicycle.Name</td>
+                    <td>@rental.CreatedOn.ToShortDateString()</td>
                     <td>@rental.StartDate.ToShortDateString()</td>
                     <td>@rental.EndDate.ToShortDateString()</td>
+                    <td>@rental.Price.ToString("0.00") лв.</td>
+                    <td>
+                        @if (rental.Status == OrderStatus.Pending)
+                        {
+                            <span class="text-warning">Очакващ</span>
+                        }
+                        else if (rental.Status == OrderStatus.Accepted)
+                        {
+                            <span class="text-success">Приет</span>
+                        }
+                        else if (rental.Status == OrderStatus.Rejected)
+                        {
+                            <span class="text-danger">Отказан</span>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -49,6 +70,8 @@ else
             <tr>
                 <th>Велосипед</th>
                 <th>Дата на поръчка</th>
+                <th>Цена</th>
+                <th>Статус</th> 
             </tr>
         </thead>
         <tbody>
@@ -57,6 +80,22 @@ else
                 <tr>
                     <td>@order.Bicycle?.Name</td>
                     <td>@order.OrderDate.ToShortDateString()</td>
+                    <td>@order.TotalPrice.ToString("0.00") лв.</td>
+                    <td>
+                        @if (order.Status == OrderStatus.Pending)
+                        {
+                            <span class="text-warning">Очакваща</span>
+                        }
+                        else if (order.Status == OrderStatus.Accepted)
+                        {
+                            <span class="text-success">Приета</span>
+                        }
+                        else if (order.Status == OrderStatus.Rejected)
+                        {
+                            <span class="text-danger">Отказана</span>
+                        }
+                    </td>
+
                 </tr>
             }
         </tbody>
@@ -76,8 +115,9 @@ else
         <thead class="table-dark">
             <tr>
                 <th>Аксесоар</th>
-                <th>Дата</th>
+                <th>Дата на поръчка</th>
                 <th>Цена</th>
+                <th>Статус</th> 
             </tr>
         </thead>
         <tbody>
@@ -97,6 +137,20 @@ else
 
                     <td>@order.OrderDate.ToShortDateString()</td>
                     <td>@order.TotalPrice.ToString("F2") лв.</td>
+                    <td>
+                        @if (order.Status == OrderStatus.Pending)
+                        {
+                            <span class="text-warning">Очакваща</span>
+                        }
+                        else if (order.Status == OrderStatus.Accepted)
+                        {
+                            <span class="text-success">Приета</span>
+                        }
+                        else if (order.Status == OrderStatus.Rejected)
+                        {
+                            <span class="text-danger">Отказана</span>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>

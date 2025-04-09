@@ -1,28 +1,67 @@
 ﻿@model List<BikeShop.Web.Models.Order>
+@using BikeShop.Models;
+@using BikeShop.Web.Models
 
 @{
     ViewData["Title"] = "Поръчки на аксесоари";
 }
 
-<h2>📦 Всички поръчки на аксесоари</h2>
+<h2 class="mb-4">📦 Всички поръчки на аксесоари</h2>
 
-<table class="table table-striped">
+<table class="table table-bordered table-striped">
     <thead class="table-dark">
         <tr>
             <th>Потребител</th>
+            <th>Клиент</th>
+            <th>Телефон</th>
             <th>Аксесоар</th>
+            <th>Адрес за доставка</th>
             <th>Дата</th>
             <th>Цена</th>
+            <th>Статус</th>
+            <th>Действия</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var order in Model)
         {
-            <tr>
+            <tr class="@(order.Status == OrderStatus.Accepted ? "table-success" : order.Status == OrderStatus.Rejected ? "table-danger" : "")">
                 <td>@order.User?.Email</td>
-                <td>@order.Accessory?.Name ?? "—"</td>
+                <td>@order.FirstName @order.LastName</td>
+                <td>@order.PhoneNumber</td>
+                <td>@(order.Accessory?.Name ?? "—")</td>
+                <td>
+                    @if (order.IsDelivery)
+                    {
+                        @($"{order.DeliveryCity}, ул. {order.DeliveryStreet} №{order.DeliveryStreetNumber}, {order.PostalCode}")
+                    }
+                    else
+                    {
+                        <span class="text-muted">Без доставка</span>
+                    }
+                </td>
                 <td>@order.OrderDate.ToShortDateString()</td>
                 <td>@order.TotalPrice лв.</td>
+                <td>@order.Status</td>
+                <td>
+                    @if (order.Status == OrderStatus.Pending)
+                    {
+                        <form asp-action="AcceptAccessoryOrder" asp-route-id="@order.Id" method="post" style="display:inline">
+                            <button class="btn btn-success btn-sm">Приеми</button>
+                        </form>
+                        <form asp-action="RejectAccessoryOrder" asp-route-id="@order.Id" method="post" style="display:inline">
+                            <button class="btn btn-danger btn-sm">Откажи</button>
+                        </form>
+                    }
+                    else if (order.Status == OrderStatus.Accepted)
+                    {
+                        <span class="text-success">Приета</span>
+                    }
+                    else if (order.Status == OrderStatus.Rejected)
+                    {
+                        <span class="text-danger">Отказана</span>
+                    }
+                </td>
             </tr>
         }
     </tbody>

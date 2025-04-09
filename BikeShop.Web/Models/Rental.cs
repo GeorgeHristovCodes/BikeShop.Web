@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BikeShop.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BikeShop.Web.Models
@@ -44,6 +45,8 @@ namespace BikeShop.Web.Models
         public DateTime CreatedOn { get; set; } = DateTime.Now;
 
         public bool IsActive { get; set; } = true;
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
+
 
     }
 }

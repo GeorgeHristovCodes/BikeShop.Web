@@ -1,4 +1,5 @@
-﻿using BikeShop.Web.Data;
+﻿using BikeShop.Models;
+using BikeShop.Web.Data;
 using BikeShop.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +12,8 @@ namespace BikeShop.Web.Controllers
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AdminController(
             UserManager<ApplicationUser> userManager,
@@ -26,11 +29,6 @@ namespace BikeShop.Web.Controllers
         {
             return View();
         }
-
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-
-       
 
         public async Task<IActionResult> Users()
         {
@@ -61,6 +59,7 @@ namespace BikeShop.Web.Controllers
 
             return RedirectToAction(nameof(Users));
         }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllRentals()
         {
@@ -71,16 +70,20 @@ namespace BikeShop.Web.Controllers
 
             return View(rentals);
         }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllOrders()
         {
             var orders = await _context.Orders
                 .Include(o => o.Bicycle)
                 .Include(o => o.User)
+                .Where(o => o.AccessoryId == null) // само поръчки на велосипеди
                 .ToListAsync();
 
             return View(orders);
         }
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllAccessoryOrders()
         {
             var accessoryOrders = await _context.Orders
@@ -93,8 +96,73 @@ namespace BikeShop.Web.Controllers
             return View(accessoryOrders);
         }
 
+        // ✅ Приемане/отказване на поръчки за велосипеди
+        [HttpPost]
+        public async Task<IActionResult> AcceptOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null) return NotFound();
 
+            order.Status = OrderStatus.Accepted;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AllOrders));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null) return NotFound();
+
+            order.Status = OrderStatus.Rejected;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AllOrders));
+        }
+
+        // ✅ Приемане/отказване на наеми
+        [HttpPost]
+        public async Task<IActionResult> AcceptRental(int id)
+        {
+            var rental = await _context.Rentals.FindAsync(id);
+            if (rental == null) return NotFound();
+
+            rental.Status = OrderStatus.Accepted;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AllRentals));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectRental(int id)
+        {
+            var rental = await _context.Rentals.FindAsync(id);
+            if (rental == null) return NotFound();
+
+            rental.Status = OrderStatus.Rejected;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AllRentals));
+        }
+
+        // ✅ Приемане/отказване на поръчки за аксесоари
+        [HttpPost]
+        public async Task<IActionResult> AcceptAccessoryOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null || order.AccessoryId == null) return NotFound();
+
+            order.Status = OrderStatus.Accepted;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AllAccessoryOrders));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectAccessoryOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null || order.AccessoryId == null) return NotFound();
+
+            order.Status = OrderStatus.Rejected;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(AllAccessoryOrders));
+        }
     }
-
-
 }

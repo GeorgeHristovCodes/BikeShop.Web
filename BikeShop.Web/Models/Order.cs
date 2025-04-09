@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BikeShop.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BikeShop.Web.Models
@@ -38,5 +39,10 @@ namespace BikeShop.Web.Models
 
         public bool IsDelivery { get; set; }
         public decimal TotalPrice { get; set; }
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
+
+
+
+
     }
 }
