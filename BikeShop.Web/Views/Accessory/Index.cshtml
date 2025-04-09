@@ -1,4 +1,6 @@
-﻿@model BikeShop.Web.Models.AccessoryFilterViewModel
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@model BikeShop.Web.Models.AccessoryFilterViewModel
 @{
     ViewData["Title"] = "Всички аксесоари";
 }
@@ -48,8 +50,15 @@
                             <img src="@item.ImageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" alt="@item.Name" />
                             <div class="card-body">
                                 <h5 class="card-title">@item.Name</h5>
+                                @{
+                                    var displayName = item.Category.GetType()
+                                    .GetMember(item.Category.ToString())
+                                    .First()
+                                    .GetCustomAttribute<DisplayAttribute>()?.Name ?? item.Category.ToString();
+                                }
+
                                 <p class="card-text">
-                                    Категория: @item.Category<br />
+                                    Категория: @displayName<br />
                                     Бранд: @item.Brand
                                 </p>
                             </div>

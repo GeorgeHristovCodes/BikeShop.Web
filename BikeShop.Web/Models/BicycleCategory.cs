@@ -1,11 +1,19 @@
-﻿namespace BikeShop.Web.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+public enum BicycleCategory
 {
-    public enum BicycleCategory
-    {
-        Road,           // Шосеен
-        MountainHardtail, // Планински - твърда рамка
-        MountainFullSuspension, // Планински - с окачване
-        City,           // Градски
-        Kids            // Детски
-    }
+    [Display(Name = "Шосеен")]
+    Road,
+
+    [Display(Name = "Планински (твърда рамка)")]
+    MountainHardtail,
+
+    [Display(Name = "Планински (с окачване)")]
+    MountainFullSuspension,
+
+    [Display(Name = "Градски")]
+    City,
+
+    [Display(Name = "Детски")]
+    Kids
 }

@@ -1,4 +1,6 @@
-﻿@model BikeShop.Web.Models.ViewModels.BicycleFilterViewModel
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@model BikeShop.Web.Models.ViewModels.BicycleFilterViewModel
 
 @{
     ViewData["Title"] = "Купи велосипед";
@@ -112,7 +114,13 @@
                                 <p class="card-text">
                                     Бранд: @bike.Brand<br />
                                     Рамка: @bike.FrameSize<br />
-                                    Категория: @bike.Category
+                                    @{
+                                        var displayName = bike.Category.GetType()
+                                        .GetMember(bike.Category.ToString())
+                                        .First()
+                                        .GetCustomAttribute<DisplayAttribute>()?.Name ?? bike.Category.ToString();
+                                    }
+                                    Категория: @displayName
                                 </p>
                             </div>
 

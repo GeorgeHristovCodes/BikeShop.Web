@@ -1,4 +1,6 @@
 ﻿@model BikeShop.Web.Models.Bicycle
+@using System.ComponentModel.DataAnnotations
+@using System.Reflection
 
 @{
     ViewData["Title"] = "Детайли за " + Model.Name;
@@ -39,7 +41,16 @@
     <!-- ℹ️ Информация за велосипеда -->
     <div class="col-md-6">
         <p><strong>Марка:</strong> @Model.Brand</p>
-        <p><strong>Категория:</strong> @Model.Category</p>
+        <p>
+            <strong>Категория:</strong>
+            @{
+                var displayName = Model.Category.GetType()
+                .GetMember(Model.Category.ToString())
+                .First()
+                .GetCustomAttribute<DisplayAttribute>()?.Name ?? Model.Category.ToString();
+            }
+            @displayName
+        </p>
         <p><strong>Размер на рамката:</strong> @Model.FrameSize</p>
         <p><strong>Цена:</strong> <span class="text-success fw-bold">@Model.Price лв.</span></p>
         <p><strong>Описание:</strong><br />@Model.Description</p>

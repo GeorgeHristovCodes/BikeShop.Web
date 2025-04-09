@@ -294,7 +294,7 @@ namespace BikeShop.Web.Controllers
             return RedirectToAction(nameof(Manage));
         }
 
-        [Authorize(Roles = "Admin")]
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
