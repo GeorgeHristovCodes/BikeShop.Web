@@ -1,4 +1,4 @@
-﻿// BicycleController.cs - с логика за качване, редакция и изтриване на снимки
+﻿// BicycleController.cs - с автоматично управление на IsAvailable
 using BikeShop.Web.Data;
 using BikeShop.Web.Models;
 using BikeShop.Web.Models.ViewModels;
@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using BikeShop.Web.Models.Requests;
+using BikeShop.Web.Models.Enum;
 
 namespace BikeShop.Web.Controllers
 {
@@ -81,11 +82,11 @@ namespace BikeShop.Web.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Manage(string? filterType, BicycleCategory? filterCategory)
         {
-            var bicycles = _context.Bicycles.AsQueryable();
+            var bicycles = _context.Bicycles.Include(b => b.Images).AsQueryable();
 
-            if (!string.IsNullOrEmpty(filterType))
+            if (!string.IsNullOrEmpty(filterType) && Enum.TryParse<BicycleType>(filterType, out var parsedType))
             {
-                bicycles = bicycles.Where(b => b.Type.ToString() == filterType);
+                bicycles = bicycles.Where(b => b.Type == parsedType);
             }
 
             if (filterCategory.HasValue)
@@ -96,6 +97,7 @@ namespace BikeShop.Web.Controllers
             ViewBag.Categories = new SelectList(Enum.GetValues(typeof(BicycleCategory)));
             return View(await bicycles.ToListAsync());
         }
+
 
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
@@ -113,9 +115,11 @@ namespace BikeShop.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                // Автоматично изчисление на наличност
+                bicycle.IsAvailable = bicycle.Quantity > 0;
+
                 if (uploadedImages.Any())
                 {
-                    // Първата снимка става основна
                     var firstImage = uploadedImages.First();
                     string root = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
                     if (!Directory.Exists(root)) Directory.CreateDirectory(root);
@@ -134,7 +138,6 @@ namespace BikeShop.Web.Controllers
                 _context.Add(bicycle);
                 await _context.SaveChangesAsync();
 
-                // Качи останалите снимки (вкл. първата, ако искаш да я покажеш в галерията)
                 foreach (var image in uploadedImages)
                 {
                     if (image.Length > 0)
@@ -240,7 +243,7 @@ namespace BikeShop.Web.Controllers
                 existingBike.Brand = bicycle.Brand;
                 existingBike.FrameSize = bicycle.FrameSize;
                 existingBike.Quantity = bicycle.Quantity;
-                existingBike.IsAvailable = bicycle.IsAvailable;
+                existingBike.IsAvailable = bicycle.Quantity > 0; // автоматично изчисление
 
                 _context.Update(existingBike);
                 await _context.SaveChangesAsync();
@@ -251,11 +254,9 @@ namespace BikeShop.Web.Controllers
             return View(bicycle);
         }
 
-      
         [Authorize(Roles = "Admin")]
-        [ValidateAntiForgeryToken] // 👈 Ако имаш този ред, JS-а трябва да подаде валиден анти-фалшификация токен
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteImage([FromBody] DeleteImageRequest request)
-
         {
             var image = await _context.BicycleImages.FindAsync(request.ImageId);
             if (image == null) return NotFound();

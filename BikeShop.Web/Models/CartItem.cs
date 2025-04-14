@@ -1,4 +1,5 @@
 ﻿using BikeShop.Web.Models;
+using BikeShop.Web.Models.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,10 +15,10 @@ public class CartItem
     public Bicycle? Bicycle { get; set; }
 
     // 🔥 Добавяме Аксесоар (по избор)
-    public int? AccessoryId { get; set; }
+    public int? AccessoriesId { get; set; }
 
-    [ForeignKey(nameof(AccessoryId))]
-    public Accessory? Accessory { get; set; }
+    [ForeignKey(nameof(AccessoriesId))]
+    public Accessories? Accessories { get; set; }
 
     // 🔐 Връзка с потребителя
     [Required]

@@ -1,4 +1,5 @@
 ﻿using BikeShop.Web.Models;
+using BikeShop.Web.Models.Enum;
 
 namespace BikeShop.Web.Models.ViewModels
 {

@@ -1,12 +1,33 @@
-﻿@using System.Reflection;
-@using System.ComponentModel.DataAnnotations;
-@model BikeShop.Web.Models.ViewModels.BicycleFilterViewModel
+﻿@model BikeShop.Web.Models.ViewModels.BicycleFilterViewModel
+@using System.Reflection
+@using System.ComponentModel.DataAnnotations
+@using BikeShop.Web.Models.Enum
+@using BikeShop.Web.Models
 
 @{
     ViewData["Title"] = "Купи велосипед";
 }
 
-<div class="row">
+<style>
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    .hover-shadow:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transform: scale(1.02);
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div class="row fade-in" id="sale-container">
     <!-- 🔍 ФИЛТЪР ПАНЕЛ -->
     <div class="col-md-3">
         <form asp-action="ForSale" method="get" class="border rounded p-3 bg-light">
@@ -77,7 +98,7 @@
                     }
 
                     <div class="col">
-                        <div class="card h-100">
+                        <div class="card h-100 hover-shadow">
                             @if (bike.Images != null && bike.Images.Count > 1)
                             {
                                 <div id="carousel-@bike.Id" class="carousel slide" data-bs-ride="carousel">
@@ -91,12 +112,10 @@
                                         }
                                     </div>
                                     <button class="carousel-control-prev" type="button" data-bs-target="#carousel-@bike.Id" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
-                                        <span class="visually-hidden">Назад</span>
+                                        <span class="carousel-control-prev-icon bg-dark rounded-circle"></span>
                                     </button>
                                     <button class="carousel-control-next" type="button" data-bs-target="#carousel-@bike.Id" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
-                                        <span class="visually-hidden">Напред</span>
+                                        <span class="carousel-control-next-icon bg-dark rounded-circle"></span>
                                     </button>
                                 </div>
                             }
@@ -134,9 +153,7 @@
                                         <button type="submit" class="btn btn-sm btn-success">Купи</button>
                                     </form>
 
-                                    <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-sm btn-primary">
-                                        Детайли
-                                    </a>
+                                    <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-sm btn-primary">Детайли</a>
                                 </div>
                             </div>
                         </div>
@@ -146,3 +163,11 @@
         }
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("sale-container").classList.add("show");
+        });
+    </script>
+}

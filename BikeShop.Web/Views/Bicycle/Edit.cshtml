@@ -1,4 +1,6 @@
 ﻿@model BikeShop.Web.Models.Bicycle
+@using BikeShop.Web.Models.Enum
+@using BikeShop.Web.Models
 @{
     ViewData["Title"] = "Редактиране на велосипед";
 }
@@ -92,15 +94,9 @@
         <input asp-for="Quantity" class="form-control" type="number" min="0" />
     </div>
 
-    <div class="form-check mb-3">
-        <input asp-for="IsAvailable" class="form-check-input" />
-        <label asp-for="IsAvailable" class="form-check-label"></label>
-    </div>
-
     <button type="submit" class="btn btn-primary">Запиши</button>
     <a asp-action="Manage" class="btn btn-secondary">Отказ</a>
 </form>
-
 @section Scripts {
     <script>
         function deleteImage(imageId, button) {
@@ -115,7 +111,6 @@
                 })
                     .then(response => {
                         if (response.ok) {
-                            // Премахни визуално картинката от DOM-а
                             button.closest('.image-container').remove();
                         } else {
                             alert("⚠️ Грешка при изтриване на снимката.");
@@ -123,5 +118,27 @@
                     });
             }
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const quantityInput = document.querySelector('input[name="Quantity"]');
+            const isAvailableCheckbox = document.querySelector('input[name="IsAvailable"]');
+
+            function validateQuantity() {
+                const quantity = parseInt(quantityInput.value);
+
+                if (quantity < 0) {
+                    quantityInput.value = 0;
+                }
+
+                isAvailableCheckbox.disabled = quantity <= 0;
+                if (quantity <= 0) {
+                    isAvailableCheckbox.checked = false;
+                }
+            }
+
+            quantityInput.addEventListener("input", validateQuantity);
+            validateQuantity();
+        });
     </script>
 }
+

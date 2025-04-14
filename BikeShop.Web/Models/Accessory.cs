@@ -1,10 +1,10 @@
-﻿using BikeShop.Models;
+﻿using BikeShop.Web.Models.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BikeShop.Web.Models
 {
-    public class Accessory
+    public class Accessories
     {
         public int Id { get; set; }
 
@@ -22,7 +22,7 @@ namespace BikeShop.Web.Models
         public string? ImageUrl { get; set; }
 
         [Required]
-        public AccessoryCategory Category { get; set; }
+        public AccessoriesCategory Category { get; set; }
 
         public int Stock { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;

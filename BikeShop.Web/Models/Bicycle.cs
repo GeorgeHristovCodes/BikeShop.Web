@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BikeShop.Web.Models.Enum;
 
 namespace BikeShop.Web.Models
 {
@@ -38,8 +39,6 @@ namespace BikeShop.Web.Models
         public IFormFile? ImageFile { get; set; }
 
         public ICollection<BicycleImage> Images { get; set; } = new List<BicycleImage>();
-
-
 
     }
 }

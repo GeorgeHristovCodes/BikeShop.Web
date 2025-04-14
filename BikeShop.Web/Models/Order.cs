@@ -1,4 +1,4 @@
-﻿using BikeShop.Models;
+﻿using BikeShop.Web.Models.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,10 +19,10 @@ namespace BikeShop.Web.Models
         [ForeignKey("BicycleId")]
         public Bicycle? Bicycle { get; set; }
 
-        public int? AccessoryId { get; set; }
+        public int? AccessoriesId { get; set; }
 
-        [ForeignKey("AccessoryId")]
-        public Accessory? Accessory { get; set; }
+        [ForeignKey("AccessoriesId")]
+        public Accessories? Accessories { get; set; }
 
         public DateTime OrderDate { get; set; } = DateTime.Now;
 

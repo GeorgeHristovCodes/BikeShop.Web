@@ -1,5 +1,6 @@
 ﻿using BikeShop.Web.Data;
 using BikeShop.Web.Models;
+using BikeShop.Web.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;

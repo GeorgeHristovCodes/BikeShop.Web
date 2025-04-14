@@ -1,0 +1,65 @@
+﻿@model BikeShop.Web.Models.Accessories
+@using BikeShop.Web.Models.Enum
+@{
+    ViewData["Title"] = "Редактиране на аксесоар";
+}
+
+<h2 class="mb-4">Редактиране на аксесоар</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Име</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Описание</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Цена</label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Brand" class="form-label">Бранд</label>
+        <input asp-for="Brand" class="form-control" />
+        <span asp-validation-for="Brand" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Category" class="form-label">Категория</label>
+        <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<AccessoriesCategory>()">
+            <option value="">-- Избери категория --</option>
+        </select>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div class="mb-3">
+            <label class="form-label">Текуща снимка</label><br />
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-thumbnail mb-2" style="height: 100px; object-fit:cover;" />
+        </div>
+    }
+
+    <div class="mb-3">
+        <label class="form-label">Нова снимка</label>
+        <input class="form-control" name="ImageFile" type="file" />
+    </div>
+
+    <input type="hidden" asp-for="ImageUrl" />
+
+    <div class="mb-3">
+        <label asp-for="Stock" class="form-label">Наличност</label>
+        <input asp-for="Stock" class="form-control" type="number" min="0" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Запиши</button>
+    <a asp-action="Manage" class="btn btn-secondary">Отказ</a>
+</form>

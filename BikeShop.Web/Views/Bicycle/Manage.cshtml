@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<BikeShop.Web.Models.Bicycle>
+@using BikeShop.Web.Models.Enum
+@using BikeShop.Web.Models
 
 @{
     ViewData["Title"] = "Управление на велосипеди";
@@ -46,9 +48,10 @@
                 <td>@bike.Type</td>
                 <td>@bike.Category</td> <!-- 🆕 -->
                 <td>@bike.Price лв.</td>
-                <td class="fw-bold @(bike.Quantity == 0 ? "text-danger" : "text-success")">
-                    @(bike.Quantity > 0 ? $"Да ({bike.Quantity} бр.)" : "❌ Не (0 бр.)")
+                <td class="fw-bold @(bike.IsAvailable ? "text-success" : "text-danger")">
+                    @(bike.IsAvailable ? $"✅ Да ({bike.Quantity} бр.)" : $"❌ Не ({bike.Quantity} бр.)")
                 </td>
+
                 <td>
                     <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@bike.Id">Детайли</a>
                     <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@bike.Id">Редактирай</a>

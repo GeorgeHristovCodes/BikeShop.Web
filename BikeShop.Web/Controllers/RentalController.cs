@@ -1,5 +1,6 @@
 ﻿using BikeShop.Web.Data;
 using BikeShop.Web.Models;
+using BikeShop.Web.Models.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

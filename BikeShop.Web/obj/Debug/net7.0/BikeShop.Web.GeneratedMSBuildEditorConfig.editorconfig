@@ -48,36 +48,36 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessory/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3J5XENyZWF0ZS5jc2h0bWw=
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessories/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3JpZXNcQ3JlYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessory/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3J5XERlbGV0ZS5jc2h0bWw=
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessories/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3JpZXNcRGVsZXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessory/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3J5XERldGFpbHMuY3NodG1s
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessories/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3JpZXNcRGV0YWlscy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessory/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3J5XEVkaXQuY3NodG1s
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessories/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3JpZXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessory/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3J5XEluZGV4LmNzaHRtbA==
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessories/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3JpZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessory/Manage.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3J5XE1hbmFnZS5jc2h0bWw=
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Accessories/Manage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjZXNzb3JpZXNcTWFuYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Account/Profile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxQcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Admin/AllAccessoryOrders.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWxsQWNjZXNzb3J5T3JkZXJzLmNzaHRtbA==
+[C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Admin/AllAccessoriesOrders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQWxsQWNjZXNzb3JpZXNPcmRlcnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/BikeShop.Web/BikeShop.Web/BikeShop.Web/Views/Admin/AllOrders.cshtml]

@@ -57,13 +57,13 @@
             <div class="col-md-4 mb-4">
                 <h4 class="mb-4 text-center fw-bold">Аксесоари</h4>
                 <div class="d-grid gap-3">
-                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Helmet" class="btn btn-outline-secondary text-start fw-semibold text-dark">Каски</a>
-                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Gloves" class="btn btn-outline-secondary text-start fw-semibold text-dark">Ръкавици</a>
-                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="KneePads" class="btn btn-outline-secondary text-start fw-semibold text-dark">Наколенки</a>
-                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="ElbowPads" class="btn btn-outline-secondary text-start fw-semibold text-dark">Лакътници</a>
-                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Glasses" class="btn btn-outline-secondary text-start fw-semibold text-dark">Очила</a>
-                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Tools" class="btn btn-outline-secondary text-start fw-semibold text-dark">Инструменти</a>
-                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Pump" class="btn btn-outline-secondary text-start fw-semibold text-dark">Помпи</a>
+                    <a asp-controller="Accessories" asp-action="Index" asp-route-category="Helmet" class="btn btn-outline-secondary text-start fw-semibold text-dark">Каски</a>
+                    <a asp-controller="Accessories" asp-action="Index" asp-route-category="Gloves" class="btn btn-outline-secondary text-start fw-semibold text-dark">Ръкавици</a>
+                    <a asp-controller="Accessories" asp-action="Index" asp-route-category="KneePads" class="btn btn-outline-secondary text-start fw-semibold text-dark">Наколенки</a>
+                    <a asp-controller="Accessories" asp-action="Index" asp-route-category="ElbowPads" class="btn btn-outline-secondary text-start fw-semibold text-dark">Лакътници</a>
+                    <a asp-controller="Accessories" asp-action="Index" asp-route-category="Glasses" class="btn btn-outline-secondary text-start fw-semibold text-dark">Очила</a>
+                    <a asp-controller="Accessories" asp-action="Index" asp-route-category="Tools" class="btn btn-outline-secondary text-start fw-semibold text-dark">Инструменти</a>
+                    <a asp-controller="Accessories" asp-action="Index" asp-route-category="Pump" class="btn btn-outline-secondary text-start fw-semibold text-dark">Помпи</a>
                 </div>
             </div>
         </div>
@@ -75,28 +75,29 @@
     <div class="container">
         <h3 class="text-center mb-4 fw-bold">🚲 Твоето следващо колело те очаква</h3>
 
-        <div class="carousel-inner">
-            <div class="row g-4">
-                @foreach (var bike in Model.BicyclesForSale.Take(3))
-                {
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow-sm">
-                            <img src="@bike.ImageUrl" class="card-img-top" alt="@bike.Name" />
-                            <div class="card-body">
-                                <h5 class="card-title fw-semibold">@bike.Name</h5>
-                                <p class="mb-1"><strong>Бранд:</strong> @bike.Brand</p>
-                                <p class="mb-1"><strong>Рамка:</strong> @bike.FrameSize</p>
-                                <p class="mb-1"><strong>Категория:</strong> @bike.Category</p>
-                                <p><strong>Цена:</strong> @bike.Price лв</p>
-                                <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-primary w-100">Виж повече</a>
-                            </div>
+        <div class="row g-4">
+            @foreach (var bike in Model.BicyclesForSale.Take(3))
+            {
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@(!string.IsNullOrWhiteSpace(bike.ImageUrl) ? bike.ImageUrl : "/images/demo-bicycles/road-sale1.jpg")"
+                             class="card-img-top" alt="@bike.Name" />
+
+                        <div class="card-body">
+                            <h5 class="card-title fw-semibold">@bike.Name</h5>
+                            <p class="mb-1"><strong>Бранд:</strong> @bike.Brand</p>
+                            <p class="mb-1"><strong>Рамка:</strong> @bike.FrameSize</p>
+                            <p class="mb-1"><strong>Категория:</strong> @bike.Category</p>
+                            <p><strong>Цена:</strong> @bike.Price.ToString("F2") лв</p>
+                            <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-primary w-100">Виж повече</a>
                         </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         </div>
     </div>
 </section>
+
 <section class="py-5 bg-white">
     <div class="container">
         <h3 class="text-center fw-bold mb-5">💡 Нашите предимства</h3>

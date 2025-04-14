@@ -1,0 +1,36 @@
+﻿@model BikeShop.Web.Models.Accessories
+@using System.ComponentModel.DataAnnotations
+@using System.Reflection
+@using BikeShop.Web.Models.Enum
+
+@{
+    ViewData["Title"] = "Детайли за " + Model.Name;
+
+    var displayName = Model.Category.GetType()
+        .GetMember(Model.Category.ToString())
+        .First()
+        .GetCustomAttribute<DisplayAttribute>()?.Name ?? Model.Category.ToString();
+}
+
+<h2 class="mb-4">@Model.Name</h2>
+
+<div class="row">
+    <!-- Снимка на аксесоара -->
+    <div class="col-md-6">
+        <img src="@Model.ImageUrl" class="img-fluid rounded shadow-sm" alt="@Model.Name" />
+    </div>
+
+    <!-- Детайли -->
+    <div class="col-md-6">
+        <p><strong>Бранд:</strong> @Model.Brand</p>
+        <p><strong>Категория:</strong> @displayName</p>
+        <p><strong>Описание:</strong> @Model.Description</p>
+        <p><strong>Цена:</strong> <span class="text-success fw-bold">@Model.Price.ToString("F2") лв.</span></p>
+
+        <form method="post" asp-controller="Cart" asp-action="AddAccessories">
+            <input type="hidden" name="AccessoriesId" value="@Model.Id" />
+            <button type="submit" class="btn btn-success me-2">Добави в кошницата</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">⬅ Назад</a>
+        </form>
+    </div>
+</div>

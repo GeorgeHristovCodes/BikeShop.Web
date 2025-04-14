@@ -1,15 +1,16 @@
 ﻿@model List<CartItem>
 @using BikeShop.Web.Models
+@using BikeShop.Web.Models.Enum
 
 @{
     ViewData["Title"] = "Кошницата";
 
     var bicycleItems = Model.Where(i => i.Bicycle != null).ToList();
-    var accessoryItems = Model.Where(i => i.Accessory != null).ToList();
+    var AccessoriesItems = Model.Where(i => i.Accessories != null).ToList();
 
     decimal bicycleTotal = bicycleItems.Sum(i => i.Price);
-    decimal accessoryTotal = accessoryItems.Sum(i => i.Price);
-    decimal total = bicycleTotal + accessoryTotal;
+    decimal AccessoriesTotal = AccessoriesItems.Sum(i => i.Price);
+    decimal total = bicycleTotal + AccessoriesTotal;
 
     bool hasPurchase = Model.Any(i => i.Type == CartItemType.Purchase);
     bool hasRental = Model.Any(i => i.Type == CartItemType.Rental);
@@ -77,7 +78,7 @@ else
     }
 
     <!-- 🧢 Аксесоари -->
-    @if (accessoryItems.Any())
+    @if (AccessoriesItems.Any())
     {
         <h4 class="mt-5">🧢 Аксесоари</h4>
         <table class="table table-bordered align-middle">
@@ -92,14 +93,14 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in accessoryItems)
+                @foreach (var item in AccessoriesItems)
                 {
                     <tr>
                         <td>
-                            <img src="@item.Accessory.ImageUrl" class="img-thumbnail" style="max-height: 100px;" />
+                            <img src="@item.Accessories.ImageUrl" class="img-thumbnail" style="max-height: 100px;" />
                         </td>
-                        <td>@item.Accessory.Name</td>
-                        <td>@item.Accessory.Brand</td>
+                        <td>@item.Accessories.Name</td>
+                        <td>@item.Accessories.Brand</td>
                         <td>@item.Quantity</td>
                         <td>@item.Price.ToString("F2") лв.</td>
                         <td>
@@ -114,7 +115,7 @@ else
             <tfoot class="table-secondary">
                 <tr>
                     <td colspan="4" class="text-end fw-bold">Сума за аксесоари:</td>
-                    <td colspan="2" class="fw-bold text-success">@accessoryTotal.ToString("F2") лв.</td>
+                    <td colspan="2" class="fw-bold text-success">@AccessoriesTotal.ToString("F2") лв.</td>
                 </tr>
             </tfoot>
         </table>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using BikeShop.Web.Models;
 using System.Security.Claims;
+using BikeShop.Web.Models.Enum;
 
 namespace BikeShop.Web.Controllers
 {
@@ -35,7 +36,7 @@ namespace BikeShop.Web.Controllers
 
             var orders = await _context.Orders
                 .Include(o => o.Bicycle)
-                .Include(o => o.Accessory) // ✅ ЕТО ТОВА ДОБАВИ!
+                .Include(o => o.Accessories) // ✅ ЕТО ТОВА ДОБАВИ!
                 .Where(o => o.UserId == user.Id)
                 .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
@@ -46,16 +47,16 @@ namespace BikeShop.Web.Controllers
             return View(user);
         }
 
-        public async Task<IActionResult> AccessoryOrders()
+        public async Task<IActionResult> AccessoriesOrders()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var accessoryOrders = await _context.Orders
-                .Include(o => o.Accessory)
-                .Where(o => o.UserId == userId && o.AccessoryId != null)
+            var AccessoriesOrders = await _context.Orders
+                .Include(o => o.Accessories)
+                .Where(o => o.UserId == userId && o.AccessoriesId != null)
                 .ToListAsync();
 
-            return View(accessoryOrders);
+            return View(AccessoriesOrders);
         }
 
 

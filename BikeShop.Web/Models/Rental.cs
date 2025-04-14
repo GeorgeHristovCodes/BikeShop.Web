@@ -1,4 +1,4 @@
-﻿using BikeShop.Models;
+﻿using BikeShop.Web.Models.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

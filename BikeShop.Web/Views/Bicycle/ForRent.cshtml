@@ -1,12 +1,33 @@
-﻿@using System.Reflection;
-@using System.ComponentModel.DataAnnotations;
-@model BikeShop.Web.Models.ViewModels.BicycleFilterViewModel
+﻿@model BikeShop.Web.Models.ViewModels.BicycleFilterViewModel
+@using System.Reflection
+@using System.ComponentModel.DataAnnotations
+@using BikeShop.Web.Models.Enum
+@using BikeShop.Web.Models
+
 @{
     ViewData["Title"] = "Наеми велосипед";
 }
 
-<div class="row">
-    <!-- 🔍 Филтри отляво -->
+<style>
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .fade-in.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .hover-shadow:hover {
+        transform: scale(1.03);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="row fade-in" id="rent-container">
+    <!-- 🔍 ФИЛТЪР ПАНЕЛ -->
     <div class="col-md-3">
         <form asp-action="ForRent" method="get" class="border rounded p-3 bg-light">
             <h5 class="mb-3">Филтрирай</h5>
@@ -43,8 +64,8 @@
             <div class="mb-3">
                 <label class="form-label">Цена (от - до)</label>
                 <div class="input-group">
-                    <input type="number" asp-for="MinPrice" class="form-control" placeholder="Мин." step="0.01" />
-                    <input type="number" asp-for="MaxPrice" class="form-control" placeholder="Макс." step="0.01" />
+                    <input asp-for="MinPrice" class="form-control" placeholder="Мин." step="0.01" />
+                    <input asp-for="MaxPrice" class="form-control" placeholder="Макс." step="0.01" />
                 </div>
             </div>
 
@@ -52,9 +73,9 @@
         </form>
     </div>
 
-    <!-- 🚲 Резултати вдясно -->
+    <!-- 📦 РЕЗУЛТАТИ -->
     <div class="col-md-9">
-        <h3 class="mb-4">Велосипеди за наем (@Model.Results.Count)</h3>
+        <h3 class="mb-4">Велосипеди под наем (@Model.Results.Count)</h3>
 
         @if (!Model.Results.Any())
         {
@@ -76,13 +97,42 @@
                     }
 
                     <div class="col">
-                        <div class="card h-100">
-                            <img src="@imageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" />
+                        <div class="card h-100 hover-shadow">
+                            @if (bike.Images != null && bike.Images.Count > 1)
+                            {
+                                <div id="carousel-rent-@bike.Id" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        @for (int i = 0; i < bike.Images.Count; i++)
+                                        {
+                                            var img = bike.Images.ElementAt(i);
+                                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                                <img src="@img.ImageUrl" class="d-block w-100 card-img-top" style="max-height:200px; object-fit:cover;" alt="Снимка @(i+1)">
+                                            </div>
+                                        }
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-rent-@bike.Id" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon bg-dark rounded-circle"></span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-rent-@bike.Id" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon bg-dark rounded-circle"></span>
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                var singleImageUrl = !string.IsNullOrEmpty(bike.ImageUrl)
+                                ? bike.ImageUrl
+                                : bike.Images?.FirstOrDefault()?.ImageUrl ?? "/images/no-image.png";
+
+                                <img src="@singleImageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" />
+                            }
+
                             <div class="card-body">
                                 <h5 class="card-title">@bike.Name</h5>
                                 <p class="card-text">
                                     Бранд: @bike.Brand<br />
                                     Рамка: @bike.FrameSize<br />
+                                    @* Категория с DisplayName *@
                                     @{
                                         var displayName = bike.Category.GetType()
                                         .GetMember(bike.Category.ToString())
@@ -92,6 +142,7 @@
                                     Категория: @displayName
                                 </p>
                             </div>
+
                             <div class="card-footer d-flex justify-content-between align-items-center">
                                 <strong class="text-success">@bike.Price лв./ден</strong>
                                 <div class="btn-group">
@@ -102,9 +153,7 @@
                                         <button type="submit" class="btn btn-sm btn-success">Наеми</button>
                                     </form>
 
-                                    <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-sm btn-primary">
-                                        Детайли
-                                    </a>
+                                    <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-sm btn-primary">Детайли</a>
                                 </div>
                             </div>
                         </div>
@@ -112,5 +161,4 @@
                 }
             </div>
         }
-    </div>
-</div>
+    </div

@@ -1,0 +1,94 @@
+﻿@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+@using BikeShop.Web.Models.Enum;
+@model BikeShop.Web.Models.AccessoriesFilterViewModel
+
+@{
+    ViewData["Title"] = "Всички аксесоари";
+}
+
+<h2 class="mb-4">🧢 Всички аксесоари</h2>
+
+<div class="row">
+    <!-- 🔍 Филтриране -->
+    <div class="col-md-3">
+        <form method="get" asp-action="Index" class="border rounded p-3 bg-light">
+            <h5 class="mb-3">Филтрирай аксесоари</h5>
+
+            <!-- Категория -->
+            <div class="mb-3">
+                <label class="form-label">Категория</label>
+                <select asp-for="Category" class="form-select" asp-items="Html.GetEnumSelectList<AccessoriesCategory>()">
+                    <option value="">-- Всички --</option>
+                </select>
+            </div>
+
+            <!-- Цена -->
+            <div class="mb-3">
+                <label class="form-label">Цена (от - до)</label>
+                <div class="input-group">
+                    <input asp-for="MinPrice" class="form-control" placeholder="Мин." step="0.01" />
+                    <input asp-for="MaxPrice" class="form-control" placeholder="Макс." step="0.01" />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Филтрирай</button>
+        </form>
+    </div>
+
+    <!-- 🧢 Резултати -->
+    <div class="col-md-9">
+        @if (!Model.Results.Any())
+        {
+            <div class="alert alert-warning mt-3">⚠️ Няма намерени аксесоари по избраните критерии.</div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (var item in Model.Results)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm hover-shadow">
+                            <img src="@item.ImageUrl" class="card-img-top" style="max-height: 200px; object-fit: cover;" alt="@item.Name" />
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Name</h5>
+                                @{
+                                    var displayName = item.Category.GetType()
+                                    .GetMember(item.Category.ToString())
+                                    .First()
+                                    .GetCustomAttribute<DisplayAttribute>()?.Name ?? item.Category.ToString();
+                                }
+
+                                <p class="card-text">
+                                    Категория: @displayName<br />
+                                    Бранд: @item.Brand
+                                </p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between align-items-center">
+                                <strong class="text-success">@item.Price.ToString("F2") лв.</strong>
+                                <div class="btn-group">
+                                    <form asp-controller="Cart" asp-action="AddAccessories" method="post" class="m-0">
+                                        <input type="hidden" name="AccessoriesId" value="@item.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success">Купи</button>
+                                    </form>
+
+                                    <a asp-controller="Accessories" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-dark">
+                                        Детайли
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .hover-shadow:hover {
+        transform: scale(1.02);
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+</style>

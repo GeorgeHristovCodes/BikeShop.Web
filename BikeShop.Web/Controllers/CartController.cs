@@ -1,5 +1,6 @@
 ﻿using BikeShop.Web.Data;
 using BikeShop.Web.Models;
+using BikeShop.Web.Models.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ public class CartController : Controller
 
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
-            .Include(c => c.Accessory)
+            .Include(c => c.Accessories)
             .Where(c => c.UserId == userId)
             .ToListAsync();
 
@@ -165,7 +166,7 @@ public class CartController : Controller
 
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
-            .Include(c => c.Accessory)
+            .Include(c => c.Accessories)
             .Where(c => c.UserId == userId && c.Type == CartItemType.Purchase)
             .ToListAsync();
 
@@ -190,7 +191,7 @@ public class CartController : Controller
 
         var cartItems = await _context.CartItems
             .Include(c => c.Bicycle)
-            .Include(c => c.Accessory)
+            .Include(c => c.Accessories)
             .Where(c => c.UserId == userId && c.Type == CartItemType.Purchase)
             .ToListAsync();
 
@@ -230,16 +231,16 @@ public class CartController : Controller
                         bicycle.IsAvailable = false;
                 }
             }
-            else if (item.AccessoryId > 0)
+            else if (item.AccessoriesId > 0)
             {
-                order.AccessoryId = item.AccessoryId;
+                order.AccessoriesId = item.AccessoriesId;
 
-                var accessory = await _context.Accessories.FindAsync(item.AccessoryId);
-                if (accessory != null)
+                var Accessories = await _context.Accessories.FindAsync(item.AccessoriesId);
+                if (Accessories != null)
                 {
-                    accessory.Stock -= item.Quantity;
-                    if (accessory.Stock < 0)
-                        accessory.Stock = 0;
+                    Accessories.Stock -= item.Quantity;
+                    if (Accessories.Stock < 0)
+                        Accessories.Stock = 0;
                 }
             }
 
@@ -260,20 +261,20 @@ public class CartController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddAccessory(int accessoryId)
+    public async Task<IActionResult> AddAccessories(int AccessoriesId)
     {
-        var accessory = await _context.Accessories.FindAsync(accessoryId);
+        var Accessories = await _context.Accessories.FindAsync(AccessoriesId);
 
-        if (accessory == null || accessory.Stock <= 0)
+        if (Accessories == null || Accessories.Stock <= 0)
         {
-            return RedirectToAction("Index", "Accessory");
+            return RedirectToAction("Index", "Accessories");
         }
 
         var userId = _userManager.GetUserId(User);
 
         var existingItem = await _context.CartItems
             .FirstOrDefaultAsync(c => c.UserId == userId
-                                   && c.AccessoryId == accessoryId
+                                   && c.AccessoriesId == AccessoriesId
                                    && c.Type == CartItemType.Purchase);
 
         if (existingItem == null)
@@ -281,10 +282,10 @@ public class CartController : Controller
             var cartItem = new CartItem
             {
                 UserId = userId,
-                AccessoryId = accessory.Id,
+                AccessoriesId = Accessories.Id,
                 Quantity = 1,
                 Type = CartItemType.Purchase,
-                Price = accessory.Price
+                Price = Accessories.Price
             };
 
             _context.CartItems.Add(cartItem);
@@ -292,11 +293,11 @@ public class CartController : Controller
         else
         {
             existingItem.Quantity++;
-            existingItem.Price += accessory.Price;
+            existingItem.Price += Accessories.Price;
         }
 
         await _context.SaveChangesAsync();
         TempData["Success"] = "✅ Аксесоарът беше добавен в количката.";
-        return RedirectToAction("Index", "Accessory");
+        return RedirectToAction("Index", "Accessories");
     }
 }

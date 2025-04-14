@@ -1,6 +1,6 @@
-﻿using BikeShop.Models;
-using BikeShop.Web.Data;
+﻿using BikeShop.Web.Data;
 using BikeShop.Web.Models;
+using BikeShop.Web.Models.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -77,23 +77,23 @@ namespace BikeShop.Web.Controllers
             var orders = await _context.Orders
                 .Include(o => o.Bicycle)
                 .Include(o => o.User)
-                .Where(o => o.AccessoryId == null) // само поръчки на велосипеди
+                .Where(o => o.AccessoriesId == null) // само поръчки на велосипеди
                 .ToListAsync();
 
             return View(orders);
         }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AllAccessoryOrders()
+        public async Task<IActionResult> AllAccessoriesOrders()
         {
-            var accessoryOrders = await _context.Orders
+            var AccessoriesOrders = await _context.Orders
                 .Include(o => o.User)
-                .Include(o => o.Accessory)
-                .Where(o => o.AccessoryId != null)
+                .Include(o => o.Accessories)
+                .Where(o => o.AccessoriesId != null)
                 .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
 
-            return View(accessoryOrders);
+            return View(AccessoriesOrders);
         }
 
         // ✅ Приемане/отказване на поръчки за велосипеди
@@ -144,25 +144,25 @@ namespace BikeShop.Web.Controllers
 
         // ✅ Приемане/отказване на поръчки за аксесоари
         [HttpPost]
-        public async Task<IActionResult> AcceptAccessoryOrder(int id)
+        public async Task<IActionResult> AcceptAccessoriesOrder(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null || order.AccessoryId == null) return NotFound();
+            if (order == null || order.AccessoriesId == null) return NotFound();
 
             order.Status = OrderStatus.Accepted;
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(AllAccessoryOrders));
+            return RedirectToAction(nameof(AllAccessoriesOrders));
         }
 
         [HttpPost]
-        public async Task<IActionResult> RejectAccessoryOrder(int id)
+        public async Task<IActionResult> RejectAccessoriesOrder(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null || order.AccessoryId == null) return NotFound();
+            if (order == null || order.AccessoriesId == null) return NotFound();
 
             order.Status = OrderStatus.Rejected;
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(AllAccessoryOrders));
+            return RedirectToAction(nameof(AllAccessoriesOrders));
         }
     }
 }

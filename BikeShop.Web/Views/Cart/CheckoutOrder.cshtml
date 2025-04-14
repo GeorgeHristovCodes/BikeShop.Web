@@ -5,7 +5,7 @@
     ViewData["Title"] = "Завърши поръчката";
 
     var bicycles = Model.CartItems.Where(i => i.Bicycle != null).ToList();
-    var accessories = Model.CartItems.Where(i => i.Accessory != null).ToList();
+    var accessories = Model.CartItems.Where(i => i.Accessories != null).ToList();
 
     decimal total = bicycles.Sum(i => i.Price) + accessories.Sum(i => i.Price);
 }
@@ -123,9 +123,9 @@ else
                     {
                         <tr>
                             <td style="width: 150px;">
-                                <img src="@item.Accessory.ImageUrl" class="img-thumbnail" style="max-height: 80px;" />
+                                <img src="@item.Accessories.ImageUrl" class="img-thumbnail" style="max-height: 80px;" />
                             </td>
-                            <td>@item.Accessory.Name</td>
+                            <td>@item.Accessories.Name</td>
                             <td>@item.Quantity</td>
                             <td>@item.Price лв.</td>
                         </tr>
