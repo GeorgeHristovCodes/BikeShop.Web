@@ -1,148 +1,234 @@
-﻿@{
+﻿@model BikeShop.Web.Models.HomeViewModel
+@{
     ViewData["Title"] = "Начало";
 }
 
-<!-- HERO секция с фон и оверлей -->
-<section class="hero-section text-white d-flex align-items-center" style="background-image: url('/images/hero-bike.jpg'); background-size: cover; background-position: center; min-height: 75vh;">
-    <div class="container text-center bg-dark bg-opacity-50 rounded p-5">
-        <h1 class="display-3 fw-bold mb-3">Открий своя перфектен велосипед</h1>
-        <p class="lead">Наеми, купи и карай с удоволствие в цяла България. Над 100 модела на едно място.</p>
-        <a class="btn btn-warning btn-lg me-3" asp-controller="Bicycle" asp-action="ForSale">Купи велосипед</a>
-        <a class="btn btn-outline-light btn-lg" asp-controller="Bicycle" asp-action="ForRent">Наеми велосипед</a>
+<section class="position-relative text-white" style="min-height: 75vh; overflow: hidden;">
+    <video autoplay muted loop playsinline class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover z-n1">
+        <source src="@Url.Content("~/videos/hero.mp4")" type="video/mp4">
+    </video>
+
+    <div class="container d-flex align-items-center justify-content-center h-100">
+        <div class="text-center bg-dark bg-opacity-50 rounded p-5">
+            <h1 class="display-3 fw-bold mb-3">Открий своя перфектен велосипед</h1>
+            <p class="lead">Наеми, купи и карай с удоволствие в цяла България. Над 100 модела на едно място.</p>
+            <a class="btn btn-warning btn-lg me-3" asp-controller="Bicycle" asp-action="ForSale">Купи велосипед</a>
+            <a class="btn btn-outline-light btn-lg" asp-controller="Bicycle" asp-action="ForRent">Наеми велосипед</a>
+        </div>
     </div>
 </section>
 
-<!-- Оферти на седмицата -->
+
+
+
+<!-- Категории + За нас -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="row align-items-start">
+            <!-- Категории велосипеди -->
+            <div class="col-md-4 mb-4">
+                <h4 class="mb-4 text-center fw-bold">Велосипеди</h4>
+                <div class="d-grid gap-3">
+                    <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="Road" class="btn btn-outline-secondary text-start fw-semibold text-dark">Шосейни</a>
+                    <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="MountainHardtail" class="btn btn-outline-secondary text-start fw-semibold text-dark">Планински с твърда рамка</a>
+                    <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="MountainFullSuspension" class="btn btn-outline-secondary text-start fw-semibold text-dark">Планински с мека рамка</a>
+                    <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="City" class="btn btn-outline-secondary text-start fw-semibold text-dark">Градски</a>
+                    <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="Kids" class="btn btn-outline-secondary text-start fw-semibold text-dark">Детски</a>
+                </div>
+            </div>
+
+            <!-- За нас -->
+            <div class="col-md-4 mb-4 d-flex flex-column justify-content-center">
+                <div class="p-4 bg-light rounded shadow-sm h-100 d-flex flex-column">
+                    <h4 class="text-center fw-bold mb-3">За BikeShop</h4>
+                    <p class="text-center fw-semibold flex-grow-1">
+                        BikeShop е създаден с една мисия – да направи карането на велосипед достъпно, удобно и приятно за всеки.
+                        При нас ще откриеш внимателно подбрана селекция от качествени велосипеди – от градски и шосейни модели до високопроходими планински колела.
+                        Не спираме дотук – предлагаме и всичко необходимо за сигурност, поддръжка и комфорт: каски, ръкавици, инструменти, аксесоари и още.
+                        Нашият екип вярва, че всяко каране е ново приключение, а ние сме тук, за да го направим още по-незабравимо.
+                    </p>
+                    <div class="text-center mt-3">
+                        <a asp-controller="Home" asp-action="About" class="btn btn-dark px-4">Научи повече</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Аксесоари -->
+            <div class="col-md-4 mb-4">
+                <h4 class="mb-4 text-center fw-bold">Аксесоари</h4>
+                <div class="d-grid gap-3">
+                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Helmet" class="btn btn-outline-secondary text-start fw-semibold text-dark">Каски</a>
+                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Gloves" class="btn btn-outline-secondary text-start fw-semibold text-dark">Ръкавици</a>
+                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="KneePads" class="btn btn-outline-secondary text-start fw-semibold text-dark">Наколенки</a>
+                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="ElbowPads" class="btn btn-outline-secondary text-start fw-semibold text-dark">Лакътници</a>
+                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Glasses" class="btn btn-outline-secondary text-start fw-semibold text-dark">Очила</a>
+                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Tools" class="btn btn-outline-secondary text-start fw-semibold text-dark">Инструменти</a>
+                    <a asp-controller="Accessory" asp-action="Index" asp-route-category="Pump" class="btn btn-outline-secondary text-start fw-semibold text-dark">Помпи</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Велосипеди за продажба -->
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="mb-4 text-center text-primary">🔥 Оферти на седмицата</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card h-100 shadow border-0">
-                    <img src="/images/offer1.jpg" class="card-img-top" alt="SpeedX Road Pro">
-                    <div class="card-body">
-                        <h5 class="card-title">SpeedX Road Pro</h5>
-                        <p class="card-text">Шосеен велосипед с аеро рамка, Shimano група и карбонови капли.</p>
-                        <span class="badge bg-success">-20%</span>
-                        <p class="mt-2">Само тази седмица: <strong>1 200 лв</strong> <del>1 500 лв</del></p>
-                        <a asp-controller="Bicycle" asp-action="ForSale" class="btn btn-primary w-100">Купи сега</a>
+        <h3 class="text-center mb-4 fw-bold">🚲 Твоето следващо колело те очаква</h3>
+
+        <div class="carousel-inner">
+            <div class="row g-4">
+                @foreach (var bike in Model.BicyclesForSale.Take(3))
+                {
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="@bike.ImageUrl" class="card-img-top" alt="@bike.Name" />
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold">@bike.Name</h5>
+                                <p class="mb-1"><strong>Бранд:</strong> @bike.Brand</p>
+                                <p class="mb-1"><strong>Рамка:</strong> @bike.FrameSize</p>
+                                <p class="mb-1"><strong>Категория:</strong> @bike.Category</p>
+                                <p><strong>Цена:</strong> @bike.Price лв</p>
+                                <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-primary w-100">Виж повече</a>
+                            </div>
+                        </div>
                     </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<section class="py-5 bg-white">
+    <div class="container">
+        <h3 class="text-center fw-bold mb-5">💡 Нашите предимства</h3>
+
+        <div class="row g-4 text-center">
+            <!-- Предимство 1 -->
+            <div class="col-md-3">
+                <div class="p-4 border rounded shadow-sm h-100">
+                    <div class="fs-1 mb-3">🚴‍♂️</div>
+                    <h5 class="fw-bold mb-2">Голям избор</h5>
+                    <p class="mb-0">Над 100 модела велосипеди – шосейни, планински, градски и детски.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow border-0">
-                    <img src="/images/offer2.jpg" class="card-img-top" alt="Mountain Explorer">
-                    <div class="card-body">
-                        <h5 class="card-title">Mountain Explorer</h5>
-                        <p class="card-text">Планински велосипед с амортисьори, подходящ за off-road и планински преходи.</p>
-                        <span class="badge bg-info text-dark">Наем -30%</span>
-                        <p class="mt-2">Отстъпка при наем над 3 дни</p>
-                        <a asp-controller="Bicycle" asp-action="ForRent" class="btn btn-primary w-100">Наеми сега</a>
-                    </div>
+
+            <!-- Предимство 2 -->
+            <div class="col-md-3">
+                <div class="p-4 border rounded shadow-sm h-100">
+                    <div class="fs-1 mb-3">🚚</div>
+                    <h5 class="fw-bold mb-2">Бърза доставка</h5>
+                    <p class="mb-0">Доставяме до всяка точка на България в рамките на 1-2 работни дни.</p>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card h-100 shadow border-0">
-                    <img src="/images/offer3.jpg" class="card-img-top" alt="City Comfort">
-                    <div class="card-body">
-                        <h5 class="card-title">City Comfort</h5>
-                        <p class="card-text">Изключително удобен за града, с вградена LED светлина и кошница.</p>
-                        <span class="badge bg-warning text-dark">Нов модел</span>
-                        <p class="mt-2">Цена: <strong>890 лв</strong></p>
-                        <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="City" class="btn btn-primary w-100">Виж повече</a>
-                    </div>
+
+            <!-- Предимство 3 -->
+            <div class="col-md-3">
+                <div class="p-4 border rounded shadow-sm h-100">
+                    <div class="fs-1 mb-3">🔧</div>
+                    <h5 class="fw-bold mb-2">Професионална поддръжка</h5>
+                    <p class="mb-0">Всеки велосипед минава преглед преди изпращане. Осигуряваме резервни части.</p>
+                </div>
+            </div>
+
+            <!-- Предимство 4 -->
+            <div class="col-md-3">
+                <div class="p-4 border rounded shadow-sm h-100">
+                    <div class="fs-1 mb-3">⭐</div>
+                    <h5 class="fw-bold mb-2">Доволни клиенти</h5>
+                    <p class="mb-0">Стотици положителни отзиви и постоянни клиенти от цяла България.</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Категории с икони -->
-<section class="py-5 text-center bg-white">
+<!-- Велосипеди под наем -->
+<section class="py-5 bg-white">
     <div class="container">
-        <h2 class="mb-4 text-dark">🚴‍♀️ Категории велосипеди</h2>
-        <div class="row justify-content-center">
-            <div class="col-6 col-md-2 mb-3">
-                <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="Road" class="btn btn-outline-dark w-100">🚴 Шосейни</a>
-            </div>
-            <div class="col-6 col-md-2 mb-3">
-                <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="MountainHardtail" class="btn btn-outline-dark w-100">🏔 Планински (твърда)</a>
-            </div>
-            <div class="col-6 col-md-2 mb-3">
-                <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="MountainFullSuspension" class="btn btn-outline-dark w-100">⛰ Окачване</a>
-            </div>
-            <div class="col-6 col-md-2 mb-3">
-                <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="City" class="btn btn-outline-dark w-100">🏙 Градски</a>
-            </div>
-            <div class="col-6 col-md-2 mb-3">
-                <a asp-controller="Bicycle" asp-action="ForSale" asp-route-category="Kids" class="btn btn-outline-dark w-100">👦 Детски</a>
+        <h3 class="text-center mb-4 fw-bold">🌄 Карай без ангажимент – просто наеми</h3>
+
+        <div class="carousel-inner">
+            <div class="row g-4">
+                @foreach (var bike in Model.BicyclesForRent.Take(3))
+                {
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <img src="@bike.ImageUrl" class="card-img-top" alt="@bike.Name" />
+                            <div class="card-body">
+                                <h5 class="card-title fw-semibold">@bike.Name</h5>
+                                <p class="mb-1"><strong>Бранд:</strong> @bike.Brand</p>
+                                <p class="mb-1"><strong>Рамка:</strong> @bike.FrameSize</p>
+                                <p class="mb-1"><strong>Категория:</strong> @bike.Category</p>
+                                <p><strong>Наем:</strong> @bike.Price лв / ден</p>
+                                <a asp-controller="Bicycle" asp-action="Details" asp-route-id="@bike.Id" class="btn btn-outline-success w-100">Наеми сега</a>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </section>
-
-<!-- Отзиви с аватари -->
-<section class="bg-light py-5">
-    <div class="container">
-        <h2 class="text-center mb-5">💬 Какво казват клиентите ни</h2>
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card shadow border-0 p-3">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="/images/user1.jpg" class="rounded-circle me-3" width="50" height="50">
-                        <strong>Николай Петров</strong>
-                    </div>
-                    <p class="fst-italic">"Най-добрият избор за наемане на велосипед в Родопите. Бързо обслужване и супер цени!"</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow border-0 p-3">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="/images/user2.jpg" class="rounded-circle me-3" width="50" height="50">
-                        <strong>Ивана Георгиева</strong>
-                    </div>
-                    <p class="fst-italic">"Купих Road Pro и съм изключително доволна. Велосипедът е качествен и луксозен!"</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow border-0 p-3">
-                    <div class="d-flex align-items-center mb-3">
-                        <img src="/images/user3.jpg" class="rounded-circle me-3" width="50" height="50">
-                        <strong>Стоян Димитров</strong>
-                    </div>
-                    <p class="fst-italic">"Сайтът е лесен за използване, а изборът е огромен. Препоръчвам на всички!"</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Призив за действие с контрастен фон -->
-<section class="py-5 text-center text-white" style="background-color: #212529;">
-    <div class="container">
-        <h2 class="fw-bold mb-3">Готов ли си за ново приключение?</h2>
-        <p class="mb-4">Започни своята обиколка днес с най-добрия партньор на две колела.</p>
-        <a class="btn btn-warning btn-lg" asp-controller="Bicycle" asp-action="ForRent">Запази велосипед</a>
-    </div>
-</section>
-
-<!-- Контакти + Google карта -->
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="mb-4 text-center">📍 Намери ни в Родопите</h2>
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <h5 class="fw-bold">BikeShop Родопите</h5>
-                <p><strong>Адрес:</strong> гр. Перущица, обл. Пловдив</p>
-                <p><strong>Телефон:</strong> +359 888 123 456</p>
-                <p><strong>Email:</strong> support@bikeshop.bg</p>
-                <p><strong>Работно време:</strong> Пн-Нед: 08:00 - 20:00</p>
+        <h3 class="text-center fw-bold mb-4">❓ Често задавани въпроси</h3>
+
+        <div class="accordion" id="faqAccordion">
+            <!-- Въпрос 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                        Как мога да наема велосипед?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        За да наемеш велосипед, просто избери желания модел, посочи дати, въведи нужната информация и потвърди. След това ще получиш имейл с потвърждение.
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6 mb-3">
-                <iframe class="w-100 rounded" height="250" frameborder="0" style="border:0"
-                        src="https://www.google.com/maps/embed/v1/place?q=Perushtitsa%2C+Bulgaria&key=YOUR_API_KEY" allowfullscreen>
-                </iframe>
+
+            <!-- Въпрос 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                        Имате ли доставка до дома?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Да! Доставяме велосипеди и аксесоари до всяка точка на България чрез наш куриер. Доставката се извършва до 2 работни дни.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Въпрос 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                        Какво включва гаранцията на велосипедите?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Всички нови велосипеди идват с 2 години гаранция, покриваща производствени дефекти. Гаранцията не важи за повреди от неправилна употреба.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Въпрос 4 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                        Мога ли да върна поръчан артикул?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Разбира се! Можеш да върнеш артикул в срок от 14 дни след получаването му, стига да не е използван и да е в оригинална опаковка.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
+

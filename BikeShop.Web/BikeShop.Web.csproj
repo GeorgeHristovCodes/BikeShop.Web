@@ -22,7 +22,12 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\accessories\" />
-    <Folder Include="wwwroot\images\bicycles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\videos\hero.mp4">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -17,23 +17,48 @@ namespace BikeShop.Web.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var rentals = await _context.Bicycles
-                .Where(b => b.Type == BicycleType.ForRent && b.IsAvailable)
-                .Take(2)
-                .ToListAsync();
+            var forSale = _context.Bicycles
+                 .Where(b => b.Type == BicycleType.ForSale)
+                 .ToList() // 👈 Взимаме всичко в паметта
+                .GroupBy(b => b.Category)
+                .Select(g => g.First())
+                .Take(3)
+                .Select(b => new Bicycle
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    ImageUrl = b.ImageUrl,
+                    Price = b.Price
+                }).ToList();
 
-            var sales = await _context.Bicycles
-                .Where(b => b.Type == BicycleType.ForSale && b.IsAvailable)
-                .Take(2)
-                .ToListAsync();
+            var forRent = _context.Bicycles
+                .Where(b => b.Type == BicycleType.ForRent)
+                .ToList() // 👈 Взимаме всичко в паметта
+                .GroupBy(b => b.Category)
+                .Select(g => g.First())
+                .Take(3)
+                .Select(b => new Bicycle
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    ImageUrl = b.ImageUrl,
+                    Price = b.Price,
+                    Brand = b.Brand,
+                    FrameSize = b.FrameSize,
+                    Category = b.Category
+                }).ToList();
 
-            ViewBag.Rentals = rentals;
-            ViewBag.Sales = sales;
+            var model = new HomeViewModel
+            {
+                BicyclesForSale = forSale,
+                BicyclesForRent = forRent
+            };
 
-            return View();
+            return View(model);
         }
+
 
         public IActionResult About()
         {
