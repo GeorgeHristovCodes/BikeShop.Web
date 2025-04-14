@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\images\accessories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="wwwroot\videos\hero.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
