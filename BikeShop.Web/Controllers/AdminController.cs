@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BikeShop.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Staff")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -30,6 +30,8 @@ namespace BikeShop.Web.Controllers
             return View();
         }
 
+        // ❌ Само Admin
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users()
         {
             var users = _userManager.Users.ToList();
@@ -46,6 +48,8 @@ namespace BikeShop.Web.Controllers
             return View(users);
         }
 
+        // ❌ Само Admin
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> ChangeRole(string userId, string newRole)
         {
@@ -60,30 +64,29 @@ namespace BikeShop.Web.Controllers
             return RedirectToAction(nameof(Users));
         }
 
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllRentals()
         {
             var rentals = await _context.Rentals
-                .Include(r => r.Bicycle)
-                .Include(r => r.User)
-                .ToListAsync();
+               .Include(r => r.Bicycle)
+               .Include(r => r.User)
+               .OrderByDescending(r => r.CreatedOn)
+               .ToListAsync();
+
 
             return View(rentals);
         }
 
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllOrders()
         {
             var orders = await _context.Orders
-                .Include(o => o.Bicycle)
-                .Include(o => o.User)
-                .Where(o => o.AccessoriesId == null) // само поръчки на велосипеди
-                .ToListAsync();
-
+                  .Include(o => o.Bicycle)
+                  .Include(o => o.User)
+                  .Where(o => o.AccessoriesId == null)
+                  .OrderByDescending(o => o.OrderDate)
+                  .ToListAsync();
             return View(orders);
         }
 
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllAccessoriesOrders()
         {
             var AccessoriesOrders = await _context.Orders
@@ -96,7 +99,6 @@ namespace BikeShop.Web.Controllers
             return View(AccessoriesOrders);
         }
 
-        // ✅ Приемане/отказване на поръчки за велосипеди
         [HttpPost]
         public async Task<IActionResult> AcceptOrder(int id)
         {
@@ -119,7 +121,6 @@ namespace BikeShop.Web.Controllers
             return RedirectToAction(nameof(AllOrders));
         }
 
-        // ✅ Приемане/отказване на наеми
         [HttpPost]
         public async Task<IActionResult> AcceptRental(int id)
         {
@@ -142,7 +143,6 @@ namespace BikeShop.Web.Controllers
             return RedirectToAction(nameof(AllRentals));
         }
 
-        // ✅ Приемане/отказване на поръчки за аксесоари
         [HttpPost]
         public async Task<IActionResult> AcceptAccessoriesOrder(int id)
         {

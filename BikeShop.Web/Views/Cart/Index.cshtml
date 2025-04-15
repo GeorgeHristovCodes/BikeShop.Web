@@ -17,6 +17,15 @@
 }
 
 <h2 class="mb-4">🛒 Моята кошница</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Затвори"></button>
+    </div>
+}
+
 @if (!Model.Any())
 {
     <div class="text-center p-5">
@@ -26,60 +35,49 @@
 }
 else
 {
-    <!-- 🚲 Велосипеди -->
-    @if (bicycleItems.Any())
-    {
-        <h4 class="mt-4">🚴 Велосипеди</h4>
-        <table class="table table-bordered align-middle">
-            <thead class="table-light">
+    <h4 class="mt-4">🚴 Велосипеди</h4>
+    <table class="table table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Снимка</th>
+                <th>Име</th>
+                <th>Бранд</th>
+                <th>Количество</th>
+                <th>Обща цена</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in bicycleItems)
+            {
                 <tr>
-                    <th>Снимка</th>
-                    <th>Име</th>
-                    <th>Тип</th>
-                    <th>Цена</th>
-                    <th></th>
-            </thead>
-            <tbody>
-                @foreach (var item in bicycleItems)
-                {
-                    <tr>
-                        <td>
-                            <img src="@item.Bicycle.ImageUrl" class="img-thumbnail" style="max-height: 100px;" />
-                        </td>
-                        <td>@item.Bicycle.Name</td>
-                        <td>@(item.Type == CartItemType.Purchase ? "Покупка" : "Наем")</td>
-                        <td>
-                            @if (item.Type == CartItemType.Rental)
-                            {
-                                @($"{item.Bicycle.Price} лв. / ден")
-                            }
-                            else
-                            {
-                                @($"{item.Bicycle.Price} лв.")
-                            }
-                        </td>
-                        <td>
-                            <form asp-action="Remove" method="post" class="remove-item-form"
-                                  data-bicycle-id="@item.BicycleId"
-                                  data-accessory-id="@item.AccessoriesId"
-                                  data-type="@item.Type.ToString()">
-                                <input type="hidden" name="id" value="@item.Id" />
-                                <button type="submit" class="btn btn-sm btn-danger">Премахни</button>
-                            </form>
-
-                        </td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot class="table-secondary">
-                <tr>
-                    <td colspan="2" class="text-end fw-bold">Сума за велосипеди:</td>
-                    <td colspan="3" class="fw-bold text-success">@bicycleTotal.ToString("F2") лв.</td>
-
+                    <td>
+                        <img src="@item.Bicycle.ImageUrl" class="img-thumbnail" style="max-height: 100px;" />
+                    </td>
+                    <td>@item.Bicycle.Name</td>
+                    <td>@item.Bicycle.Brand</td>
+                    <td>@item.Quantity</td>
+                    <td>@($"{item.Price:F2} лв.")</td>
+                    <td>
+                        <form asp-action="Remove" method="post" class="remove-item-form"
+                              data-bicycle-id="@item.BicycleId"
+                              data-accessory-id="@item.AccessoriesId"
+                              data-type="@item.Type.ToString()">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger">Премахни</button>
+                        </form>
+                    </td>
                 </tr>
-            </tfoot>
-        </table>
-    }
+            }
+        </tbody>
+        <tfoot class="table-secondary">
+            <tr>
+                <td colspan="4" class="text-end fw-bold">Сума за велосипеди:</td>
+                <td colspan="2" class="fw-bold text-success">@bicycleTotal.ToString("F2") лв.</td>
+            </tr>
+        </tfoot>
+    </table>
+
 
     <!-- 🧢 Аксесоари -->
     @if (AccessoriesItems.Any())

@@ -52,12 +52,18 @@ app.UseSession(); // ✅ Активира session middleware-а
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStatusCodePagesWithRedirects("/Home/AccessDenied");
 
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+    // 3. Създай роля "Staff" ако не съществува
+    if (!await roleManager.RoleExistsAsync("Staff"))
+        await roleManager.CreateAsync(new IdentityRole("Staff"));
+
 
     // 1. Създай роля "User" ако не съществува
     if (!await roleManager.RoleExistsAsync("User"))
@@ -70,7 +76,6 @@ using (var scope = app.Services.CreateScope())
     // 3. Създай админ потребител, ако не съществува
     string adminEmail = "admin@bikeshop.com";
     string adminPassword = "Admin123!";
-
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
     if (adminUser == null)
     {
@@ -87,6 +92,48 @@ using (var scope = app.Services.CreateScope())
             await userManager.AddToRoleAsync(newAdmin, "Admin");
         }
     }
+    // 🔸 Създай staff потребител, ако не съществува
+    string staffEmail = "staff@bikeshop.com";
+    string staffPassword = "Staff123!";
+
+    var staffUser = await userManager.FindByEmailAsync(staffEmail);
+    if (staffUser == null)
+    {
+        var newStaff = new ApplicationUser
+        {
+            UserName = staffEmail,
+            Email = staffEmail,
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(newStaff, staffPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(newStaff, "Staff");
+        }
+    }
+
+    // 🔹 Създай стандартен user, ако не съществува
+    string userEmail = "user@bikeshop.com";
+    string userPassword = "User123!";
+
+    var normalUser = await userManager.FindByEmailAsync(userEmail);
+    if (normalUser == null)
+    {
+        var newUser = new ApplicationUser
+        {
+            UserName = userEmail,
+            Email = userEmail,
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(newUser, userPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(newUser, "User");
+        }
+    }
+
 }
 
 

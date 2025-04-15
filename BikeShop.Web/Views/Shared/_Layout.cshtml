@@ -52,8 +52,17 @@
 
                     @if (User.IsInRole("Admin"))
                     {
-                        <li class="nav-item"><a class="nav-link text-warning" asp-controller="Admin" asp-action="Index">Админ</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link text-warning fw-bold" asp-controller="Admin" asp-action="Index">👑 Админ</a>
+                        </li>
                     }
+                    else if (User.IsInRole("Staff"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-info fw-bold" asp-controller="Admin" asp-action="Index">🧑‍💼 Продавач</a>
+                        </li>
+                    }
+
                 </ul>
 
                 

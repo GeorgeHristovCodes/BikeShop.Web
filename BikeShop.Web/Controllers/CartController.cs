@@ -42,22 +42,33 @@ public class CartController : Controller
         if (bicycle == null)
             return NotFound();
 
-        var price = type == CartItemType.Purchase ? bicycle.Price : 0;
+        var existingItem = await _context.CartItems
+            .FirstOrDefaultAsync(c => c.BicycleId == bicycleId && c.UserId == userId && c.Type == type);
 
-        var cartItem = new CartItem
+        if (existingItem != null)
         {
-            BicycleId = bicycleId,
-            UserId = userId,
-            Type = type,
-            Price = price
-        };
+            existingItem.Quantity++;
+            existingItem.Price = existingItem.Quantity * bicycle.Price;
+        }
+        else
+        {
+            var price = type == CartItemType.Purchase ? bicycle.Price : 0;
 
-        _context.CartItems.Add(cartItem);
+            var cartItem = new CartItem
+            {
+                BicycleId = bicycleId,
+                UserId = userId,
+                Type = type,
+                Quantity = 1,
+                Price = price
+            };
+
+            _context.CartItems.Add(cartItem);
+        }
+
         await _context.SaveChangesAsync();
 
         TempData["Success"] = "✅ Артикулът беше добавен в кошницата.";
-
-        // Връщаме се към зададената страница
         return !string.IsNullOrEmpty(returnUrl) ? Redirect(returnUrl) : RedirectToAction("Index", "Cart");
     }
 
@@ -75,8 +86,11 @@ public class CartController : Controller
         _context.CartItems.Remove(item);
         await _context.SaveChangesAsync();
 
+        TempData["Success"] = "🗑️ Артикулът беше премахнат от кошницата.";
+
         return RedirectToAction("Index");
     }
+
 
     [HttpGet]
     public async Task<IActionResult> CheckoutRental()

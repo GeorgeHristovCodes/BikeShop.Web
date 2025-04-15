@@ -4,30 +4,35 @@
     var userRoles = ViewBag.UserRoles as Dictionary<string, IList<string>>;
 }
 
-<h2>Управление на потребители</h2>
+<h2 class="mb-4">🔵 Управление на потребители</h2>
 
 <table class="table table-bordered table-striped">
     <thead class="table-dark">
         <tr>
+            <th>Име</th>
             <th>Email</th>
             <th>Роля</th>
-            <th>Промени роля</th>
+            <th>Смени роля</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var user in Model)
         {
             <tr>
+                <td>@user.UserName</td>
                 <td>@user.Email</td>
-                <td>@string.Join(", ", userRoles[user.Id])</td>
                 <td>
-                    <form asp-action="ChangeRole" method="post" class="d-flex gap-2">
+                    @string.Join(", ", userRoles[user.Id])
+                </td>
+                <td>
+                    <form asp-action="ChangeRole" method="post" class="d-flex gap-2 align-items-center">
                         <input type="hidden" name="userId" value="@user.Id" />
-                        <select name="newRole" class="form-select form-select-sm w-auto">
+                        <select name="newRole" class="form-select w-auto">
                             <option value="User">User</option>
+                            <option value="Staff">Staff</option>
                             <option value="Admin">Admin</option>
                         </select>
-                        <button type="submit" class="btn btn-sm btn-primary">Промени</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Промени</button>
                     </form>
                 </td>
             </tr>
