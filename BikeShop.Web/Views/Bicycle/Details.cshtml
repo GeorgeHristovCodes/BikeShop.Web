@@ -79,7 +79,10 @@
 
 
 
-            <a asp-action="ForSale" class="btn btn-outline-secondary">⬅ Обратно</a>
+            <a href="@(Context.Request.Headers["Referer"].ToString() ?? Url.Action("Index", "Home"))" class="btn btn-outline-secondary">
+                ⬅ Обратно
+            </a>
+
         </div>
     </div>
 </div>

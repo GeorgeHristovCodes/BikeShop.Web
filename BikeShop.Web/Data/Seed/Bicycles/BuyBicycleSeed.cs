@@ -19,7 +19,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.Road,
                     Brand = "DRAG",
                     FrameSize = "M",
-                    ImageUrl = "/images/road1-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/road1-1.jpg",
                     IsAvailable = true,
                     Quantity = 5
                 },
@@ -33,7 +33,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.Road,
                     Brand = "SPECIALIZED",
                     FrameSize = "L",
-                    ImageUrl = "/images/road2-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/road2-1.jpg",
                     IsAvailable = true,
                     Quantity = 3
                 },
@@ -47,7 +47,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.MountainHardtail,
                     Brand = "NS BIKES",
                     FrameSize = "S",
-                    ImageUrl = "/images/hardtail1-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/hardtail1-1.jpg",
                     IsAvailable = true,
                     Quantity = 4
                 },
@@ -61,7 +61,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.MountainHardtail,
                     Brand = "DRAG",
                     FrameSize = "M",
-                    ImageUrl = "/images/hardtail2-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/hardtail2-1.jpg",
                     IsAvailable = true,
                     Quantity = 7
                 },
@@ -75,7 +75,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.MountainFullSuspension,
                     Brand = "YT INDUSTRIES",
                     FrameSize = "L",
-                    ImageUrl = "/images/full1-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/full1-1.jpg",
                     IsAvailable = true,
                     Quantity = 6
                 },
@@ -89,7 +89,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.MountainFullSuspension,
                     Brand = "SPECIALIZED",
                     FrameSize = "XL",
-                    ImageUrl = "/images/full2-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/full2-1.jpg",
                     IsAvailable = true,
                     Quantity = 2
                 },
@@ -103,7 +103,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.City,
                     Brand = "DRAG",
                     FrameSize = "M",
-                    ImageUrl = "/images/city1-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/city1-1.jpg",
                     IsAvailable = true,
                     Quantity = 8
                 },
@@ -117,7 +117,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.City,
                     Brand = "NS BIKES",
                     FrameSize = "L",
-                    ImageUrl = "/images/city2-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/city2-1.jpg",
                     IsAvailable = true,
                     Quantity = 4
                 },
@@ -131,7 +131,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.Kids,
                     Brand = "DRAG",
                     FrameSize = "XS",
-                    ImageUrl = "/images/kid1-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/kid1-1.jpg",
                     IsAvailable = true,
                     Quantity = 10
                 },
@@ -145,7 +145,7 @@ namespace BikeShop.Web.Data.Seed.Bicycles
                     Category = BicycleCategory.Kids,
                     Brand = "YT INDUSTRIES",
                     FrameSize = "S",
-                    ImageUrl = "/images/kid2-1.jpg",
+                    ImageUrl = "/images/demo-bicycles/kid2-1.jpg",
                     IsAvailable = true,
                     Quantity = 9
                 }

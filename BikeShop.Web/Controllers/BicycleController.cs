@@ -287,13 +287,27 @@ namespace BikeShop.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var bicycle = await _context.Bicycles.FindAsync(id);
-            if (bicycle != null)
+            if (bicycle == null)
             {
-                _context.Bicycles.Remove(bicycle);
-                await _context.SaveChangesAsync();
+                TempData["Error"] = "Велосипедът не беше намерен.";
+                return RedirectToAction(nameof(Manage));
             }
+
+            // Проверка дали е използван в поръчка
+            var hasOrders = await _context.Orders.AnyAsync(o => o.BicycleId == id);
+            if (hasOrders)
+            {
+                TempData["Error"] = "Този велосипед е използван в поръчка и не може да бъде изтрит.";
+                return RedirectToAction(nameof(Manage));
+            }
+
+            _context.Bicycles.Remove(bicycle);
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Велосипедът беше успешно изтрит.";
             return RedirectToAction(nameof(Manage));
         }
+
 
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)

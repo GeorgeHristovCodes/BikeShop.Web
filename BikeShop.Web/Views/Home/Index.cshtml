@@ -3,20 +3,27 @@
     ViewData["Title"] = "Начало";
 }
 
-<section class="position-relative text-white" style="min-height: 75vh; overflow: hidden;">
-    <video autoplay muted loop playsinline class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover z-n1">
-        <source src="@Url.Content("~/videos/hero.mp4")" type="video/mp4">
-    </video>
+<section class="position-relative text-white" style="min-height: 90vh; overflow: hidden;">
+    <div class="container position-relative">
+        <div class="rounded overflow-hidden">
+            <video autoplay muted loop playsinline class="w-100 rounded shadow" style="max-height: 80vh; object-fit: cover;">
+                <source src="/videos/hero.mp4" type="video/mp4" />
+                Твоят браузър не поддържа видео.
+            </video>
+        </div>
 
-    <div class="container d-flex align-items-center justify-content-center h-100">
-        <div class="text-center bg-dark bg-opacity-50 rounded p-5">
-            <h1 class="display-3 fw-bold mb-3">Открий своя перфектен велосипед</h1>
-            <p class="lead">Наеми, купи и карай с удоволствие в цяла България. Над 100 модела на едно място.</p>
+        <!-- Текст върху видеото -->
+        <div class="position-absolute top-50 start-50 translate-middle text-center bg-dark bg-opacity-50 p-5 rounded shadow"
+             style="max-width: 900px; width: 90%;">
+            <h1 class="display-4 fw-bold text-white mb-3">Открий своя перфектен велосипед</h1>
+            <p class="lead text-white">Наеми, купи и карай с удоволствие в цяла България. Над 100 модела на едно място.</p>
             <a class="btn btn-warning btn-lg me-3" asp-controller="Bicycle" asp-action="ForSale">Купи велосипед</a>
             <a class="btn btn-outline-light btn-lg" asp-controller="Bicycle" asp-action="ForRent">Наеми велосипед</a>
         </div>
     </div>
 </section>
+
+
 
 
 
@@ -80,9 +87,7 @@
             {
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm">
-                        <img src="@(!string.IsNullOrWhiteSpace(bike.ImageUrl) ? bike.ImageUrl : "/images/demo-bicycles/road-sale1.jpg")"
-                             class="card-img-top" alt="@bike.Name" />
-
+                        <img src="@bike.ImageUrl" class="card-img-top" alt="@bike.Name" />
                         <div class="card-body">
                             <h5 class="card-title fw-semibold">@bike.Name</h5>
                             <p class="mb-1"><strong>Бранд:</strong> @bike.Brand</p>

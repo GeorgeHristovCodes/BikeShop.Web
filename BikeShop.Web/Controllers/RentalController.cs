@@ -49,14 +49,21 @@ namespace BikeShop.Web.Controllers
             if (user == null)
                 return Unauthorized();
 
-            // 🟢 Най-важно: задаваме UserId и махаме от валидацията
             rental.UserId = user.Id;
             ModelState.Remove("UserId");
 
             var bicycle = await _context.Bicycles.FindAsync(rental.BicycleId);
-            if (bicycle == null || !bicycle.IsAvailable || bicycle.Quantity <= 0)
+            if (bicycle == null || !bicycle.IsAvailable)
             {
                 return BadRequest("Велосипедът не е наличен");
+            }
+
+            await _context.Entry(bicycle).ReloadAsync(); // <-- актуални данни от БД
+
+            if (bicycle.Quantity <= 0)
+            {
+                TempData["Error"] = $"Няма налични бройки от '{bicycle.Name}'.";
+                return RedirectToAction("Create", new { id = rental.BicycleId });
             }
 
             if (rental.StartDate >= rental.EndDate)
@@ -72,18 +79,19 @@ namespace BikeShop.Web.Controllers
 
             rental.IsActive = true;
             rental.CreatedOn = DateTime.Now;
-            //
-            _context.Rentals.Add(rental);
 
+            _context.Rentals.Add(rental);
             bicycle.Quantity--;
+
             if (bicycle.Quantity == 0)
                 bicycle.IsAvailable = false;
 
             await _context.SaveChangesAsync();
 
+            TempData["Success"] = "✅ Велосипедът е успешно нает.";
             return RedirectToAction("Success");
-
         }
+
         public IActionResult Success()
         {
             return View();

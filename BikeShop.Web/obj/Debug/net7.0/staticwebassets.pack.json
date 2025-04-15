@@ -25,6 +25,10 @@
       "PackagePath": "staticwebassets\\images\\bicycles\\0b4a594c-9e30-4b12-bd2a-bdd1262515d8.webp"
     },
     {
+      "Id": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\1396bc1e-5820-47d2-b098-06422384b94b.jpg",
+      "PackagePath": "staticwebassets\\images\\bicycles\\1396bc1e-5820-47d2-b098-06422384b94b.jpg"
+    },
+    {
       "Id": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\5c523f44-e2d4-4d22-9390-96b6b5c7cd49.webp",
       "PackagePath": "staticwebassets\\images\\bicycles\\5c523f44-e2d4-4d22-9390-96b6b5c7cd49.webp"
     },
@@ -39,6 +43,14 @@
     {
       "Id": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\762a0d6d-7ac0-4da5-8823-8733b91a9091.webp",
       "PackagePath": "staticwebassets\\images\\bicycles\\762a0d6d-7ac0-4da5-8823-8733b91a9091.webp"
+    },
+    {
+      "Id": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\ae4e88c9-9292-4d99-be2e-68ddc6aa83c7.jpg",
+      "PackagePath": "staticwebassets\\images\\bicycles\\ae4e88c9-9292-4d99-be2e-68ddc6aa83c7.jpg"
+    },
+    {
+      "Id": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\bicycles\\d59695f6-e181-40e0-8a1e-3ba00dacd5c8.jpg",
+      "PackagePath": "staticwebassets\\images\\bicycles\\d59695f6-e181-40e0-8a1e-3ba00dacd5c8.jpg"
     },
     {
       "Id": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\d23f6e01-c1ae-4a42-8e82-bf8c6756f732.webp",
@@ -367,6 +379,10 @@
     {
       "Id": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\demo-bicycles\\road2-3.jpg",
       "PackagePath": "staticwebassets\\images\\demo-bicycles\\road2-3.jpg"
+    },
+    {
+      "Id": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\f8479c5b-8036-4c75-9950-c386e4ea1532.jpg",
+      "PackagePath": "staticwebassets\\images\\f8479c5b-8036-4c75-9950-c386e4ea1532.jpg"
     },
     {
       "Id": "C:\\BikeShop.Web\\BikeShop.Web\\BikeShop.Web\\wwwroot\\images\\js\\site.js",

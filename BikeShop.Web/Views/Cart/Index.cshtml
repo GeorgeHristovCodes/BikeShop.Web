@@ -59,10 +59,14 @@ else
                             }
                         </td>
                         <td>
-                            <form asp-action="Remove" asp-controller="Cart" method="post">
+                            <form asp-action="Remove" method="post" class="remove-item-form"
+                                  data-bicycle-id="@item.BicycleId"
+                                  data-accessory-id="@item.AccessoriesId"
+                                  data-type="@item.Type.ToString()">
                                 <input type="hidden" name="id" value="@item.Id" />
-                                <button type="submit" class="btn btn-danger btn-sm">Премахни</button>
+                                <button type="submit" class="btn btn-sm btn-danger">Премахни</button>
                             </form>
+
                         </td>
                     </tr>
                 }
@@ -104,10 +108,15 @@ else
                         <td>@item.Quantity</td>
                         <td>@item.Price.ToString("F2") лв.</td>
                         <td>
-                            <form asp-action="Remove" asp-controller="Cart" method="post">
+                            <form asp-action="Remove" method="post" class="remove-item-form"
+                                  data-bicycle-id="@item.BicycleId"
+                                  data-accessory-id="@item.AccessoriesId">
                                 <input type="hidden" name="id" value="@item.Id" />
-                                <button type="submit" class="btn btn-danger btn-sm">Премахни</button>
+                                <button type="submit" class="btn btn-sm btn-danger">Премахни</button>
                             </form>
+
+
+
                         </td>
                     </tr>
                 }
@@ -151,3 +160,63 @@ else
         }
     }
 }
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("✅ Скрипт зареден");
+
+            document.querySelectorAll(".remove-item-form").forEach(form => {
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+
+                    const bicycleId = parseInt(form.getAttribute("data-bicycle-id") || "0");
+                    const accessoryId = parseInt(form.getAttribute("data-accessory-id") || "0");
+                    const type = form.getAttribute("data-type"); // ➕ тук четем типа
+
+                    console.log("🚲 BicycleId:", bicycleId);
+                    console.log("🧢 AccessoryId:", accessoryId);
+                    console.log("📦 Тип:", type);
+
+                    if (bicycleId > 0 && type === "Purchase") {
+                        let bikeCart = JSON.parse(localStorage.getItem("bikeCart") || "{}");
+                        delete bikeCart[bicycleId];
+                        localStorage.setItem("bikeCart", JSON.stringify(bikeCart));
+                        console.log("✅ Изтрит от bikeCart");
+                    }
+
+                    if (bicycleId > 0 && type === "Rental") {
+                        let rentCart = JSON.parse(localStorage.getItem("bikeRentCart") || "{}");
+                        delete rentCart[bicycleId];
+                        localStorage.setItem("bikeRentCart", JSON.stringify(rentCart));
+                        console.log("✅ Изтрит от bikeRentCart");
+                    }
+
+                    if (accessoryId > 0) {
+                        let accCart = JSON.parse(localStorage.getItem("accessoryCart") || "{}");
+                        delete accCart[accessoryId];
+                        localStorage.setItem("accessoryCart", JSON.stringify(accCart));
+                        console.log("✅ Изтрит от accessoryCart");
+                    }
+
+                    // Ако вече е празно – премахваме ключовете
+                    if (Object.keys(JSON.parse(localStorage.getItem("bikeCart") || "{}")).length === 0)
+                        localStorage.removeItem("bikeCart");
+
+                    if (Object.keys(JSON.parse(localStorage.getItem("bikeRentCart") || "{}")).length === 0)
+                        localStorage.removeItem("bikeRentCart");
+
+                    if (Object.keys(JSON.parse(localStorage.getItem("accessoryCart") || "{}")).length === 0)
+                        localStorage.removeItem("accessoryCart");
+
+                    // Финално – изпращаме формата
+                    form.submit();
+                });
+            });
+        });
+    </script>
+}
+
+
+
+

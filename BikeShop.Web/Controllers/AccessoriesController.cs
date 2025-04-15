@@ -173,5 +173,7 @@ namespace BikeShop.Web.Controllers
             ViewBag.SelectedCategory = category;
             return View(model);
         }
+
+      
     }
 }

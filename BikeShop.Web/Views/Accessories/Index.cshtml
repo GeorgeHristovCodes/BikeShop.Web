@@ -67,10 +67,15 @@
                             <div class="card-footer d-flex justify-content-between align-items-center">
                                 <strong class="text-success">@item.Price.ToString("F2") лв.</strong>
                                 <div class="btn-group">
-                                    <form asp-controller="Cart" asp-action="AddAccessories" method="post" class="m-0">
+                                    <form asp-controller="Cart" asp-action="AddAccessories" method="post"
+                                          class="add-accessory-form m-0"
+                                          data-stock="@item.Stock"
+                                          data-id="@item.Id"
+                                          data-name="@item.Name">
                                         <input type="hidden" name="AccessoriesId" value="@item.Id" />
                                         <button type="submit" class="btn btn-sm btn-success">Купи</button>
                                     </form>
+
 
                                     <a asp-controller="Accessories" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-dark">
                                         Детайли
@@ -92,3 +97,33 @@
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 </style>
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".add-accessory-form").on("submit", function (e) {
+                e.preventDefault();
+
+                const form = $(this);
+                const maxStock = parseInt(form.data("stock"));
+                const accessoryId = form.data("id");
+                const name = form.data("name");
+
+                let cart = JSON.parse(localStorage.getItem("accessoryCart")) || {};
+                let currentQty = cart[accessoryId] || 0;
+
+                if (currentQty + 1 > maxStock) {
+                    toastr.error(`Налични са само ${maxStock} бр. от „${name}“.`);
+                    return;
+                }
+
+                cart[accessoryId] = currentQty + 1;
+                localStorage.setItem("accessoryCart", JSON.stringify(cart));
+                this.submit();
+            });
+        });
+    </script>
+}
+
