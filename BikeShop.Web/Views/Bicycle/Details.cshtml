@@ -62,7 +62,7 @@
             {
                 <form asp-controller="Cart" asp-action="Add" method="post" class="d-inline">
                     <input type="hidden" name="bicycleId" value="@Model.Id" />
-                    <input type="hidden" name="type" value="Rent" />
+                    <input type="hidden" name="type" value="Rental" />
                     <input type="hidden" name="returnUrl" value="@Url.Action("ForRent", "Bicycle")" />
                     <button type="submit" class="btn btn-warning">Добави в кошницата</button>
                 </form>

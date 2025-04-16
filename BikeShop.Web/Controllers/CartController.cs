@@ -72,8 +72,6 @@ public class CartController : Controller
         return !string.IsNullOrEmpty(returnUrl) ? Redirect(returnUrl) : RedirectToAction("Index", "Cart");
     }
 
-
-
     [HttpPost]
     public async Task<IActionResult> Remove(int id)
     {
@@ -90,7 +88,6 @@ public class CartController : Controller
 
         return RedirectToAction("Index");
     }
-
 
     [HttpGet]
     public async Task<IActionResult> CheckoutRental()
@@ -116,7 +113,6 @@ public class CartController : Controller
 
         return View(model);
     }
-
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -249,12 +245,12 @@ public class CartController : Controller
             {
                 order.AccessoriesId = item.AccessoriesId;
 
-                var Accessories = await _context.Accessories.FindAsync(item.AccessoriesId);
-                if (Accessories != null)
+                var accessory = await _context.Accessories.FindAsync(item.AccessoriesId);
+                if (accessory != null)
                 {
-                    Accessories.Stock -= item.Quantity;
-                    if (Accessories.Stock < 0)
-                        Accessories.Stock = 0;
+                    accessory.Stock -= item.Quantity;
+                    if (accessory.Stock < 0)
+                        accessory.Stock = 0;
                 }
             }
 
@@ -277,9 +273,9 @@ public class CartController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> AddAccessories(int AccessoriesId)
     {
-        var Accessories = await _context.Accessories.FindAsync(AccessoriesId);
+        var accessory = await _context.Accessories.FindAsync(AccessoriesId);
 
-        if (Accessories == null || Accessories.Stock <= 0)
+        if (accessory == null || accessory.Stock <= 0)
         {
             return RedirectToAction("Index", "Accessories");
         }
@@ -296,10 +292,10 @@ public class CartController : Controller
             var cartItem = new CartItem
             {
                 UserId = userId,
-                AccessoriesId = Accessories.Id,
+                AccessoriesId = accessory.Id,
                 Quantity = 1,
                 Type = CartItemType.Purchase,
-                Price = Accessories.Price
+                Price = accessory.Price
             };
 
             _context.CartItems.Add(cartItem);
@@ -307,7 +303,7 @@ public class CartController : Controller
         else
         {
             existingItem.Quantity++;
-            existingItem.Price += Accessories.Price;
+            existingItem.Price += accessory.Price;
         }
 
         await _context.SaveChangesAsync();

@@ -1,6 +1,6 @@
 ﻿using BikeShop.Web.Models.Enum;
 
-namespace BikeShop.Web.Models
+namespace BikeShop.Web.Models.ViewModels
 {
     public class AccessoriesFilterViewModel
     {

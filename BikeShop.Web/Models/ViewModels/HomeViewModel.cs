@@ -1,4 +1,4 @@
-﻿namespace BikeShop.Web.Models
+﻿namespace BikeShop.Web.Models.ViewModels
 {
     public class HomeViewModel
     {

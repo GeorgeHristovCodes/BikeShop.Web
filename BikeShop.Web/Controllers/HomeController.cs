@@ -4,6 +4,8 @@ using BikeShop.Web.Models.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using BikeShop.Web.Models.ViewModels;
+
 
 namespace BikeShop.Web.Controllers
 {
