@@ -42,6 +42,7 @@ else
         <div class="mb-3">
             <label asp-for="CustomerCity" class="form-label">Град</label>
             <input asp-for="CustomerCity" class="form-control" />
+            <span asp-validation-for="CustomerCity" class="text-danger"></span>
         </div>
 
         <!-- 📦 Доставка -->
@@ -63,18 +64,22 @@ else
             <div class="mb-3">
                 <label asp-for="DeliveryCity" class="form-label">Град</label>
                 <input asp-for="DeliveryCity" class="form-control" />
+                <span asp-validation-for="DeliveryCity" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="DeliveryStreet" class="form-label">Улица</label>
                 <input asp-for="DeliveryStreet" class="form-control" />
+                <span asp-validation-for="DeliveryStreet" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="DeliveryStreetNumber" class="form-label">Номер</label>
                 <input asp-for="DeliveryStreetNumber" class="form-control" />
+                <span asp-validation-for="DeliveryStreetNumber" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="PostalCode" class="form-label">Пощенски код</label>
                 <input asp-for="PostalCode" class="form-control" />
+                <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
         </div>
 
@@ -148,13 +153,17 @@ else
     <script>
         function toggleDeliveryFields() {
             const isDelivery = document.querySelector('input[name="IsDelivery"]:checked')?.value === "true";
+            const deliveryFields = document.querySelectorAll('#deliveryFields input');
             document.getElementById("deliveryFields").style.display = isDelivery ? "block" : "none";
+            deliveryFields.forEach(field => {
+                field.required = isDelivery;
+            });
         }
 
         document.querySelectorAll('input[name="IsDelivery"]').forEach(el => {
             el.addEventListener("change", toggleDeliveryFields);
         });
 
-        toggleDeliveryFields();
+        toggleDeliveryFields(); // При зареждане
     </script>
 }

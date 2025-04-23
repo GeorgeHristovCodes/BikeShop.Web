@@ -1,8 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Админ Панел";
 }
-
-<h2 class="mb-4">Админ панел</h2>
+@if (User.IsInRole("Admin"))
+{
+    <h2 class="mb-4">Админ панел</h2>
+}
+else
+{
+    <h2 class="mb-4">Продавач панел</h2>
+}
 
 <div class="list-group">
     <a href="/Admin/AllRentals" class="list-group-item list-group-item-action">🟡 Всички наеми</a>

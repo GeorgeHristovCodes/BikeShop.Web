@@ -96,6 +96,8 @@ C:\BikeShop.Web\BikeShop.Web\BikeShop.Tests\bin\Debug\net7.0\Microsoft.VisualStu
 C:\BikeShop.Web\BikeShop.Web\BikeShop.Tests\bin\Debug\net7.0\Microsoft.Win32.SystemEvents.dll
 C:\BikeShop.Web\BikeShop.Web\BikeShop.Tests\bin\Debug\net7.0\Moq.dll
 C:\BikeShop.Web\BikeShop.Web\BikeShop.Tests\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\BikeShop.Web\BikeShop.Web\BikeShop.Tests\bin\Debug\net7.0\Npgsql.dll
+C:\BikeShop.Web\BikeShop.Web\BikeShop.Tests\bin\Debug\net7.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
 C:\BikeShop.Web\BikeShop.Web\BikeShop.Tests\bin\Debug\net7.0\NuGet.Common.dll
 C:\BikeShop.Web\BikeShop.Web\BikeShop.Tests\bin\Debug\net7.0\NuGet.Configuration.dll
 C:\BikeShop.Web\BikeShop.Web\BikeShop.Tests\bin\Debug\net7.0\NuGet.DependencyResolver.Core.dll

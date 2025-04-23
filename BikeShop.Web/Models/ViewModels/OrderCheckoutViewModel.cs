@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using BikeShop.Web.Models;
 
-public class OrderCheckoutViewModel
+public class OrderCheckoutViewModel : IValidatableObject
 {
     public List<CartItem> CartItems { get; set; } = new List<CartItem>();
 
@@ -22,13 +22,26 @@ public class OrderCheckoutViewModel
     // Адрес за доставка
     public bool IsDelivery { get; set; }
 
-    [Required(ErrorMessage = "Моля, въведете град.")]
     public string? DeliveryCity { get; set; }
-    [Required(ErrorMessage = "Моля, въведете улица.")]
     public string? DeliveryStreet { get; set; }
-    [Required(ErrorMessage = "Моля, въведете номер на улицата.")]
     public string? DeliveryStreetNumber { get; set; }
-
-    [Required(ErrorMessage = "Моля, въведете пощенски код.")]
     public string? PostalCode { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (IsDelivery)
+        {
+            if (string.IsNullOrWhiteSpace(DeliveryCity))
+                yield return new ValidationResult("Моля, въведете град.", new[] { nameof(DeliveryCity) });
+
+            if (string.IsNullOrWhiteSpace(DeliveryStreet))
+                yield return new ValidationResult("Моля, въведете улица.", new[] { nameof(DeliveryStreet) });
+
+            if (string.IsNullOrWhiteSpace(DeliveryStreetNumber))
+                yield return new ValidationResult("Моля, въведете номер на улицата.", new[] { nameof(DeliveryStreetNumber) });
+
+            if (string.IsNullOrWhiteSpace(PostalCode))
+                yield return new ValidationResult("Моля, въведете пощенски код.", new[] { nameof(PostalCode) });
+        }
+    }
 }

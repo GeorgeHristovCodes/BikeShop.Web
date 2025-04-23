@@ -8,10 +8,13 @@
 <section class="position-relative text-white" style="min-height: 90vh; overflow: hidden;">
     <div class="container position-relative">
         <div class="rounded overflow-hidden">
-            <video autoplay muted loop playsinline class="w-100 rounded shadow" style="max-height: 80vh; object-fit: cover;">
-                <source src="/videos/hero.mp4" type="video/mp4" />
-                Твоят браузър не поддържа видео.
-            </video>
+            <<div class="ratio ratio-16x9 rounded shadow overflow-hidden">
+                <video autoplay muted loop playsinline class="w-100 h-100">
+                    <source src="/videos/hero.mp4" type="video/mp4" />
+                    Твоят браузър не поддържа видео.
+                </video>
+            </div>
+
         </div>
 
         <!-- Текст върху видеото -->
@@ -184,16 +187,17 @@
             <!-- Въпрос 1 -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                    <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
                         Как мога да наема велосипед?
                     </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                     <div class="accordion-body">
                         За да наемеш велосипед, просто избери желания модел, посочи дати, въведи нужната информация и потвърди. След това ще получиш имейл с потвърждение.
                     </div>
                 </div>
             </div>
+
 
             <!-- Въпрос 2 -->
             <div class="accordion-item">
