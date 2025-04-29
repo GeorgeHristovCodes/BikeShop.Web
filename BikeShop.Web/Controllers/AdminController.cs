@@ -30,7 +30,7 @@ namespace BikeShop.Web.Controllers
             return View();
         }
 
-        // ❌ Само Admin
+        // Само Admin
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Users()
         {
@@ -48,7 +48,7 @@ namespace BikeShop.Web.Controllers
             return View(users);
         }
 
-        // ❌ Само Admin
+        // Само Admin
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> ChangeRole(string userId, string newRole)

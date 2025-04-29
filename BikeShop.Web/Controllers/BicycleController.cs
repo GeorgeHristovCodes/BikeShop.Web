@@ -1,4 +1,4 @@
-﻿// BicycleController.cs - с автоматично управление на IsAvailable
+﻿
 using BikeShop.Web.Data;
 using BikeShop.Web.Models;
 using BikeShop.Web.Models.ViewModels;

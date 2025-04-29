@@ -11,7 +11,7 @@
 <h2 class="mb-4">🧢 Всички аксесоари</h2>
 
 <div class="row">
-    <!-- 🔍 Филтриране -->
+    <!-- Филтриране -->
     <div class="col-md-3">
         <form method="get" asp-action="Index" class="border rounded p-3 bg-light">
             <h5 class="mb-3">Филтрирай аксесоари</h5>
@@ -37,7 +37,7 @@
         </form>
     </div>
 
-    <!-- 🧢 Резултати -->
+    <!-- Резултати -->
     <div class="col-md-9">
         @if (!Model.Results.Any())
         {
@@ -113,14 +113,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         $(document).ready(function () {
-            // ✅ Fade-in анимация
+            // Fade-in анимация
             $(".fade-in").each(function (i) {
                 setTimeout(() => {
                     $(this).addClass("show");
                 }, 100 + i * 100);
             });
 
-            // 🛒 Добавяне в количката с проверка
+            // Добавяне в количката с проверка
             $(".add-accessory-form").on("submit", function (e) {
                 e.preventDefault();
 

@@ -59,7 +59,7 @@ namespace BikeShop.Web.Controllers
                 return BadRequest("Велосипедът не е наличен");
             }
 
-            await _context.Entry(bicycle).ReloadAsync(); // <-- актуални данни от БД
+            await _context.Entry(bicycle).ReloadAsync(); // <-- актуални данни
 
             if (bicycle.Quantity <= 0)
             {

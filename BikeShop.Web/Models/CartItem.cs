@@ -14,13 +14,13 @@ public class CartItem
     [ForeignKey(nameof(BicycleId))]
     public Bicycle? Bicycle { get; set; }
 
-    // 🔥 Добавяме Аксесоар (по избор)
+    //  Добавяме Аксесоар (по избор)
     public int? AccessoriesId { get; set; }
 
     [ForeignKey(nameof(AccessoriesId))]
     public Accessories? Accessories { get; set; }
 
-    // 🔐 Връзка с потребителя
+    // Връзка с потребителя
     [Required]
     public string UserId { get; set; } = null!;
 

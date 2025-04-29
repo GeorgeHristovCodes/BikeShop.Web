@@ -33,7 +33,7 @@
         <tr>
             <th>Име</th>
             <th>Тип</th>
-            <th>Категория</th> <!-- 🆕 -->
+            <th>Категория</th>
             <th>Цена</th>
             <th>Наличност</th>
             <th>Количество</th>
@@ -46,7 +46,7 @@
             <tr>
                 <td>@bike.Name</td>
                 <td>@bike.Type</td>
-                <td>@bike.Category</td> <!-- 🆕 -->
+                <td>@bike.Category</td> 
                 <td>@bike.Price лв.</td>
                 <td class="fw-bold @(bike.IsAvailable ? "text-success" : "text-danger")">
                     @(bike.IsAvailable ? $"✅ Да ({bike.Quantity} бр.)" : $"❌ Не ({bike.Quantity} бр.)")

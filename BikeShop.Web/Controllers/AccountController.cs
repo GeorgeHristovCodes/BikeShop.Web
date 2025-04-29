@@ -36,7 +36,7 @@ namespace BikeShop.Web.Controllers
 
             var orders = await _context.Orders
                 .Include(o => o.Bicycle)
-                .Include(o => o.Accessories) // ✅ ЕТО ТОВА ДОБАВИ!
+                .Include(o => o.Accessories) 
                 .Where(o => o.UserId == user.Id)
                 .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
